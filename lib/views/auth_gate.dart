@@ -7,7 +7,6 @@ import 'package:adaptive_theme/adaptive_theme.dart';
 
 class EmptyHomePage extends StatelessWidget {
   const EmptyHomePage({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,12 +31,11 @@ class EmptyHomePage extends StatelessWidget {
 
 class AuthGate extends StatelessWidget {
   AuthGate({super.key});
-
   final List<AuthProvider<AuthListener, AuthCredential>> providers = [
     EmailAuthProvider(),
     GoogleProvider(
         clientId:
-            "1005622537424-ek0pnmrgkou172j6afli4ec8m0de9b8p.apps.googleusercontent.com")
+            "266612414037-a7vd5t7ckuks3db3bru11tlaah9hk5c4.apps.googleusercontent.com")
   ];
 
   @override
