@@ -44,40 +44,39 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDJQGy-n0_TIQJZx8r0aJ9aUwAhGXKCo84',
-    appId: '1:408911448811:web:4aa476ac6011d0324c4cae',
-    messagingSenderId: '408911448811',
-    projectId: 'healthmate-a6451',
-    authDomain: 'healthmate-a6451.firebaseapp.com',
-    storageBucket: 'healthmate-a6451.appspot.com',
-    measurementId: 'G-44KKQ70P1C',
+    apiKey: 'AIzaSyDeJZqoZFn4W8YXZRMRxFNCx83zOvDmwYc',
+    appId: '1:1005622537424:web:a20a42bcfb3c639d05c2d5',
+    messagingSenderId: '1005622537424',
+    projectId: 'health-mate-4768',
+    authDomain: 'health-mate-4768.firebaseapp.com',
+    storageBucket: 'health-mate-4768.appspot.com',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCZixwGlCKim8CDC79-XMtRFVWWUHZaQV0',
-    appId: '1:408911448811:android:07e3ae38e1c0a2f54c4cae',
-    messagingSenderId: '408911448811',
-    projectId: 'healthmate-a6451',
-    storageBucket: 'healthmate-a6451.appspot.com',
+    apiKey: 'AIzaSyBY9HpdAeHKpckt6N1IqX0zAmudc77H2rg',
+    appId: '1:1005622537424:android:00ee01f88eacd47a05c2d5',
+    messagingSenderId: '1005622537424',
+    projectId: 'health-mate-4768',
+    storageBucket: 'health-mate-4768.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBy54cpoopN6Wh7lCskafOdakShKFEBbT8',
-    appId: '1:408911448811:ios:386e6b4e6c960fd24c4cae',
-    messagingSenderId: '408911448811',
-    projectId: 'healthmate-a6451',
-    storageBucket: 'healthmate-a6451.appspot.com',
-    iosClientId: '408911448811-7k305vga5fh8pmk3ld2r58nukdjr4l64.apps.googleusercontent.com',
+    apiKey: 'AIzaSyADf3tIYKO-R1mCjQOnZbV_7obuEyt4DEI',
+    appId: '1:1005622537424:ios:b4faac70ca9987f105c2d5',
+    messagingSenderId: '1005622537424',
+    projectId: 'health-mate-4768',
+    storageBucket: 'health-mate-4768.appspot.com',
+    iosClientId: '1005622537424-u7jnc9jrq4u15iovnmf47lgd4svq8e08.apps.googleusercontent.com',
     iosBundleId: 'com.example.healthMate',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyBy54cpoopN6Wh7lCskafOdakShKFEBbT8',
-    appId: '1:408911448811:ios:c2bd9af7487ef42f4c4cae',
-    messagingSenderId: '408911448811',
-    projectId: 'healthmate-a6451',
-    storageBucket: 'healthmate-a6451.appspot.com',
-    iosClientId: '408911448811-8rphiv9o7tnf9j4hhlnmecivb29vjtfk.apps.googleusercontent.com',
+    apiKey: 'AIzaSyADf3tIYKO-R1mCjQOnZbV_7obuEyt4DEI',
+    appId: '1:1005622537424:ios:40551dea6727dfb705c2d5',
+    messagingSenderId: '1005622537424',
+    projectId: 'health-mate-4768',
+    storageBucket: 'health-mate-4768.appspot.com',
+    iosClientId: '1005622537424-4f4rea2h5vi7akdahbimon7svkmq907p.apps.googleusercontent.com',
     iosBundleId: 'com.example.healthMate.RunnerTests',
   );
 }
