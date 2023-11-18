@@ -46,7 +46,7 @@ dependencies:
   cloud_firestore: ^4.13.1
   
   permission_handler: ^11.0.1
-  adaptive_theme: ^3.4.1
+  google_sign_in: ^6.1.6
 
 dev_dependencies:
   flutter_test:
