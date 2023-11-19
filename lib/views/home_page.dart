@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  HomePage({super.key});
+  User? user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class HomePage extends StatelessWidget {
             SizedBox(
               height: 20,
             ),
-            Text("The body needs to be implemented with Aesthetic UI")
+            Text("The body needs to be implemented with Aesthetic UI"),
           ],
         ),
       ),

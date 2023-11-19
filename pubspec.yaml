@@ -43,6 +43,7 @@ dependencies:
   firebase_auth: ^4.14.0
   hive_flutter: ^1.1.0
   firebase_ui_oauth_google: ^1.2.14
+  firebase_ui_localizations: ^1.8.0
   cloud_firestore: ^4.13.1
   
   permission_handler: ^11.0.1
@@ -66,6 +67,7 @@ dev_dependencies:
 flutter:
   assets:
     - assets/logo.png
+    - assets/person-icon.png
     
 
   # The following line ensures that the Material Icons font is

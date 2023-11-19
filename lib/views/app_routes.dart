@@ -1,6 +1,6 @@
-import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 
+import 'profile_page.dart';
 import 'home_page.dart';
 
 class AppRoutes extends StatelessWidget {
@@ -13,14 +13,8 @@ class AppRoutes extends StatelessWidget {
       theme: ThemeData(scaffoldBackgroundColor: Colors.red.shade50),
       initialRoute: '/',
       routes: {
-        '/': (context) => const HomePage(),
-        '/profile': (context) => ProfileScreen(
-              actions: [
-                SignedOutAction((context) {
-                  Navigator.of(context).pop();
-                })
-              ],
-            )
+        '/': (context) => HomePage(),
+        '/profile': (context) => ProfilePage()
       },
     );
   }
