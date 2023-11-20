@@ -1,6 +1,7 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:health_mate/pages/login/auth_gate.dart';
+
+import 'auth_gate.dart';
 
 class LogoAnimation extends StatefulWidget {
   const LogoAnimation({super.key});
@@ -20,7 +21,7 @@ class _LogoAnimationState extends State<LogoAnimation>
 
     Future.delayed(const Duration(seconds: 3), () {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const LoginPage()),
+        MaterialPageRoute(builder: (context) => AuthGate()),
       );
     });
 
