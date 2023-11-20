@@ -7,7 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:health_mate/views/logo_animation.dart';
+import 'package:health_mate/pages/views/logo_animation.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
