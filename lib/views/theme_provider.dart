@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeProvider with ChangeNotifier {
+
   static final ThemeData defaultTheme = ThemeData(
     colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
     appBarTheme: const AppBarTheme(
@@ -9,6 +10,10 @@ class ThemeProvider with ChangeNotifier {
       iconTheme: IconThemeData(color: Colors.white),
       titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
     ),
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      backgroundColor: Colors.white,
+      elevation: 2,
+    )
   );
   final darkTheme = ThemeData(
     brightness: Brightness.dark,

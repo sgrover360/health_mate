@@ -70,6 +70,10 @@ flutter:
   assets:
     - assets/logo.png
     - assets/person-icon.png
+    - assets/doctor.png
+    - assets/doctor_1.png
+    - assets/doctor_3.png
+    - assets/doctor_4.png
     
 
   # The following line ensures that the Material Icons font is
