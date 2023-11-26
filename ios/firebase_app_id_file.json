@@ -1,13 +1,7 @@
 {
   "file_generated_by": "FlutterFire CLI",
   "purpose": "FirebaseAppID & ProjectID for this Firebase app in this directory",
-<<<<<<< HEAD
-  "GOOGLE_APP_ID": "1:408911448811:ios:386e6b4e6c960fd24c4cae",
-  "FIREBASE_PROJECT_ID": "healthmate-a6451",
-  "GCM_SENDER_ID": "408911448811"
-=======
   "GOOGLE_APP_ID": "1:1005622537424:ios:b4faac70ca9987f105c2d5",
   "FIREBASE_PROJECT_ID": "health-mate-4768",
   "GCM_SENDER_ID": "1005622537424"
->>>>>>> origin/main
 }

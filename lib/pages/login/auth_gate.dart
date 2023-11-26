@@ -1,15 +1,19 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:health_mate/pages/chat_overview/chat_overview_page.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
+import 'package:health_mate/models/chat_user.dart';
 import 'package:health_mate/pages/login/login_controller.dart';
+import 'package:health_mate/views/doctor_register.dart';
+import 'package:health_mate/views/home_page.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class AuthGate extends StatefulWidget {
+  const AuthGate({super.key});
+
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<AuthGate> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends State<AuthGate> {
   final LoginController _controller = LoginController();
   TextEditingController? _mailController;
   TextEditingController? _passwordController;
@@ -89,6 +93,19 @@ class _LoginPageState extends State<LoginPage> {
                         _registerMode ? await _register() : await _login()),
                   )),
               const SizedBox(height: 20),
+              SignInButton(
+                Buttons.Google,
+                onPressed: () async {
+                  try {
+                    await signInWithGoogle();
+                  }
+                  catch (error) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(error.toString()))
+                    );
+                  }
+                },
+              ),
               TextButton(
                 child: Text(_registerMode
                     ? "Want to log in?"
@@ -97,6 +114,14 @@ class _LoginPageState extends State<LoginPage> {
                   setState(() {
                     _registerMode = !_registerMode;
                   });
+                },
+              ),
+              TextButton(
+                child: const Text('Doctor? Register Here'),
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => RegistrationForm()
+                  ));
                 },
               )
             ])));
@@ -111,10 +136,28 @@ class _LoginPageState extends State<LoginPage> {
       _passwordConfirmController?.text = "";
 
       await Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => ChatOverviewPage(user)));
+          MaterialPageRoute(builder: (context) => HomePage(user: user)));
+
+      //await Navigator.of(context).push(
+      //    MaterialPageRoute(builder: (context) => ChatOverviewPage(user)));
     } on FirebaseAuthException catch (ex) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(ex.message ?? "")));
+    }
+  }
+
+  Future<void> signInWithGoogle() async {
+    try {
+      ChatUser chatUser = await _controller.signInWithGoogle();
+
+      // Navigate to the HomePage with the obtained ChatUser
+      await Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => HomePage(user: chatUser))
+      );
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(error.toString()))
+      );
     }
   }
 

@@ -104,7 +104,7 @@ class ProfilePage extends ProfileScreen {
                     ),
                   ),
                 ),
-                Divider(),
+                const Divider(),
                 ListTile(
                     title: const Text(
                       'Phone',
@@ -116,11 +116,11 @@ class ProfilePage extends ProfileScreen {
                     ),
                     subtitle: Row(
                       children: [
-                        Container(
+                        SizedBox(
                             width: 120,
                             child: TextFormField(
                               decoration:
-                                  InputDecoration(hintText: 'xxx-xxxxxxx'),
+                              const InputDecoration(hintText: 'xxx-xxxxxxx'),
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'Enter valid phone number';
@@ -131,9 +131,9 @@ class ProfilePage extends ProfileScreen {
                                 newUser.phone = value!;
                               },
                             )),
-                        SizedBox(width: 25),
+                        const SizedBox(width: 25),
                         IconButton(
-                          icon: Icon(Icons.edit),
+                          icon: const Icon(Icons.edit),
                           onPressed: () {
                             _isEditing = !_isEditing;
                           },
@@ -146,7 +146,7 @@ class ProfilePage extends ProfileScreen {
                   height: 45,
                   child: InkWell(
                     splashColor: const Color.fromARGB(255, 176, 220, 240),
-                    hoverColor: Color.fromARGB(255, 214, 231, 239),
+                    hoverColor: const Color.fromARGB(255, 214, 231, 239),
                     highlightColor: Colors.blueGrey,
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:health_mate/models/chat.dart';
-import 'package:health_mate/models/chat_user.dart';
 import 'package:health_mate/models/chat_message.dart';
+import 'package:health_mate/models/chat_user.dart';
 
 class NewChatController {
   Future<List<ChatUser>> getAllPossibleChatPartners(ChatUser user) async {

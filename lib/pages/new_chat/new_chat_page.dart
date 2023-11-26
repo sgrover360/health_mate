@@ -3,9 +3,8 @@ import 'package:health_mate/models/chat.dart';
 import 'package:health_mate/models/chat_user.dart';
 import 'package:health_mate/pages/new_chat/new_chat_controller.dart';
 import 'package:health_mate/pages/single_chat/single_chat_page.dart';
-import 'package:health_mate/widgets/loading_widget.dart';
-
 import 'package:health_mate/widgets/exception_widget.dart';
+import 'package:health_mate/widgets/loading_widget.dart';
 
 class NewChatPage extends StatefulWidget {
   final ChatUser localUser;

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:health_mate/models/chat.dart';
 import 'package:health_mate/models/chat_user.dart';
 import 'package:health_mate/pages/chat_overview/chat_overview_controller.dart';
-import 'package:health_mate/pages/new_chat/new_chat_page.dart';
 import 'package:health_mate/pages/chat_overview/widgets/chat_header_widget.dart';
+import 'package:health_mate/pages/new_chat/new_chat_page.dart';
 import 'package:health_mate/widgets/exception_widget.dart';
 import 'package:health_mate/widgets/loading_widget.dart';
 

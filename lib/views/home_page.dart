@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:health_mate/pages/chat_overview/chat_overview_page.dart';
 import 'package:health_mate/views/theme_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../models/chat_user.dart';
+import 'profile_page.dart';
+
 class HomePage extends StatelessWidget {
-  HomePage({super.key});
-  User? user = FirebaseAuth.instance.currentUser;
+  final ChatUser user;
+  const HomePage({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Home Page"),
-        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         actions: [
           IconButton(
             icon: const Icon(Icons.brightness_6),
@@ -23,7 +25,9 @@ class HomePage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.person),
             onPressed: () {
-              Navigator.pushNamed(context, '/profile');
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => ProfilePage()),// change
+              );
             },
           ),
         ],
@@ -39,6 +43,15 @@ class HomePage extends StatelessWidget {
             Text("The body needs to be implemented with Aesthetic UI"),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Add your action for the chat button here
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => ChatOverviewPage(user)));
+        },
+        tooltip: 'Chat',
+        child: const Icon(Icons.chat),
       ),
     );
   }
