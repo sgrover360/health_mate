@@ -39,9 +39,12 @@ dependencies:
   flutter_svg: ^2.0.9
   firebase_database: ^10.3.4
   cloud_firestore: ^4.13.1
-  image_picker: ^1.0.4
   firebase_auth: ^4.14.0
   firebase_ui_auth: ^1.10.0
+
+  permission_handler: ^11.0.1
+  google_sign_in: ^6.1.6
+  image_picker: ^1.0.4
   provider: ^6.1.1
   shared_preferences: ^2.2.2
   firebase_ui_oauth: ^1.4.14
@@ -67,6 +70,12 @@ dev_dependencies:
 flutter:
   assets:
     - assets/logo.png
+    - assets/person-icon.png
+    - assets/doctor.png
+    - assets/doctor_1.png
+    - assets/doctor_3.png
+    - assets/doctor_4.png
+
     - assets/img.png
     - assets/doctor_animation.gif
 
