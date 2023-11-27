@@ -9,6 +9,10 @@ class ThemeProvider with ChangeNotifier {
       iconTheme: IconThemeData(color: Colors.white),
       titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
     ),
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      backgroundColor: Colors.white,
+      elevation: 2,
+    )
   );
   final darkTheme = ThemeData(
     brightness: Brightness.dark,
