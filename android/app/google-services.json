@@ -14,6 +14,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "1005622537424-6j5qk51aqnufgivr1t2ikag1d4h9gqv1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.health_mate",
+            "certificate_hash": "d3274a5b769c5c6808a6dbc2915df299eae30f95"
+          }
+        },
+        {
+          "client_id": "1005622537424-85ul8qne520mol4645rfp6nvfesslgb3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.health_mate",
+            "certificate_hash": "356ef347ab5a7a6f49a6978b59ba948f504cc2a5"
+          }
+        },
+        {
           "client_id": "1005622537424-6htimcsjfa40r0ug38h80kiegilmp6p1.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,6 +45,13 @@
             {
               "client_id": "1005622537424-6htimcsjfa40r0ug38h80kiegilmp6p1.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "1005622537424-4f4rea2h5vi7akdahbimon7svkmq907p.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.healthMate.RunnerTests"
+              }
             }
           ]
         }
