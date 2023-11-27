@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:health_mate/components/extensions.dart';
 import 'package:health_mate/views/user_prescriptions_page.dart';
+import 'package:health_mate/models/chat_user.dart';
 import 'package:health_mate/views/theme_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -12,9 +13,8 @@ import '../models/data.dart';
 import '../models/doctor.dart';
 
 class HomePage extends StatefulWidget {
-  final User? user = FirebaseAuth.instance.currentUser;
-
-  HomePage({super.key});
+  final ChatUser user;
+  HomePage({super.key, required this.user});
 
   @override
   State<StatefulWidget> createState() => HomePageState();
