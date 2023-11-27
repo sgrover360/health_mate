@@ -11,7 +11,6 @@ import '../models/data.dart';
 import '../models/doctor.dart';
 
 class HomePage extends StatefulWidget {
-
   final User? user = FirebaseAuth.instance.currentUser;
 
   HomePage({super.key});
@@ -266,7 +265,8 @@ class HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          title: Text("Dr. ${doctor.firstName} ${doctor.lastName}", style: TextStyles.title.bold),
+          title: Text("Dr. ${doctor.firstName} ${doctor.lastName}",
+              style: TextStyles.title.bold),
           subtitle: Text(
             doctor.type,
             style: TextStyles.bodySm.subTitleColor.bold,
@@ -286,8 +286,8 @@ class HomePageState extends State<HomePage> {
   Widget _bottomNavigationBar() {
     return ClipRRect(
       borderRadius: const BorderRadius.only(
-      topLeft: Radius.circular(20.0),
-      topRight: Radius.circular(20.0),
+        topLeft: Radius.circular(20.0),
+        topRight: Radius.circular(20.0),
       ),
       child: BottomNavigationBar(
         backgroundColor: Theme.of(context).primaryColor,
@@ -311,7 +311,8 @@ class HomePageState extends State<HomePage> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
+        selectedItemColor:
+            Theme.of(context).bottomNavigationBarTheme.backgroundColor,
         elevation: Theme.of(context).bottomNavigationBarTheme.elevation,
         onTap: _onItemTapped,
       ),
@@ -327,22 +328,22 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: _appBar(context),
-        backgroundColor: Theme.of(context).colorScheme.background,
-        body: CustomScrollView(
-          slivers: <Widget>[
-            SliverList(
-              delegate: SliverChildListDelegate(
-                [
-                  _header(),
-                  _searchField(),
-                  _appointmentsToday(),
-                ],
-              ),
+      appBar: _appBar(context),
+      backgroundColor: Theme.of(context).colorScheme.background,
+      body: CustomScrollView(
+        slivers: <Widget>[
+          SliverList(
+            delegate: SliverChildListDelegate(
+              [
+                _header(),
+                _searchField(),
+                _appointmentsToday(),
+              ],
             ),
-            _doctorsList()
-          ],
-        ),
+          ),
+          _doctorsList()
+        ],
+      ),
       bottomNavigationBar: _bottomNavigationBar(),
     );
   }
