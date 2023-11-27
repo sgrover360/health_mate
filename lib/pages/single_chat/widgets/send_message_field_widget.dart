@@ -26,47 +26,75 @@ class _SendMessageFieldWidgetState extends State<SendMessageFieldWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 60,
-        //color: Colors.blue.shade400,
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        clipBehavior: Clip.antiAlias,
-        decoration: ShapeDecoration(
-          color: const Color(0x0C0091A6),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(25),
+      width: 375,
+      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Color(0x0C0091A6),
+            blurRadius: 5,
+            offset: Offset(0, -1),
+            spreadRadius: 0,
+          )
+        ],
+      ),
+      child: Row(
+        children: [
+          IconButton(
+            icon: const Icon(Icons.attach_file, color: Color(0xFF0091A6)),
+            onPressed: () {
+              // Handle attachment
+            },
           ),
-        ),
-        child: Container(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(children: [
-              Expanded(
-                  child: TextField(
-                    maxLines: 1,
-                    controller: _messageController,
-                    style: const TextStyle(color: Colors.black, fontSize: 16),
-                    decoration: const InputDecoration(
-                        hintText: "Write a message!",
-                        hintStyle: TextStyle(color: Color(0x7F0091A6),
-                          fontSize: 14,
-                          fontFamily: 'Raleway',
-                          fontWeight: FontWeight.w400,
-                          height: 0,
-                          letterSpacing: -0.30,),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(20.0)))),
-                  )),
-              const SizedBox(width: 10),
-              IconButton(
-                  onPressed: () {
-                    widget.onPressed == null
-                        ? null
-                        : widget.onPressed!(_messageController?.text ?? "");
-
-                    setState(() {
-                      _messageController!.text = "";
-                    });
-                  },
-                  icon: const Icon(Icons.send, color: Colors.blueAccent))
-            ])));
+          IconButton(
+            icon: const Icon(Icons.camera_alt, color: Color(0xFF0091A6)),
+            onPressed: () {
+              // Handle camera
+            },
+          ),
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              decoration: ShapeDecoration(
+                color: const Color(0x140090A6),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25),
+                ),
+              ),
+              child: TextField(
+                controller: _messageController,
+                keyboardType: TextInputType.multiline,
+                maxLines: null, // Allows the input to wrap to a new line
+                style: const TextStyle(
+                  color: Color(0xFF0091A6),
+                  fontSize: 14,
+                  fontFamily: 'Raleway',
+                ),
+                decoration: const InputDecoration(
+                  hintText: 'Type a message',
+                  hintStyle: TextStyle(
+                    color: Color(0x7F0091A6),
+                    fontSize: 14,
+                    fontFamily: 'Raleway',
+                    fontWeight: FontWeight.w400,
+                    letterSpacing: -0.30,
+                  ),
+                  border: InputBorder.none, // No border
+                  contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10), // Adjust padding
+                ),
+              ),
+            ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.send, color: Color(0xFF0091A6)),
+            onPressed: () {
+              widget.onPressed?.call(_messageController?.text ?? "");
+              _messageController?.clear();
+            },
+          ),
+        ],
+      ),
+    );
   }
 }
