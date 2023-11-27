@@ -1,35 +1,42 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:health_mate/views/logo_animation.dart';
 import 'package:health_mate/views/theme_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'firebase_options.dart';
 
-Future<void> main() async {
-  // Ensure Flutter is initialized.
+Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // Initialize firebase
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
-  runApp(ChangeNotifierProvider(
-    create: (context) => ThemeProvider(),
-    child: const MainApp(),
-  ));
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  runApp(const MyApp());
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(scaffoldBackgroundColor: Colors.red.shade50),
-      home: const Scaffold(
-        body: LogoAnimation(),
+    return ChangeNotifierProvider(
+      create: (_) => ThemeProvider(), // Initialize the ThemeProvider
+      child: Consumer<ThemeProvider>(
+        builder: (context, themeProvider, _) {
+          // Set status bar style based on the theme
+          SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+            statusBarColor: Colors.transparent,
+            statusBarIconBrightness:
+                themeProvider.themeData.brightness == Brightness.dark
+                    ? Brightness.light
+                    : Brightness.dark,
+          ));
+          return MaterialApp(
+            title: 'Flutter Firebase Chat',
+            debugShowCheckedModeBanner: false,
+            theme: themeProvider.themeData, // Use the theme from ThemeProvider
+            home: const LogoAnimation(),
+          );
+        },
       ),
     );
   }
