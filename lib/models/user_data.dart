@@ -17,6 +17,7 @@ class UserData {
   final String email;
   String phone;
   String? photoUri;
+  bool isDoctor;
 
   UserData(
       {this.id,
@@ -34,9 +35,8 @@ class UserData {
       this.skinTone = '',
       required this.email,
       this.phone = '',
-      this.photoUri = ''});
-
-  get entries => null;
+      this.photoUri = '',
+      this.isDoctor = false});
 
   Map<String, dynamic> toMap() {
     return {
@@ -51,10 +51,11 @@ class UserData {
       'hair_color': hairCol,
       'blood_type': bloodType,
       'eye_color': eyeCol,
-      'skine_tone': skinTone,
+      'skin_tone': skinTone,
       'email': email,
       'phone': phone,
       'profile_pic': photoUri,
+      'isDoctor': isDoctor,
     };
   }
 
@@ -77,6 +78,7 @@ class UserData {
       email: map['email'],
       phone: map['phone'] ?? '',
       photoUri: map['photoUri'] ?? '',
+      isDoctor: map['isDoctor'] ?? false,
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_ui_auth/src/screens/profile_screen.dart';
 import 'package:firebase_ui_localizations/firebase_ui_localizations.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +12,8 @@ import '../views/theme_provider.dart';
 import '../controllers/profile_page_service.dart';
 
 class ProfilePage extends StatefulWidget {
-  ProfilePage({Key? key}) : super(key: key);
+  UserData? currUser;
+  ProfilePage({Key? key, this.currUser}) : super(key: key);
   @override
   State<ProfilePage> createState() => ProfilePageState();
 }
@@ -24,7 +26,6 @@ class ProfilePageState extends State<ProfilePage> {
   final _formKey = GlobalKey<FormState>();
   final _userDataService = UserDataService();
   final ImagePicker picker = ImagePicker();
-  late UserData currUser; // need initialise properly
   String fname = '';
   String lname = '';
   DateTime? dob = DateTime(DateTime.now().year, DateTime.now().month,
@@ -41,10 +42,11 @@ class ProfilePageState extends State<ProfilePage> {
   String eyeCol = '';
   String skinTone = '';
   String email = '';
-  String? phone_primary = '';
-  String? phone_secondary = '';
+  String phone_primary = '';
+  String phone_secondary = '';
   String? photoUri = '';
   XFile? selectedImage;
+  bool is_doctor = false;
   bool editProfile = false;
   bool editProfilePic = false;
   List<String> genders = ['Male', 'Female'];
@@ -178,29 +180,30 @@ class ProfilePageState extends State<ProfilePage> {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
     }
-    currUser.fname = fname;
-    currUser.lname = lname;
-    currUser.dob = dob;
-    currUser.sex = sex;
-    currUser.addr = '$addr_line1\n$addr_line2';
-    currUser.post = post;
-    currUser.city = city;
-    currUser.province = province!;
-    currUser.hairCol = hairCol;
-    currUser.eyeCol = eyeCol;
-    currUser.bloodType = bloodType;
-    currUser.skinTone = skinTone;
-    currUser.phone = phone_primary ?? phone_secondary!;
-    currUser.photoUri = photoUri;
-    print(currUser.dob);
+    // widget.currUser ??= UserData(id: user!.uid, email: user!.email!);
+    widget.currUser?.fname = fname.isNotEmpty ? fname : '';
+    widget.currUser?.lname = lname.isNotEmpty ? lname : 'Guest';
+    widget.currUser?.dob = dob;
+    widget.currUser?.sex = sex;
+    widget.currUser?.addr = '$addr_line1, $addr_line2';
+    widget.currUser?.post = post;
+    widget.currUser?.city = city;
+    widget.currUser?.province = province!;
+    widget.currUser?.hairCol = hairCol;
+    widget.currUser?.eyeCol = eyeCol;
+    widget.currUser?.bloodType = bloodType;
+    widget.currUser?.skinTone = skinTone;
+    widget.currUser?.phone =
+        phone_primary.isNotEmpty ? phone_primary : phone_secondary;
+    widget.currUser?.photoUri = photoUri;
   }
 
   @override
   Widget build(BuildContext context) {
-    currUser = UserData(id: user!.uid, email: user!.email!);
     if (user!.photoURL != null) {
       preload(context, user!.photoURL);
     }
+    widget.currUser ??= UserData(id: user!.uid, email: user!.email!);
     return Scaffold(
       body: Form(
         key: _formKey,
@@ -269,8 +272,8 @@ class ProfilePageState extends State<ProfilePage> {
                     children: [
                       Center(
                         child: Text(
-                          user!.displayName ??
-                              '${currUser!.fname} ${currUser!.lname}',
+                          user?.displayName ??
+                              '${widget.currUser?.fname ?? ''} ${widget.currUser?.lname ?? 'Guest'}',
                           style: const TextStyle(
                             fontSize: 35,
                             fontWeight: FontWeight.bold,
@@ -394,7 +397,7 @@ class ProfilePageState extends State<ProfilePage> {
                         ),
                         SizedBox(width: 25),
                         Container(
-                            width: 120,
+                            width: 125,
                             child: TextFormField(
                               enabled: editProfile,
                               keyboardType: TextInputType.number,
@@ -405,21 +408,26 @@ class ProfilePageState extends State<ProfilePage> {
                                   hintText: 'xxx-xxxxxxx',
                                   labelText: 'Primary',
                                   counterText: ''),
-                              validator: (value) {
-                                if (double.tryParse(value!) == null) {
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'[0-9]')),
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
+                              validator: ((value) {
+                                if (value!.length > 0 && value!.length < 10) {
                                   return 'Enter valid phone number';
                                 }
                                 return null;
-                              },
+                              }),
                               onSaved: (value) {
-                                setState(() {
-                                  phone_primary = value!;
-                                });
+                                // setState(() {
+                                phone_primary = value!;
+                                // });
                               },
                             )),
                         SizedBox(width: 60),
                         Container(
-                            width: 120,
+                            width: 125,
                             child: TextFormField(
                               enabled: editProfile,
                               keyboardType: TextInputType.number,
@@ -430,12 +438,17 @@ class ProfilePageState extends State<ProfilePage> {
                                   hintText: 'xxx-xxxxxxx',
                                   labelText: 'Secondary',
                                   counterText: ''),
-                              validator: (value) {
-                                if (double.tryParse(value!) == null) {
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'[0-9]')),
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
+                              validator: ((value) {
+                                if (value!.length > 0 && value!.length < 10) {
                                   return 'Enter valid phone number';
                                 }
                                 return null;
-                              },
+                              }),
                               onSaved: (value) {
                                 setState(() {
                                   phone_secondary = value!;
@@ -505,6 +518,10 @@ class ProfilePageState extends State<ProfilePage> {
                                 style: TextStyle(fontSize: 18),
                                 decoration: const InputDecoration(
                                     labelText: 'City', counterText: ''),
+                                inputFormatters: <TextInputFormatter>[
+                                  FilteringTextInputFormatter.allow(
+                                      RegExp(r'[a-zA-Z ]')),
+                                ],
                                 onSaved: (value) {
                                   setState(() {
                                     city = value!;
@@ -523,6 +540,10 @@ class ProfilePageState extends State<ProfilePage> {
                                 style: TextStyle(fontSize: 18),
                                 decoration: const InputDecoration(
                                     labelText: 'Postal Code', counterText: ''),
+                                inputFormatters: <TextInputFormatter>[
+                                  FilteringTextInputFormatter.allow(
+                                      RegExp(r'[A-Z0-9 ]')),
+                                ],
                                 onSaved: (value) {
                                   setState(() {
                                     post = value!;
@@ -585,181 +606,248 @@ class ProfilePageState extends State<ProfilePage> {
                   ),
                   subtitle: Column(
                     children: [
-                      Row(
-                        children: [
-                          Container(
-                            width: 100,
-                            padding: EdgeInsets.only(left: 10),
-                            child: IgnorePointer(
-                              ignoring: !editProfile,
-                              child: InputDatePickerFormField(
-                                initialDate: dob,
-                                firstDate: DateTime(1940),
-                                lastDate: DateTime.now(),
-                                fieldLabelText: 'Date of Birth',
-                                keyboardType: TextInputType.datetime,
-                                acceptEmptyDate: true,
-                                onDateSubmitted: (value) {
-                                  setState(() {
-                                    dob = value;
-                                  });
-                                },
+                      if (user?.providerData[0].providerId == 'password') ...[
+                        Row(
+                          children: [
+                            Container(
+                                width: 200,
+                                padding: EdgeInsets.only(left: 10),
+                                child: TextFormField(
+                                  enabled: editProfile,
+                                  keyboardType: TextInputType.text,
+                                  textCapitalization: TextCapitalization.words,
+                                  maxLength: 30,
+                                  style: TextStyle(fontSize: 18),
+                                  decoration: const InputDecoration(
+                                      labelText: 'First Name', counterText: ''),
+                                  inputFormatters: <TextInputFormatter>[
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp(r'[a-zA-Z ]')),
+                                  ],
+                                  onSaved: (value) {
+                                    setState(() {
+                                      fname = value!;
+                                    });
+                                  },
+                                )),
+                            Container(
+                                width: 200,
+                                padding: EdgeInsets.only(left: 15),
+                                child: TextFormField(
+                                  enabled: editProfile,
+                                  keyboardType: TextInputType.text,
+                                  textCapitalization: TextCapitalization.words,
+                                  maxLength: 30,
+                                  style: TextStyle(fontSize: 18),
+                                  decoration: const InputDecoration(
+                                      labelText: 'Last Name', counterText: ''),
+                                  inputFormatters: <TextInputFormatter>[
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp(r'[a-zA-Z ]')),
+                                  ],
+                                  onSaved: (value) {
+                                    setState(() {
+                                      lname = value!;
+                                    });
+                                  },
+                                )),
+                          ],
+                        ),
+                        const SizedBox(height: 5)
+                      ] else ...[
+                        const SizedBox(height: 3)
+                      ],
+                      if (!widget.currUser!.isDoctor) ...[
+                        Row(
+                          children: [
+                            Container(
+                              width: 100,
+                              padding: EdgeInsets.only(left: 10),
+                              child: IgnorePointer(
+                                ignoring: !editProfile,
+                                child: InputDatePickerFormField(
+                                  initialDate: dob,
+                                  firstDate: DateTime(1940),
+                                  lastDate: DateTime.now(),
+                                  fieldLabelText: 'Date of Birth',
+                                  keyboardType: TextInputType.datetime,
+                                  acceptEmptyDate: true,
+                                  onDateSubmitted: (value) {
+                                    setState(() {
+                                      dob = value;
+                                    });
+                                  },
+                                ),
                               ),
                             ),
-                          ),
-                          const SizedBox(width: 5),
-                          IgnorePointer(
-                            ignoring: !editProfile,
-                            child: IconButton(
-                              hoverColor: Colors.transparent,
-                              disabledColor: Colors.blue,
-                              padding: EdgeInsets.only(top: 20),
-                              icon: const Icon(Icons.calendar_month),
-                              onPressed: () => selectDate(context),
-                            ),
-                          ),
-                          const SizedBox(width: 45),
-                          Container(
-                            width: 100,
-                            child: IgnorePointer(
+                            const SizedBox(width: 5),
+                            IgnorePointer(
                               ignoring: !editProfile,
-                              child: DropdownButtonHideUnderline(
-                                  child: ButtonTheme(
-                                alignedDropdown: true,
-                                layoutBehavior:
-                                    ButtonBarLayoutBehavior.constrained,
-                                child: DropdownButtonFormField<String>(
-                                  isDense: true,
-                                  menuMaxHeight: 115,
-                                  alignment: AlignmentDirectional.centerStart,
-                                  padding: EdgeInsets.only(top: 10),
-                                  borderRadius: BorderRadius.circular(10),
-                                  focusColor: Colors.transparent,
-                                  decoration: const InputDecoration(
-                                      contentPadding: EdgeInsets.zero,
-                                      focusedBorder: InputBorder.none,
-                                      enabledBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Colors.transparent)),
-                                      labelText: 'Sex'),
-                                  value: sex,
-                                  items: genders
-                                      .map((label) => DropdownMenuItem(
-                                            alignment:
-                                                AlignmentDirectional.center,
-                                            child: Text(label),
-                                            value: label,
-                                          ))
-                                      .toList(),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      sex = value!;
-                                    });
-                                  },
-                                ),
-                              )),
+                              child: IconButton(
+                                hoverColor: Colors.transparent,
+                                disabledColor: Colors.blue,
+                                padding: EdgeInsets.only(top: 20),
+                                icon: const Icon(Icons.calendar_month),
+                                onPressed: () => selectDate(context),
+                              ),
                             ),
-                          ),
-                          const SizedBox(width: 35),
-                          Container(
-                            width: 80,
-                            child: IgnorePointer(
-                              ignoring: !editProfile,
-                              child: DropdownButtonHideUnderline(
-                                  child: ButtonTheme(
-                                alignedDropdown: true,
-                                layoutBehavior:
-                                    ButtonBarLayoutBehavior.constrained,
-                                child: DropdownButtonFormField<String>(
-                                  isDense: true,
-                                  menuMaxHeight: 115,
-                                  alignment: AlignmentDirectional.centerStart,
-                                  padding: EdgeInsets.only(top: 10),
-                                  borderRadius: BorderRadius.circular(10),
-                                  focusColor: Colors.transparent,
-                                  decoration: const InputDecoration(
-                                      contentPadding: EdgeInsets.zero,
-                                      focusedBorder: InputBorder.none,
-                                      enabledBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Colors.transparent)),
-                                      labelText: 'Blood Type'),
-                                  value: bloodType,
-                                  items: bloodTypes
-                                      .map((label) => DropdownMenuItem(
-                                            alignment:
-                                                AlignmentDirectional.center,
-                                            child: Text(label),
-                                            value: label,
-                                          ))
-                                      .toList(),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      bloodType = value!;
-                                    });
-                                  },
-                                ),
-                              )),
+                            const SizedBox(width: 45),
+                            Container(
+                              width: 100,
+                              child: IgnorePointer(
+                                ignoring: !editProfile,
+                                child: DropdownButtonHideUnderline(
+                                    child: ButtonTheme(
+                                  alignedDropdown: true,
+                                  layoutBehavior:
+                                      ButtonBarLayoutBehavior.constrained,
+                                  child: DropdownButtonFormField<String>(
+                                    isDense: true,
+                                    menuMaxHeight: 115,
+                                    alignment: AlignmentDirectional.centerStart,
+                                    padding: EdgeInsets.only(top: 10),
+                                    borderRadius: BorderRadius.circular(10),
+                                    focusColor: Colors.transparent,
+                                    decoration: const InputDecoration(
+                                        contentPadding: EdgeInsets.zero,
+                                        focusedBorder: InputBorder.none,
+                                        enabledBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.transparent)),
+                                        labelText: 'Sex'),
+                                    value: sex,
+                                    items: genders
+                                        .map((label) => DropdownMenuItem(
+                                              alignment:
+                                                  AlignmentDirectional.center,
+                                              child: Text(label),
+                                              value: label,
+                                            ))
+                                        .toList(),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        sex = value!;
+                                      });
+                                    },
+                                  ),
+                                )),
+                              ),
                             ),
-                          )
-                        ],
-                      ),
+                            const SizedBox(width: 35),
+                            Container(
+                              width: 80,
+                              child: IgnorePointer(
+                                ignoring: !editProfile,
+                                child: DropdownButtonHideUnderline(
+                                    child: ButtonTheme(
+                                  alignedDropdown: true,
+                                  layoutBehavior:
+                                      ButtonBarLayoutBehavior.constrained,
+                                  child: DropdownButtonFormField<String>(
+                                    isDense: true,
+                                    menuMaxHeight: 115,
+                                    alignment: AlignmentDirectional.centerStart,
+                                    padding: EdgeInsets.only(top: 10),
+                                    borderRadius: BorderRadius.circular(10),
+                                    focusColor: Colors.transparent,
+                                    decoration: const InputDecoration(
+                                        contentPadding: EdgeInsets.zero,
+                                        focusedBorder: InputBorder.none,
+                                        enabledBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.transparent)),
+                                        labelText: 'Blood Type'),
+                                    value: bloodType,
+                                    items: bloodTypes
+                                        .map((label) => DropdownMenuItem(
+                                              alignment:
+                                                  AlignmentDirectional.center,
+                                              child: Text(label),
+                                              value: label,
+                                            ))
+                                        .toList(),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        bloodType = value!;
+                                      });
+                                    },
+                                  ),
+                                )),
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
                       const SizedBox(height: 15),
-                      Row(
-                        children: [
-                          Container(
-                              width: 150,
-                              padding: EdgeInsets.only(left: 10),
-                              child: TextFormField(
-                                enabled: editProfile,
-                                keyboardType: TextInputType.text,
-                                textCapitalization: TextCapitalization.none,
-                                maxLength: 30,
-                                style: TextStyle(fontSize: 18),
-                                decoration: const InputDecoration(
-                                    labelText: 'Hair Color', counterText: ''),
-                                onSaved: (value) {
-                                  setState(() {
-                                    hairCol = value!;
-                                  });
-                                },
-                              )),
-                          Container(
-                              width: 150,
-                              padding: EdgeInsets.only(left: 10),
-                              child: TextFormField(
-                                enabled: editProfile,
-                                keyboardType: TextInputType.text,
-                                textCapitalization: TextCapitalization.none,
-                                maxLength: 30,
-                                style: TextStyle(fontSize: 18),
-                                decoration: const InputDecoration(
-                                    labelText: 'Eye Color', counterText: ''),
-                                onSaved: (value) {
-                                  setState(() {
-                                    eyeCol = value!;
-                                  });
-                                },
-                              )),
-                          Container(
-                              width: 150,
-                              padding: EdgeInsets.only(left: 10),
-                              child: TextFormField(
-                                enabled: editProfile,
-                                keyboardType: TextInputType.text,
-                                textCapitalization: TextCapitalization.none,
-                                maxLength: 30,
-                                style: TextStyle(fontSize: 18),
-                                decoration: const InputDecoration(
-                                    labelText: 'Skin Tone', counterText: ''),
-                                onSaved: (value) {
-                                  setState(() {
-                                    skinTone = value!;
-                                  });
-                                },
-                              )),
-                        ],
-                      ),
+                      if (!widget.currUser!.isDoctor) ...[
+                        Row(
+                          children: [
+                            Container(
+                                width: 150,
+                                padding: EdgeInsets.only(left: 10),
+                                child: TextFormField(
+                                  enabled: editProfile,
+                                  keyboardType: TextInputType.text,
+                                  textCapitalization: TextCapitalization.none,
+                                  maxLength: 30,
+                                  style: TextStyle(fontSize: 18),
+                                  decoration: const InputDecoration(
+                                      labelText: 'Hair Color', counterText: ''),
+                                  inputFormatters: <TextInputFormatter>[
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp(r'[a-zA-Z ]')),
+                                  ],
+                                  onSaved: (value) {
+                                    setState(() {
+                                      hairCol = value!;
+                                    });
+                                  },
+                                )),
+                            Container(
+                                width: 150,
+                                padding: EdgeInsets.only(left: 10),
+                                child: TextFormField(
+                                  enabled: editProfile,
+                                  keyboardType: TextInputType.text,
+                                  textCapitalization: TextCapitalization.none,
+                                  maxLength: 30,
+                                  style: TextStyle(fontSize: 18),
+                                  decoration: const InputDecoration(
+                                      labelText: 'Eye Color', counterText: ''),
+                                  inputFormatters: <TextInputFormatter>[
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp(r'[a-zA-Z ]')),
+                                  ],
+                                  onSaved: (value) {
+                                    setState(() {
+                                      eyeCol = value!;
+                                    });
+                                  },
+                                )),
+                            Container(
+                                width: 150,
+                                padding: EdgeInsets.only(left: 10),
+                                child: TextFormField(
+                                  enabled: editProfile,
+                                  keyboardType: TextInputType.text,
+                                  textCapitalization: TextCapitalization.none,
+                                  maxLength: 30,
+                                  style: TextStyle(fontSize: 18),
+                                  decoration: const InputDecoration(
+                                      labelText: 'Skin Tone', counterText: ''),
+                                  inputFormatters: <TextInputFormatter>[
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp(r'[a-zA-Z ]')),
+                                  ],
+                                  onSaved: (value) {
+                                    setState(() {
+                                      skinTone = value!;
+                                    });
+                                  },
+                                )),
+                          ],
+                        ),
+                      ],
                     ],
                   ),
                 ),
