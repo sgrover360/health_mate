@@ -66,6 +66,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '1005622537424',
     projectId: 'health-mate-4768',
     storageBucket: 'health-mate-4768.appspot.com',
+    androidClientId: '1005622537424-6j5qk51aqnufgivr1t2ikag1d4h9gqv1.apps.googleusercontent.com',
     iosClientId: '1005622537424-u7jnc9jrq4u15iovnmf47lgd4svq8e08.apps.googleusercontent.com',
     iosBundleId: 'com.example.healthMate',
   );
@@ -76,6 +77,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '1005622537424',
     projectId: 'health-mate-4768',
     storageBucket: 'health-mate-4768.appspot.com',
+    androidClientId: '1005622537424-6j5qk51aqnufgivr1t2ikag1d4h9gqv1.apps.googleusercontent.com',
     iosClientId: '1005622537424-4f4rea2h5vi7akdahbimon7svkmq907p.apps.googleusercontent.com',
     iosBundleId: 'com.example.healthMate.RunnerTests',
   );

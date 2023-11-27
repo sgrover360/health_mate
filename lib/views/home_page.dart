@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:health_mate/components/extensions.dart';
+import 'package:health_mate/views/user_prescriptions_page.dart';
 import 'package:health_mate/views/theme_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -32,7 +33,7 @@ class HomePageState extends State<HomePage> {
 
   AppBar _appBar(BuildContext context) {
     return AppBar(
-      title: const Text("Home Page"),
+      title: const Text("Health Mate"),
       actions: [
         IconButton(
           icon: const Icon(Icons.brightness_6),
@@ -83,7 +84,7 @@ class HomePageState extends State<HomePage> {
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           border: InputBorder.none,
-          hintText: "Search",
+          hintText: "Search for doctor",
           hintStyle: TextStyles.body.subTitleColor,
           suffixIcon: SizedBox(
               width: 50,
@@ -95,7 +96,7 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _appointmentsToday() {
+  Widget _upcomingAppointments() {
     return Column(
       children: <Widget>[
         Padding(
@@ -104,7 +105,7 @@ class HomePageState extends State<HomePage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text("Appointments Today", style: TextStyles.title.bold),
+              Text("Upcoming Appointments", style: TextStyles.title.bold),
               Text(
                 "See All",
                 style: TextStyles.titleNormal,
@@ -265,8 +266,7 @@ class HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          title: Text("Dr. ${doctor.firstName} ${doctor.lastName}",
-              style: TextStyles.title.bold),
+          title: Text("Dr. ${doctor.firstName} ${doctor.lastName}", style: TextStyles.title.bold),
           subtitle: Text(
             doctor.type,
             style: TextStyles.bodySm.subTitleColor.bold,
@@ -311,8 +311,7 @@ class HomePageState extends State<HomePage> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor:
-            Theme.of(context).bottomNavigationBarTheme.backgroundColor,
+        selectedItemColor: Colors.white,
         elevation: Theme.of(context).bottomNavigationBarTheme.elevation,
         onTap: _onItemTapped,
       ),
@@ -322,28 +321,37 @@ class HomePageState extends State<HomePage> {
   _onItemTapped(index) {
     setState(() {
       _selectedIndex = index;
+
+      if (index == 1) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const UserPrescriptionsPage(),
+          ),
+        );
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _appBar(context),
-      backgroundColor: Theme.of(context).colorScheme.background,
-      body: CustomScrollView(
-        slivers: <Widget>[
-          SliverList(
-            delegate: SliverChildListDelegate(
-              [
-                _header(),
-                _searchField(),
-                _appointmentsToday(),
-              ],
+        appBar: _appBar(context),
+        backgroundColor: Theme.of(context).colorScheme.background,
+        body: CustomScrollView(
+          slivers: <Widget>[
+            SliverList(
+              delegate: SliverChildListDelegate(
+                [
+                  _header(),
+                  _searchField(),
+                  _upcomingAppointments(),
+                ],
+              ),
             ),
-          ),
-          _doctorsList()
-        ],
-      ),
+            _doctorsList()
+          ],
+        ),
       bottomNavigationBar: _bottomNavigationBar(),
     );
   }
