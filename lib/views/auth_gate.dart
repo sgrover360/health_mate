@@ -1,72 +1,8 @@
-// import 'package:flutter/material.dart';
-// import 'package:firebase_auth/firebase_auth.dart'
-//     hide EmailAuthProvider, AuthProvider;
-// import 'package:firebase_ui_auth/firebase_ui_auth.dart';
-// import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
-
-// import 'app_routes.dart';
-
-// class AuthGate extends StatelessWidget {
-//   AuthGate({super.key});
-
-//   final List<AuthProvider<AuthListener, AuthCredential>> providers = [
-//     EmailAuthProvider(),
-//     GoogleProvider(
-//         clientId:
-//             "1005622537424-ek0pnmrgkou172j6afli4ec8m0de9b8p.apps.googleusercontent.com")
-//   ];
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return StreamBuilder(
-//         stream: FirebaseAuth.instance.authStateChanges(),
-//         builder: (context, snapshot) {
-//           if (!snapshot.hasData) {
-//             return SignInScreen(
-//               providers: providers,
-//               headerBuilder: (context, constraints, shrinkOffset) {
-//                 return Column(
-//                   children: [
-//                     Expanded(
-//                       child: Padding(
-//                         padding: const EdgeInsets.all(20),
-//                         child: Image.asset(
-//                           'assets/logo.png',
-//                           width: 100, // Set the desired width
-//                           height: 100, // Set the desired height
-//                         ),
-//                       ),
-//                     ),
-//                     const Text(
-//                       'Health Mate',
-//                       style:
-//                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-//                     ),
-//                   ],
-//                 );
-//               },
-//               footerBuilder: (context, action) {
-//                 return const Padding(
-//                   padding: EdgeInsets.only(top: 16),
-//                   child: Text(
-//                     'By signing in, you agree to our terms and conditions.',
-//                     style: TextStyle(color: Colors.grey),
-//                   ),
-//                 );
-//               },
-//             );
-//           } else {
-//             // return const AppRoutes();
-//           }
-//         });
-//   }
-// }
-///////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:sign_in_button/sign_in_button.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:health_mate/models/chat_user.dart';
+import 'package:health_mate/views/doctor_register.dart';
 import 'package:health_mate/views/home_page.dart';
 import 'package:health_mate/views/login_controller.dart';
 
@@ -114,9 +50,8 @@ class _LoginPageState extends State<AuthGate> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
               // Chip(
-              //     label: Text(_registerMode
-              //         ? "Register for Health Mate"
-              //         : "Login to Health Mate")),
+              //     label:
+              //     Text(_registerMode ? "Register for chat" : "Login to chat")),
               if (_registerMode) const SizedBox(height: 10),
               if (_registerMode)
                 SizedBox(
@@ -161,7 +96,7 @@ class _LoginPageState extends State<AuthGate> {
               )),
               const SizedBox(height: 20),
               SignInButton(
-                Buttons.google,
+                Buttons.Google,
                 onPressed: () async {
                   try {
                     await signInWithGoogle();
@@ -172,15 +107,21 @@ class _LoginPageState extends State<AuthGate> {
                 },
               ),
               TextButton(
-                child: Text(_registerMode
-                    ? "Want to log in?"
-                    : "Want to register for chat?"),
+                child: Text(
+                    _registerMode ? "Want to log in?" : "Want to register?"),
                 onPressed: () {
                   setState(() {
                     _registerMode = !_registerMode;
                   });
                 },
               ),
+              TextButton(
+                child: const Text('Doctor? Register Here'),
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const RegistrationForm()));
+                },
+              )
             ])));
   }
 

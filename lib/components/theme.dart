@@ -27,7 +27,7 @@ class AppTheme {
   static TextStyle h6Style = const TextStyle(fontSize: 14);
 
   static List<BoxShadow> shadow = <BoxShadow>[
-    BoxShadow(color: Color(0xfff8f8f8), blurRadius: 10, spreadRadius: 15),
+    const BoxShadow(color: Color(0xfff8f8f8), blurRadius: 10, spreadRadius: 15),
   ];
 
   static EdgeInsets padding =
