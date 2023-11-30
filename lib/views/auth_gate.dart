@@ -5,6 +5,8 @@ import 'package:health_mate/models/chat_user.dart';
 import 'package:health_mate/views/home_page.dart';
 import 'package:health_mate/views/login_controller.dart';
 
+import 'doctor_home_page.dart';
+
 class AuthGate extends StatefulWidget {
   const AuthGate({super.key});
 
@@ -127,8 +129,11 @@ class _LoginPageState extends State<AuthGate> {
       _passwordController?.text = "";
       _passwordConfirmController?.text = "";
 
+      // await Navigator.of(context)
+      //     .push(MaterialPageRoute(builder: (context) => HomePage(user: user)));
+
       await Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => HomePage(user: user)));
+          .push(MaterialPageRoute(builder: (context) => DoctorHomePage(user: user)));
 
       //await Navigator.of(context).push(
       //    MaterialPageRoute(builder: (context) => ChatOverviewPage(user)));
@@ -143,8 +148,10 @@ class _LoginPageState extends State<AuthGate> {
       ChatUser chatUser = await _controller.signInWithGoogle();
 
       // Navigate to the HomePage with the obtained ChatUser
-      await Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => HomePage(user: chatUser)));
+      await Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => DoctorHomePage(user: chatUser)));
+      // await Navigator.of(context).push(
+      //     MaterialPageRoute(builder: (context) => HomePage(user: chatUser)));
     } catch (error) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(error.toString())));

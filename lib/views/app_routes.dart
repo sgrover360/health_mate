@@ -3,6 +3,8 @@ import 'package:health_mate/models/chat_user.dart';
 import 'package:health_mate/views/theme_provider.dart';
 import 'package:provider/provider.dart';
 
+import 'create_prescription.dart';
+import 'doctor_home_page.dart';
 import 'profile_page.dart';
 import 'home_page.dart';
 
@@ -18,7 +20,7 @@ class AppRoutes extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => HomePage(user: user),
-        //'/profile': (context) => ProfilePage()
+        // '/profile': (context) => ProfilePage(),
       },
     );
   }

@@ -33,7 +33,7 @@ class UserData {
       this.bloodType = '',
       this.eyeCol = '',
       this.skinTone = '',
-      required this.email,
+      this.email = '',
       this.phone = '',
       this.photoUri = '',
       this.isDoctor = false});
@@ -81,4 +81,24 @@ class UserData {
       isDoctor: map['isDoctor'] ?? false,
     );
   }
+
+  fromPatientJson(Map<String, dynamic> json) => UserData(
+    fname: json["fname"],
+    lname: json["lname"],
+    dob: json["dob"],
+    sex: json["sex"],
+    addr: json["addr"],
+    post: json["post"],
+    city: json["city"],
+    province: json["province"],
+    hairCol: json["hairCol"],
+    bloodType: json["bloodType"],
+    eyeCol: json["eyeCol"],
+    skinTone: json["skinTone"],
+    email: json["email"],
+    phone: json["phone"],
+    photoUri: json["photoUri"],
+    isDoctor: json["isDoctor"],
+    id: json["id"],
+  );
 }
