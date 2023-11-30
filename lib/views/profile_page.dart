@@ -20,7 +20,7 @@ class ProfilePage extends StatefulWidget {
 
 class ProfilePageState extends State<ProfilePage> {
   var auth = FirebaseAuth.instance;
-  var providers = AuthGate().providers;
+  // var providers = AuthGate().providers;
   User? user = FirebaseAuth.instance.currentUser;
   ThemeProvider themeProvider = ThemeProvider();
   final _formKey = GlobalKey<FormState>();
@@ -127,20 +127,20 @@ class ProfilePageState extends State<ProfilePage> {
     'Wyoming'
   ];
 
-  Future<bool> _reauthenticate(BuildContext context) {
-    // final l = FirebaseUILocalizations.labelsOf(context);
-    return showReauthenticateDialog(
-      context: context,
-      providers: providers,
-      auth: auth,
-      onSignedIn: () {
-        user!.delete();
-        Navigator.of(context).pop();
-      },
-      // actionButtonLabelOverride: l.deleteAccount,
-      actionButtonLabelOverride: 'Delete Account',
-    );
-  }
+  // Future<bool> _reauthenticate(BuildContext context) {
+  //   // final l = FirebaseUILocalizations.labelsOf(context);
+  //   return showReauthenticateDialog(
+  //     context: context,
+  //     providers: providers,
+  //     auth: auth,
+  //     onSignedIn: () {
+  //       user!.delete();
+  //       Navigator.of(context).pop();
+  //     },
+  //     // actionButtonLabelOverride: l.deleteAccount,
+  //     actionButtonLabelOverride: 'Delete Account',
+  //   );
+  // }
 
   Future<void> selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -196,6 +196,15 @@ class ProfilePageState extends State<ProfilePage> {
     widget.currUser?.phone =
         phone_primary.isNotEmpty ? phone_primary : phone_secondary;
     widget.currUser?.photoUri = photoUri;
+    await _userDataService.addNewProfile(widget.currUser!).then((value) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('User profile added'),
+      ));
+    }).catchError((err) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(err.toString()),
+      ));
+    });
   }
 
   @override
@@ -884,11 +893,26 @@ class ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
                 const SizedBox(height: 30),
-                DeleteAccountButton(
-                  auth: auth,
-                  onSignInRequired: () {
-                    return _reauthenticate(context);
-                  },
+                Container(
+                  height: 30,
+                  alignment: AlignmentDirectional.center,
+                  child: FloatingActionButton.extended(
+                      heroTag: null,
+                      backgroundColor: Colors.red.shade400,
+                      icon: const Icon(Icons.delete_forever),
+                      label: Text('Delete Account'),
+                      onPressed: (() async {
+                        await _userDataService
+                            .deleteProfile(widget.currUser!)
+                            .then((value) => {user!.delete()})
+                            .then((value) => ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                                    content: Text('User account deleted'))))
+                            .whenComplete(() => FirebaseUIAuth.signOut(
+                                  context: context,
+                                  auth: auth,
+                                ));
+                      })),
                 ),
               ],
             )

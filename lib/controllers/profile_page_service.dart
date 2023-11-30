@@ -17,8 +17,10 @@ class UserDataService {
             .collection('userData');
 
   Future<DocumentReference<Object?>> addNewProfile(UserData profile) async {
-    if (await profileExists(profile.id)) {
-      throw Exception('User data already exists for this user');
+    if (profile.fname.isEmpty && profile.lname.isEmpty) {
+      throw Exception('Please update name');
+    } else if (await profileExists(profile.id)) {
+      throw Exception('User profile already exists for this email');
     }
     return await userDataCollection.add(profile.toMap());
   }
@@ -53,7 +55,7 @@ class UserDataService {
         profiles.add(profile);
       });
     });
-    if (profiles.length > 1) {
+    if (profiles.length > 0) {
       return true;
     }
     return false;

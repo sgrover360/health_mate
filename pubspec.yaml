@@ -52,6 +52,7 @@ dependencies:
   image_picker: ^1.0.4
   shared_preferences: ^2.2.2
   provider: ^6.1.1
+  flutter_signin_button: ^2.0.0
 
 dev_dependencies:
   flutter_test:
