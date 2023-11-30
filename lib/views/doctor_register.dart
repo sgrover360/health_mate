@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:health_mate/pages/login/login_controller.dart';
+import 'package:health_mate/views/login_controller.dart';
 import 'package:intl/intl.dart';
 
 import 'AuthenticationCompletePage.dart';
@@ -14,14 +14,14 @@ class RegistrationForm extends StatefulWidget {
 
 class _RegistrationFormState extends State<RegistrationForm> {
   final LoginController _controller = LoginController();
-  DateFormat _dateFormat = DateFormat('yyyy-MM-dd');
-  TextEditingController _firstNameController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
-  TextEditingController _confirmPasswordController = TextEditingController();
-  TextEditingController _specializationController = TextEditingController();
-  TextEditingController _medicalIdController = TextEditingController();
-  TextEditingController _researchPaperURLController = TextEditingController();
+  final DateFormat _dateFormat = DateFormat('yyyy-MM-dd');
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _specializationController = TextEditingController();
+  final TextEditingController _medicalIdController = TextEditingController();
+  final TextEditingController _researchPaperURLController = TextEditingController();
 
   DateTime? _dateOfBirth;
 

@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:sign_in_button/sign_in_button.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:health_mate/models/chat_user.dart';
+import 'package:health_mate/views/doctor_register.dart';
 import 'package:health_mate/views/home_page.dart';
 import 'package:health_mate/views/login_controller.dart';
 
@@ -45,21 +46,19 @@ class _LoginPageState extends State<AuthGate> {
     return Scaffold(
         appBar: AppBar(title: const Text("Login")),
         body: Center(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
+            child:
+            Column(mainAxisAlignment: MainAxisAlignment.center, children: <
+                Widget>[
               // Chip(
-              //     label: Text(_registerMode
-              //         ? "Register for Health Mate"
-              //         : "Login to Health Mate")),
+              //     label:
+              //     Text(_registerMode ? "Register for chat" : "Login to chat")),
               if (_registerMode) const SizedBox(height: 10),
               if (_registerMode)
                 SizedBox(
                     width: 200,
                     child: TextField(
                       controller: _userController,
-                      decoration:
-                          const InputDecoration(label: Text("User name")),
+                      decoration: const InputDecoration(label: Text("User name")),
                     )),
               const SizedBox(height: 10),
               SizedBox(
@@ -74,8 +73,7 @@ class _LoginPageState extends State<AuthGate> {
                   child: TextField(
                       controller: _passwordController,
                       obscureText: true,
-                      decoration:
-                          const InputDecoration(label: Text("Password")))),
+                      decoration: const InputDecoration(label: Text("Password")))),
               if (_registerMode) const SizedBox(height: 10),
               if (_registerMode)
                 SizedBox(
@@ -88,34 +86,44 @@ class _LoginPageState extends State<AuthGate> {
               const SizedBox(height: 20),
               Center(
                   child: SizedBox(
-                width: 100,
-                child: ElevatedButton(
-                    child: Text(_registerMode ? "Register" : "Login"),
-                    onPressed: () async =>
+                    width: 100,
+                    child: ElevatedButton(
+                        child: Text(_registerMode ? "Register" : "Login"),
+                        onPressed: () async =>
                         _registerMode ? await _register() : await _login()),
-              )),
+                  )),
               const SizedBox(height: 20),
               SignInButton(
-                Buttons.google,
+                Buttons.Google,
                 onPressed: () async {
                   try {
                     await signInWithGoogle();
-                  } catch (error) {
+                  }
+                  catch (error) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(error.toString())));
+                        SnackBar(content: Text(error.toString()))
+                    );
                   }
                 },
               ),
               TextButton(
                 child: Text(_registerMode
                     ? "Want to log in?"
-                    : "Want to register for chat?"),
+                    : "Want to register?"),
                 onPressed: () {
                   setState(() {
                     _registerMode = !_registerMode;
                   });
                 },
               ),
+              TextButton(
+                child: const Text('Doctor? Register Here'),
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const RegistrationForm()
+                  ));
+                },
+              )
             ])));
   }
 
@@ -127,8 +135,8 @@ class _LoginPageState extends State<AuthGate> {
       _passwordController?.text = "";
       _passwordConfirmController?.text = "";
 
-      await Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => HomePage(user: user)));
+      await Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => HomePage(user: user)));
 
       //await Navigator.of(context).push(
       //    MaterialPageRoute(builder: (context) => ChatOverviewPage(user)));
@@ -144,10 +152,12 @@ class _LoginPageState extends State<AuthGate> {
 
       // Navigate to the HomePage with the obtained ChatUser
       await Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => HomePage(user: chatUser)));
+          MaterialPageRoute(builder: (context) => HomePage(user: chatUser))
+      );
     } catch (error) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(error.toString())));
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(error.toString()))
+      );
     }
   }
 

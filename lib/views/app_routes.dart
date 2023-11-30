@@ -19,7 +19,7 @@ class AppRoutes extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => HomePage(user: user),
-        '/profile': (context) => ProfilePage(),
+       // '/profile': (context) => ProfilePage(currUser: user),
       },
     );
   }

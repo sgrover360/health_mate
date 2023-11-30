@@ -4,7 +4,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
 import '../models/user_data.dart';
-import '../views/auth_gate.dart';
 
 class UserDataService {
   final user = FirebaseAuth.instance.currentUser;
@@ -48,10 +47,10 @@ class UserDataService {
   Future<bool> profileExists(String? id) async {
     var profiles = [];
     await userDataCollection.get().then((snapshot) {
-      snapshot.docs.forEach((doc) {
+      for (var doc in snapshot.docs) {
         var profile = doc.data();
         profiles.add(profile);
-      });
+      }
     });
     if (profiles.length > 1) {
       return true;
