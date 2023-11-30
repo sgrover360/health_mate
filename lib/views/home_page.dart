@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:health_mate/components/extensions.dart';
 import 'package:health_mate/views/user_prescriptions_page.dart';
 import 'package:health_mate/models/chat_user.dart';
+import 'package:health_mate/pages/chat_overview/chat_overview_page.dart';
+import 'package:health_mate/views/profile_page.dart';
 import 'package:health_mate/views/theme_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -13,15 +15,18 @@ import '../models/data.dart';
 import '../models/doctor.dart';
 
 class HomePage extends StatefulWidget {
+  //final User? user = FirebaseAuth.instance.currentUser;
   final ChatUser user;
-  HomePage({super.key, required this.user});
+
+  const HomePage({super.key, required this.user});
 
   @override
-  State<StatefulWidget> createState() => HomePageState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class HomePageState extends State<HomePage> {
-  final User? user = FirebaseAuth.instance.currentUser;
+class _HomePageState extends State<HomePage> {
+  //final User? user = FirebaseAuth.instance.currentUser;
+  //final ChatUser user;
   late List<Doctor> doctorDataList;
   int _selectedIndex = 0;
 
@@ -44,7 +49,9 @@ class HomePageState extends State<HomePage> {
         IconButton(
           icon: const Icon(Icons.person),
           onPressed: () {
-            Navigator.pushNamed(context, '/profile');
+            // Navigator.pushNamed(context, '/profile');
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => ProfilePage(currUser: widget.user)));
           },
         ),
       ],
@@ -311,7 +318,8 @@ class HomePageState extends State<HomePage> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.white,
+        selectedItemColor: Colors.white, // Changed to a contrasting color
+        unselectedItemColor: Colors.grey, // Added for unselected items
         elevation: Theme.of(context).bottomNavigationBarTheme.elevation,
         onTap: _onItemTapped,
       ),
@@ -329,6 +337,10 @@ class HomePageState extends State<HomePage> {
             builder: (context) => const UserPrescriptionsPage(),
           ),
         );
+      }
+      if (index == 2){
+        Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => ChatOverviewPage(widget.user)));
       }
     });
   }

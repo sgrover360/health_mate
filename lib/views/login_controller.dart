@@ -1,7 +1,44 @@
+/*import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:health_mate/models/chat_user.dart';
+
+class LoginController {
+  Future<ChatUser> login(String email, String password) async {
+    var cred = await FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: email, password: password);
+
+    var user = (await FirebaseFirestore.instance
+        .collection("users")
+        .where("id", isEqualTo: cred.user?.uid ?? "")
+        .get())
+        .docs
+        .map((e) => ChatUser.fromJson(e.data()))
+        .toList()
+        .single;
+
+    return user;
+  }
+
+  Future register(String email, String password, String username) async {
+    var cred = await FirebaseAuth.instance
+        .createUserWithEmailAndPassword(email: email, password: password);
+
+    var user =
+    ChatUser(id: cred.user?.uid ?? "", name: username, chatIds: <String>[]);
+
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(cred.user?.uid ?? "")
+        .set(user.toJson());
+  }
+}
+*/
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:health_mate/models/chat_user.dart';
+import 'package:health_mate/models/doctor_user.dart';
 
 class LoginController {
   // Email/Password Login
@@ -30,13 +67,41 @@ class LoginController {
     UserCredential cred = await FirebaseAuth.instance
         .createUserWithEmailAndPassword(email: email, password: password);
 
-    ChatUser newUser =
-        ChatUser(id: cred.user!.uid, name: username, chatIds: []);
+    ChatUser newUser = ChatUser(
+        id: cred.user!.uid,
+        name: username,
+        chatIds: []);
 
     await FirebaseFirestore.instance
         .collection("users")
         .doc(cred.user!.uid)
         .set(newUser.toJson());
+  }
+
+  Future<void> registerDoctor(String email, String password, Map<String, dynamic> doctorData) async {
+    // Assuming doctorData contains email and password for creating a Firebase user
+    // String email = doctorData['email'];
+    // String password = doctorData['password'];
+
+    UserCredential cred = await FirebaseAuth.instance
+        .createUserWithEmailAndPassword(email: email, password: password);
+
+    // Create a DoctorUser instance
+    DoctorUser newDoctor = DoctorUser(
+      id: cred.user!.uid,
+      name: doctorData['name'],
+      specialization: doctorData['specialization'],
+      medicalId: doctorData['medicalId'],
+      researchPaperURL: doctorData['researchPaperURL'],
+      dateOfBirth: doctorData['dateOfBirth'],
+      chatIds: [], // Initialize with empty list or as needed
+    );
+
+    // Save the new doctor to Firestore
+    await FirebaseFirestore.instance
+        .collection("doctors")
+        .doc(cred.user!.uid)
+        .set(newDoctor.toJson());
   }
 
   // Google Sign-In
@@ -56,8 +121,7 @@ class LoginController {
       idToken: googleAuth.idToken,
     );
 
-    UserCredential userCredential =
-        await FirebaseAuth.instance.signInWithCredential(credential);
+    UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
     User? firebaseUser = userCredential.user;
 
     if (firebaseUser != null) {
