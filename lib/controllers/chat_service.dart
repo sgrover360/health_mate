@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-import '../models/chat_data.dart';
+import '../models/chat_user.dart';
 
 class LoginController {
   // Email/Password Login

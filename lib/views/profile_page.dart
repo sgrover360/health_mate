@@ -13,7 +13,7 @@ import '../controllers/profile_page_service.dart';
 
 class ProfilePage extends StatefulWidget {
   UserData? currUser;
-  ProfilePage({Key? key, this.currUser}) : super(key: key);
+  ProfilePage({Key? key}) : super(key: key);
   @override
   State<ProfilePage> createState() => ProfilePageState();
 }

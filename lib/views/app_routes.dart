@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:health_mate/models/chat_data.dart';
-import 'package:health_mate/views/theme_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:health_mate/models/chat_user.dart';
+import 'package:health_mate/views/theme_provider.dart';
 
 import 'profile_page.dart';
 import 'home_page.dart';
@@ -17,7 +17,7 @@ class AppRoutes extends StatelessWidget {
       theme: Provider.of<ThemeProvider>(context).themeData,
       initialRoute: '/',
       routes: {
-        '/': (context) => HomePage(user: user), //added user as parameter
+        '/': (context) => HomePage(user: user),
         '/profile': (context) => ProfilePage()
       },
     );
