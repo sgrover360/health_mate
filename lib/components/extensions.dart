@@ -9,6 +9,25 @@ extension TextStyleHelpers on TextStyle {
   TextStyle get subTitleColor => copyWith(color: LightColor.subTitleTextColor);
 }
 
+extension WidgetExtensions on Widget {
+  Widget wrapWithDecoration() {
+    return Container(
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5), // Adjust the shadow color
+            spreadRadius: 1, // Adjust the shadow spread radius
+            blurRadius: 4, // Adjust the shadow blur radius
+            offset: const Offset(0, -4), // Adjust the shadow offset
+          ),
+        ],
+      ),
+      child: this,
+    );
+  }
+}
+
+
 extension PaddingHelper on Widget {
   Padding get p16 => Padding(padding: const EdgeInsets.all(16), child: this);
 

@@ -6,6 +6,8 @@ import 'package:health_mate/views/doctor_register.dart';
 import 'package:health_mate/views/home_page.dart';
 import 'package:health_mate/views/login_controller.dart';
 
+import 'doctor_home_page.dart';
+
 class AuthGate extends StatefulWidget {
   const AuthGate({super.key});
 
@@ -46,9 +48,9 @@ class _LoginPageState extends State<AuthGate> {
     return Scaffold(
         appBar: AppBar(title: const Text("Login")),
         body: Center(
-            child:
-            Column(mainAxisAlignment: MainAxisAlignment.center, children: <
-                Widget>[
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
               // Chip(
               //     label:
               //     Text(_registerMode ? "Register for chat" : "Login to chat")),
@@ -101,8 +103,7 @@ class _LoginPageState extends State<AuthGate> {
                   }
                   catch (error) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(error.toString()))
-                    );
+                        SnackBar(content: Text(error.toString())));
                   }
                 },
               ),
@@ -137,6 +138,9 @@ class _LoginPageState extends State<AuthGate> {
 
       await Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => HomePage(user: user)));
+      
+      // await Navigator.of(context)
+      //     .push(MaterialPageRoute(builder: (context) => DoctorHomePage(user: user)));
 
       //await Navigator.of(context).push(
       //    MaterialPageRoute(builder: (context) => ChatOverviewPage(user)));
@@ -151,9 +155,10 @@ class _LoginPageState extends State<AuthGate> {
       ChatUser chatUser = await _controller.signInWithGoogle();
 
       // Navigate to the HomePage with the obtained ChatUser
+      // await Navigator.of(context)
+      //     .push(MaterialPageRoute(builder: (context) => DoctorHomePage(user: chatUser)));
       await Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => HomePage(user: chatUser))
-      );
+          MaterialPageRoute(builder: (context) => HomePage(user: chatUser)));
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(error.toString()))
