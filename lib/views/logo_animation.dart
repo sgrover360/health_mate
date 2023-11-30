@@ -1,7 +1,6 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
-
-import 'auth_gate.dart';
+import 'package:health_mate/views/auth_gate.dart';
 
 class LogoAnimation extends StatefulWidget {
   const LogoAnimation({super.key});
@@ -21,7 +20,7 @@ class _LogoAnimationState extends State<LogoAnimation>
 
     Future.delayed(const Duration(seconds: 3), () {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => AuthGate()),
+        MaterialPageRoute(builder: (context) => const AuthGate()),
       );
     });
 
@@ -30,11 +29,9 @@ class _LogoAnimationState extends State<LogoAnimation>
       vsync: this,
     );
 
-    // scale animation for the logo
     final curve = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
     _scaleAnimation = Tween<double>(begin: 1.0, end: 2).animate(curve);
 
-    // Start the animation
     _controller.forward();
   }
 
@@ -46,41 +43,42 @@ class _LogoAnimationState extends State<LogoAnimation>
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          AnimatedBuilder(
-            animation: _scaleAnimation,
-            builder: (context, child) {
-              return Transform.scale(
-                scale: _scaleAnimation.value,
-                child: SizedBox(
-                  width: 100, // Heart icon size
-                  height: 100, // Heart icon size
-                  child: Image.asset(
-                    'assets/logo.png',
+    return Scaffold(
+      backgroundColor: Colors.white, // Set the background color of the page
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            AnimatedBuilder(
+              animation: _scaleAnimation,
+              builder: (context, child) {
+                return Transform.scale(
+                  scale: _scaleAnimation.value,
+                  child: SizedBox(
+                    width: 100,
+                    height: 100,
+                    child: Image.asset('assets/logo.png'),
                   ),
-                ),
-              );
-            },
-          ),
-          const SizedBox(height: 35),
-          SizedBox(
-            width: 250.0,
-            child: TextLiquidFill(
-              text: 'Health Mate',
-              loadDuration: const Duration(seconds: 2),
-              waveColor: Colors.redAccent.shade400,
-              boxBackgroundColor: Colors.red.shade50,
-              textStyle: const TextStyle(
-                fontSize: 40.0,
-                fontWeight: FontWeight.bold,
-              ),
-              boxHeight: 70.0,
+                );
+              },
             ),
-          )
-        ],
+            const SizedBox(height: 35),
+            SizedBox(
+              width: 250.0,
+              child: TextLiquidFill(
+                text: 'Health Mate',
+                loadDuration: const Duration(seconds: 2),
+                waveColor: Colors.blueAccent,
+                boxBackgroundColor: Colors.white,
+                textStyle: const TextStyle(
+                  fontSize: 40.0,
+                  fontWeight: FontWeight.bold,
+                ),
+                boxHeight: 70.0,
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
