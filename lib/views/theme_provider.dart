@@ -12,7 +12,10 @@ class ThemeProvider with ChangeNotifier {
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: Colors.white,
       elevation: 2,
-    )
+    ),
+    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+    checkboxTheme: const CheckboxThemeData(side: BorderSide(color: Colors.deepPurple, width: 2)),
+    hintColor: Colors.grey,
   );
   final darkTheme = ThemeData(
     brightness: Brightness.dark,
@@ -22,6 +25,19 @@ class ThemeProvider with ChangeNotifier {
       iconTheme: IconThemeData(color: Colors.white),
       titleTextStyle: TextStyle(fontSize: 20),
     ),
+    inputDecorationTheme: InputDecorationTheme(
+      focusedBorder: OutlineInputBorder(
+        borderSide: const BorderSide(color: Colors.white),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderSide: const BorderSide(color: Colors.white),
+        borderRadius: BorderRadius.circular(10),
+      ),
+    ),
+    iconTheme: const IconThemeData(color: Colors.white),
+    iconButtonTheme: const IconButtonThemeData(
+        style: ButtonStyle(iconColor: MaterialStatePropertyAll(Colors.white))),
   );
   late ThemeData _themeData;
 
