@@ -65,12 +65,10 @@
 //////////////////////////////////////////////////////////////////
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_signin_button/flutter_signin_button.dart';
-
-import '../models/chat_data.dart';
-import '../controllers/chat_service.dart';
-import '../views/home_page.dart';
-// import 'package:health_mate/views/doctor_register.dart';
+import 'package:sign_in_button/sign_in_button.dart';
+import 'package:health_mate/models/chat_user.dart';
+import 'package:health_mate/views/home_page.dart';
+import 'package:health_mate/views/login_controller.dart';
 
 class AuthGate extends StatefulWidget {
   const AuthGate({super.key});
@@ -115,9 +113,10 @@ class _LoginPageState extends State<AuthGate> {
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-              Chip(
-                  label: Text(
-                      _registerMode ? "Register for chat" : "Login to chat")),
+              // Chip(
+              //     label: Text(_registerMode
+              //         ? "Register for Health Mate"
+              //         : "Login to Health Mate")),
               if (_registerMode) const SizedBox(height: 10),
               if (_registerMode)
                 SizedBox(
@@ -162,7 +161,7 @@ class _LoginPageState extends State<AuthGate> {
               )),
               const SizedBox(height: 20),
               SignInButton(
-                Buttons.Google,
+                Buttons.google,
                 onPressed: () async {
                   try {
                     await signInWithGoogle();
@@ -182,13 +181,6 @@ class _LoginPageState extends State<AuthGate> {
                   });
                 },
               ),
-              // TextButton(
-              //   child: const Text('Doctor? Register Here'),
-              //   onPressed: () {
-              //     Navigator.of(context).push(MaterialPageRoute(
-              //         builder: (context) => const RegistrationForm()));
-              //   },
-              // )
             ])));
   }
 
