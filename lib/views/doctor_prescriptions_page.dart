@@ -13,7 +13,8 @@ import 'doctor_home_page.dart';
 class DoctorPrescriptionsPage extends StatefulWidget {
   final ChatUser user;
 
-  const DoctorPrescriptionsPage({Key? key, required this.user}) : super(key: key);
+  const DoctorPrescriptionsPage({Key? key, required this.user})
+      : super(key: key);
 
   @override
   DoctorPrescriptionsPageState createState() => DoctorPrescriptionsPageState();
@@ -21,6 +22,7 @@ class DoctorPrescriptionsPage extends StatefulWidget {
 
 class DoctorPrescriptionsPageState extends State<DoctorPrescriptionsPage> {
   late final String? userFirstName;
+  String _searchQuery = "";
 
   Widget _searchField() {
     return Container(
@@ -39,9 +41,14 @@ class DoctorPrescriptionsPageState extends State<DoctorPrescriptionsPage> {
         ],
       ),
       child: TextField(
+        onChanged: (query) {
+          setState(() {
+            _searchQuery = query;
+          });
+        },
         decoration: InputDecoration(
           contentPadding:
-          const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           border: InputBorder.none,
           hintText: "Search for prescription",
           hintStyle: TextStyles.body.subTitleColor,
@@ -77,8 +84,8 @@ class DoctorPrescriptionsPageState extends State<DoctorPrescriptionsPage> {
         onPressed: () {
           // Navigate to the page where the doctor can create a new prescription
           // Navigator.pushNamed(context, '/createPrescription');
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => CreatePrescription(user: widget.user)));
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => CreatePrescription(user: widget.user)));
         },
         child: const Icon(Icons.add),
       ),
@@ -109,10 +116,17 @@ class DoctorPrescriptionsPageState extends State<DoctorPrescriptionsPage> {
   }
 
   Widget _getPrescriptionsWidgetList() {
+    final filteredPrescriptions = prescriptions.where((prescription) {
+      return prescription.medicineName
+          .toLowerCase()
+          .contains(_searchQuery.toLowerCase());
+    }).toList();
+
     return Column(
-        children: prescriptions.map((x) {
-          return _prescriptionTile(x);
-        }).toList());
+      children: filteredPrescriptions.map((x) {
+        return _prescriptionTile(x);
+      }).toList(),
+    );
   }
 
   Widget _prescriptionTile(Prescription prescription) {
@@ -159,7 +173,8 @@ class DoctorPrescriptionsPageState extends State<DoctorPrescriptionsPage> {
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Prescribed to:   ${prescription.userFirstName} ${prescription.userLastName}"),
+              Text(
+                  "Prescribed to:   ${prescription.userFirstName} ${prescription.userLastName}"),
               Text("Prescribed on:   ${prescription.date}"),
             ],
           ),
@@ -172,7 +187,10 @@ class DoctorPrescriptionsPageState extends State<DoctorPrescriptionsPage> {
       ).ripple(() {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => PdfViewerPage(pdfUrl: prescription.prescriptionPdfUrl,)),
+          MaterialPageRoute(
+              builder: (context) => PdfViewerPage(
+                    pdfUrl: prescription.prescriptionPdfUrl,
+                  )),
         );
       }, borderRadius: const BorderRadius.all(Radius.circular(20))),
     );

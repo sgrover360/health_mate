@@ -15,6 +15,7 @@ class UserPrescriptionsPage extends StatefulWidget {
 
 class UserPrescriptionsPageState extends State<UserPrescriptionsPage> {
   late final String? userFirstName;
+  String _searchQuery = "";
   final List<Prescription> prescriptions = [
     Prescription(
       doctorFirstName: 'Mashoor',
@@ -23,7 +24,8 @@ class UserPrescriptionsPageState extends State<UserPrescriptionsPage> {
       userLastName: 'Grover',
       contactInfo: '123-456-7890',
       date: '2023-01-01',
-      prescriptionPdfUrl: 'https://firebasestorage.googleapis.com/v0/b/health-mate-4768.appspot.com/o/prescription.pdf?alt=media&token=5a5f9ac5-88e0-4d22-9215-a9101f4fa2fb', // Replace with the actual URL
+      prescriptionPdfUrl:
+          'https://firebasestorage.googleapis.com/v0/b/health-mate-4768.appspot.com/o/prescription.pdf?alt=media&token=5a5f9ac5-88e0-4d22-9215-a9101f4fa2fb', // Replace with the actual URL
       medicineName: 'Aspirin',
       doctorImage: 'assets/doctor_gulati.png',
       userImage: 'assets/user_1.png',
@@ -37,11 +39,13 @@ class UserPrescriptionsPageState extends State<UserPrescriptionsPage> {
       userLastName: 'Grover',
       contactInfo: '123-456-7890',
       date: '2023-01-02',
-      prescriptionPdfUrl: 'https://firebasestorage.googleapis.com/v0/b/health-mate-4768.appspot.com/o/prescription.pdf?alt=media&token=5a5f9ac5-88e0-4d22-9215-a9101f4fa2fb', // Replace with the actual URL
+      prescriptionPdfUrl:
+          'https://firebasestorage.googleapis.com/v0/b/health-mate-4768.appspot.com/o/prescription.pdf?alt=media&token=5a5f9ac5-88e0-4d22-9215-a9101f4fa2fb', // Replace with the actual URL
       medicineName: 'Advil',
       doctorImage: 'assets/doctor.png',
       userImage: 'assets/user_2.png',
-      userId: '', // think about making a static User class containing all the properties
+      userId:
+          '', // think about making a static User class containing all the properties
       prescriptionId: '',
     ),
     Prescription(
@@ -51,7 +55,8 @@ class UserPrescriptionsPageState extends State<UserPrescriptionsPage> {
       userLastName: 'Grover',
       contactInfo: '123-456-7890',
       date: '2023-04-01',
-      prescriptionPdfUrl: 'https://firebasestorage.googleapis.com/v0/b/health-mate-4768.appspot.com/o/prescription.pdf?alt=media&token=5a5f9ac5-88e0-4d22-9215-a9101f4fa2fb', // Replace with the actual URL
+      prescriptionPdfUrl:
+          'https://firebasestorage.googleapis.com/v0/b/health-mate-4768.appspot.com/o/prescription.pdf?alt=media&token=5a5f9ac5-88e0-4d22-9215-a9101f4fa2fb', // Replace with the actual URL
       medicineName: 'Viagra',
       doctorImage: 'assets/doctor_1.png',
       userImage: 'assets/user_3.png',
@@ -65,7 +70,8 @@ class UserPrescriptionsPageState extends State<UserPrescriptionsPage> {
       userLastName: 'Choudhary',
       contactInfo: '123-456-7890',
       date: '2023-04-18',
-      prescriptionPdfUrl: 'https://firebasestorage.googleapis.com/v0/b/health-mate-4768.appspot.com/o/prescription.pdf?alt=media&token=5a5f9ac5-88e0-4d22-9215-a9101f4fa2fb', // Replace with the actual URL
+      prescriptionPdfUrl:
+          'https://firebasestorage.googleapis.com/v0/b/health-mate-4768.appspot.com/o/prescription.pdf?alt=media&token=5a5f9ac5-88e0-4d22-9215-a9101f4fa2fb', // Replace with the actual URL
       medicineName: 'Ibuprofen',
       doctorImage: 'assets/doctor_3.png',
       userImage: 'assets/user_4.png',
@@ -79,7 +85,8 @@ class UserPrescriptionsPageState extends State<UserPrescriptionsPage> {
       userLastName: 'Grover',
       contactInfo: '123-456-7890',
       date: '2023-08-23',
-      prescriptionPdfUrl: 'https://firebasestorage.googleapis.com/v0/b/health-mate-4768.appspot.com/o/prescription.pdf?alt=media&token=5a5f9ac5-88e0-4d22-9215-a9101f4fa2fb', // Replace with the actual URL
+      prescriptionPdfUrl:
+          'https://firebasestorage.googleapis.com/v0/b/health-mate-4768.appspot.com/o/prescription.pdf?alt=media&token=5a5f9ac5-88e0-4d22-9215-a9101f4fa2fb', // Replace with the actual URL
       medicineName: 'Paracetamol',
       doctorImage: 'assets/doctor_4.png',
       userImage: 'assets/user_5.png',
@@ -93,7 +100,8 @@ class UserPrescriptionsPageState extends State<UserPrescriptionsPage> {
       userLastName: 'Grover',
       contactInfo: '123-456-7890',
       date: '2023-11-19',
-      prescriptionPdfUrl: 'https://firebasestorage.googleapis.com/v0/b/health-mate-4768.appspot.com/o/prescription.pdf?alt=media&token=5a5f9ac5-88e0-4d22-9215-a9101f4fa2fb', // Replace with the actual URL
+      prescriptionPdfUrl:
+          'https://firebasestorage.googleapis.com/v0/b/health-mate-4768.appspot.com/o/prescription.pdf?alt=media&token=5a5f9ac5-88e0-4d22-9215-a9101f4fa2fb', // Replace with the actual URL
       medicineName: 'Lipitor',
       doctorImage: 'assets/doctor.png',
       userImage: 'assets/user_6.png',
@@ -107,7 +115,8 @@ class UserPrescriptionsPageState extends State<UserPrescriptionsPage> {
       userLastName: 'Grover',
       contactInfo: '123-456-7890',
       date: '2023-12-27',
-      prescriptionPdfUrl: 'https://firebasestorage.googleapis.com/v0/b/health-mate-4768.appspot.com/o/prescription.pdf?alt=media&token=5a5f9ac5-88e0-4d22-9215-a9101f4fa2fb', // Replace with the actual URL
+      prescriptionPdfUrl:
+          'https://firebasestorage.googleapis.com/v0/b/health-mate-4768.appspot.com/o/prescription.pdf?alt=media&token=5a5f9ac5-88e0-4d22-9215-a9101f4fa2fb', // Replace with the actual URL
       medicineName: 'Penicillin',
       doctorImage: 'assets/doctor_4.png',
       userImage: 'assets/user_6.png',
@@ -134,9 +143,14 @@ class UserPrescriptionsPageState extends State<UserPrescriptionsPage> {
         ],
       ),
       child: TextField(
+        onChanged: (query) {
+          setState(() {
+            _searchQuery = query;
+          });
+        },
         decoration: InputDecoration(
           contentPadding:
-          const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           border: InputBorder.none,
           hintText: "Search for prescription",
           hintStyle: TextStyles.body.subTitleColor,
@@ -195,10 +209,20 @@ class UserPrescriptionsPageState extends State<UserPrescriptionsPage> {
   }
 
   Widget _getPrescriptionsWidgetList() {
+    final filteredPrescriptions = prescriptions.where((prescription) {
+      return prescription.medicineName
+          .toLowerCase()
+          .contains(_searchQuery.toLowerCase());
+    }).toList();
+
+    print(
+        "Filtered Prescriptions: $filteredPrescriptions"); // Add this line to check the filtered list
+
     return Column(
-        children: prescriptions.map((x) {
-          return _prescriptionTile(x);
-        }).toList());
+      children: filteredPrescriptions.map((x) {
+        return _prescriptionTile(x);
+      }).toList(),
+    );
   }
 
   Widget _prescriptionTile(Prescription prescription) {
@@ -245,7 +269,8 @@ class UserPrescriptionsPageState extends State<UserPrescriptionsPage> {
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Prescribed by:   Dr. ${prescription.doctorFirstName} ${prescription.doctorLastName}"),
+              Text(
+                  "Prescribed by:   Dr. ${prescription.doctorFirstName} ${prescription.doctorLastName}"),
               Text("Prescribed on:   ${prescription.date}"),
             ],
           ),
@@ -258,7 +283,10 @@ class UserPrescriptionsPageState extends State<UserPrescriptionsPage> {
       ).ripple(() {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => PdfViewerPage(pdfUrl: prescription.prescriptionPdfUrl,)),
+          MaterialPageRoute(
+              builder: (context) => PdfViewerPage(
+                    pdfUrl: prescription.prescriptionPdfUrl,
+                  )),
         );
       }, borderRadius: const BorderRadius.all(Radius.circular(20))),
     );
