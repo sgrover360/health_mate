@@ -3,36 +3,31 @@ import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_ui_auth/src/screens/profile_screen.dart';
 import 'package:firebase_ui_localizations/firebase_ui_localizations.dart';
 import 'package:flutter/services.dart';
-import 'package:health_mate/models/chat_user.dart';
+import 'package:health_mate/components/extensions.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 
-import '../models/user_data.dart';
 import '../views/theme_provider.dart';
 import '../controllers/profile_page_service.dart';
+import 'package:health_mate/models/chat_user.dart';
 
 class ProfilePage extends StatefulWidget {
   final ChatUser currUser;
-
-  const ProfilePage({Key? key, required this.currUser}) : super(key: key);
-
+  ProfilePage({Key? key, required this.currUser}) : super(key: key);
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  late ChatUser _user;
-
   ThemeProvider themeProvider = ThemeProvider();
-
+  User? _user = FirebaseAuth.instance.currentUser;
   final _formKey = GlobalKey<FormState>();
   final _userDataService = UserDataService();
   final ImagePicker picker = ImagePicker();
-
   String fname = '';
   String lname = '';
-  DateTime? dob = DateTime(DateTime.now().year, DateTime.now().month,
-      DateTime.now().day); //need change
+  DateTime? dob =
+      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
   String sex = 'Male';
   String addr_line1 = '';
   String addr_line2 = '';
@@ -183,7 +178,9 @@ class _ProfilePageState extends State<ProfilePage> {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
     }
-
+    print(widget.currUser);
+    print(widget.currUser.id);
+    print(widget.currUser.toJson());
     // // Assuming 'user' is a Firebase User and 'widget.currUser' is of type ChatUser
     // widget.currUser ??= ChatUser(
     //   id: _user!.id,
@@ -194,36 +191,46 @@ class _ProfilePageState extends State<ProfilePage> {
     // );
     //
     // // Update the fields of currUser
-    // widget.currUser.fname = fname.isNotEmpty ? fname : widget.currUser.fname;
-    // widget.currUser.lname = lname.isNotEmpty ? lname : widget.currUser.lname;
-    // widget.currUser.dob = dob ?? widget.currUser.dob;
-    // widget.currUser.sex = sex.isNotEmpty ? sex : widget.currUser.sex;
-    // widget.currUser.addr = '$addr_line1, $addr_line2';
-    // widget.currUser.post = post.isNotEmpty ? post : widget.currUser.post;
-    // widget.currUser.city = city.isNotEmpty ? city : widget.currUser.city;
-    // widget.currUser.province = province ?? widget.currUser.province;
-    // widget.currUser.hairCol = hairCol.isNotEmpty ? hairCol : widget.currUser.hairCol;
-    // widget.currUser.eyeCol = eyeCol.isNotEmpty ? eyeCol : widget.currUser.eyeCol;
-    // widget.currUser.bloodType = bloodType.isNotEmpty ? bloodType : widget.currUser.bloodType;
-    // widget.currUser.skinTone = skinTone.isNotEmpty ? skinTone : widget.currUser.skinTone;
-    // widget.currUser.phone = phone_primary.isNotEmpty ? phone_primary : (phone_secondary.isNotEmpty ? phone_secondary : widget.currUser.phone);
-    // widget.currUser.photoUri = photoUri ?? widget.currUser.photoUri;
-
-    // Add any additional logic to save or update the user data in your database
+    widget.currUser.fname = fname.isNotEmpty ? fname : widget.currUser.fname;
+    widget.currUser.lname = lname.isNotEmpty ? lname : widget.currUser.lname;
+    widget.currUser.dob = dob ?? widget.currUser.dob;
+    widget.currUser.sex = sex.isNotEmpty ? sex : widget.currUser.sex;
+    widget.currUser.addr = '$addr_line1, $addr_line2';
+    widget.currUser.post = post.isNotEmpty ? post : widget.currUser.post;
+    widget.currUser.city = city.isNotEmpty ? city : widget.currUser.city;
+    widget.currUser.province = province ?? widget.currUser.province;
+    widget.currUser.hairCol =
+        hairCol.isNotEmpty ? hairCol : widget.currUser.hairCol;
+    widget.currUser.eyeCol =
+        eyeCol.isNotEmpty ? eyeCol : widget.currUser.eyeCol;
+    widget.currUser.bloodType =
+        bloodType.isNotEmpty ? bloodType : widget.currUser.bloodType;
+    widget.currUser.skinTone =
+        skinTone.isNotEmpty ? skinTone : widget.currUser.skinTone;
+    widget.currUser.phone = phone_primary.isNotEmpty
+        ? phone_primary
+        : (phone_secondary.isNotEmpty
+            ? phone_secondary
+            : widget.currUser.phone);
+    widget.currUser.photoUri = photoUri ?? widget.currUser.photoUri;
+    await _userDataService
+        .updateProfile(widget.currUser.id!, widget.currUser)
+        .whenComplete(() => ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('User profile updated'))));
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _user = widget.currUser; // Assuming you pass the current user data here
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _user = widget.currUser; // Assuming you pass the current user data here
+  // }
 
   @override
   Widget build(BuildContext context) {
-    if (_user!.photoUri != null) {
-      preload(context, _user!.photoUri);
+    if (_user!.photoURL != null) {
+      preload(context, _user!.photoURL);
     }
-    // widget.currUser ??= ChatUser( id: _user!.id,email: _user!.email!);
+    // widget.currUser ??= ChatUser(id: _user!.id, email: _user!.email!);
     return Scaffold(
       body: Form(
         key: _formKey,
@@ -254,9 +261,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         minRadius: 60.0,
                         child: CircleAvatar(
                           radius: 50,
-                          backgroundImage: _user!.photoUri == null
+                          backgroundImage: _user!.photoURL == null
                               ? const AssetImage('assets/person-icon.png')
-                              : NetworkImage(_user!.photoUri!) as ImageProvider,
+                              : NetworkImage(_user!.photoURL!) as ImageProvider,
                           child: Visibility(
                             visible: editProfile,
                             child: Stack(children: [
@@ -374,7 +381,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     subtitle: Row(
                       children: [
                         Container(
-                          width: 85,
+                          width: MediaQuery.of(context).size.width / 4,
                           child: IgnorePointer(
                             ignoring: !editProfile,
                             child: DropdownButtonHideUnderline(
@@ -418,11 +425,12 @@ class _ProfilePageState extends State<ProfilePage> {
                             )),
                           ),
                         ),
-                        const SizedBox(width: 25),
+                        SizedBox(width: MediaQuery.of(context).size.width / 45),
                         Container(
                             width: 125,
                             child: TextFormField(
                               enabled: editProfile,
+                              initialValue: widget.currUser.phone,
                               keyboardType: TextInputType.number,
                               maxLength: 10,
                               style: const TextStyle(fontSize: 18),
@@ -448,11 +456,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                 // });
                               },
                             )),
-                        const SizedBox(width: 60),
+                        SizedBox(width: MediaQuery.of(context).size.width / 45),
                         Container(
                             width: 125,
                             child: TextFormField(
                               enabled: editProfile,
+                              initialValue: widget.currUser.phone,
                               keyboardType: TextInputType.number,
                               maxLength: 10,
                               style: const TextStyle(fontSize: 18),
@@ -498,6 +507,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           padding: const EdgeInsets.only(left: 10),
                           child: TextFormField(
                             enabled: editProfile,
+                            initialValue: widget.currUser.addr,
                             keyboardType: TextInputType.text,
                             textCapitalization: TextCapitalization.words,
                             maxLength: 50,
@@ -531,10 +541,11 @@ class _ProfilePageState extends State<ProfilePage> {
                       Row(
                         children: [
                           Container(
-                              width: 150,
+                              width: MediaQuery.of(context).size.width / 4,
                               padding: const EdgeInsets.only(left: 10),
                               child: TextFormField(
                                 enabled: editProfile,
+                                initialValue: widget.currUser.city,
                                 keyboardType: TextInputType.text,
                                 textCapitalization: TextCapitalization.words,
                                 maxLength: 30,
@@ -552,10 +563,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                 },
                               )),
                           Container(
-                              width: 140,
-                              padding: const EdgeInsets.only(left: 30),
+                              width: 95,
+                              padding: EdgeInsets.only(
+                                  left: MediaQuery.of(context).size.width / 20),
                               child: TextFormField(
                                 enabled: editProfile,
+                                initialValue: widget.currUser.post,
                                 keyboardType: TextInputType.text,
                                 maxLength: 6,
                                 textCapitalization:
@@ -574,7 +587,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 },
                               )),
                           Container(
-                            width: 174,
+                            width: 165,
                             child: IgnorePointer(
                               ignoring: !editProfile,
                               child: DropdownButtonHideUnderline(
@@ -586,8 +599,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                   isDense: false,
                                   menuMaxHeight: 150,
                                   alignment: AlignmentDirectional.centerStart,
-                                  padding:
-                                      const EdgeInsets.only(top: 10, left: 12),
+                                  padding: EdgeInsets.only(
+                                      top: 20,
+                                      left: MediaQuery.of(context).size.width /
+                                          140),
                                   borderRadius: BorderRadius.circular(10),
                                   focusColor: Colors.transparent,
                                   decoration: const InputDecoration(
@@ -597,7 +612,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                           borderSide: BorderSide(
                                               color: Colors.transparent)),
                                       labelText: '     Province'),
-                                  value: province,
+                                  value: widget.currUser.province == ''
+                                      ? province
+                                      : widget.currUser.province,
                                   items: (country == 'CA' ? can_lst : usa_lst)
                                       .map((label) => DropdownMenuItem(
                                             alignment:
@@ -638,6 +655,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 padding: const EdgeInsets.only(left: 10),
                                 child: TextFormField(
                                   enabled: editProfile,
+                                  initialValue: widget.currUser.fname,
                                   keyboardType: TextInputType.text,
                                   textCapitalization: TextCapitalization.words,
                                   maxLength: 30,
@@ -656,9 +674,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                 )),
                             Container(
                                 width: 200,
-                                padding: const EdgeInsets.only(left: 15),
+                                padding: const EdgeInsets.only(left: 10),
                                 child: TextFormField(
                                   enabled: editProfile,
+                                  initialValue: widget.currUser.lname,
                                   keyboardType: TextInputType.text,
                                   textCapitalization: TextCapitalization.words,
                                   maxLength: 30,
@@ -690,7 +709,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               child: IgnorePointer(
                                 ignoring: !editProfile,
                                 child: InputDatePickerFormField(
-                                  initialDate: dob,
+                                  initialDate: widget.currUser.dob ?? dob,
                                   firstDate: DateTime(1940),
                                   lastDate: DateTime.now(),
                                   fieldLabelText: 'Date of Birth',
@@ -704,7 +723,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ),
                               ),
                             ),
-                            const SizedBox(width: 5),
                             IgnorePointer(
                               ignoring: !editProfile,
                               child: IconButton(
@@ -715,7 +733,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                 onPressed: () => selectDate(context),
                               ),
                             ),
-                            const SizedBox(width: 45),
+                            SizedBox(
+                                width: MediaQuery.of(context).size.width / 20),
                             Container(
                               width: 100,
                               child: IgnorePointer(
@@ -729,7 +748,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                     isDense: true,
                                     menuMaxHeight: 115,
                                     alignment: AlignmentDirectional.centerStart,
-                                    padding: const EdgeInsets.only(top: 10),
+                                    padding: EdgeInsets.only(
+                                        top: 10,
+                                        left:
+                                            MediaQuery.of(context).size.width /
+                                                150),
                                     borderRadius: BorderRadius.circular(10),
                                     focusColor: Colors.transparent,
                                     decoration: const InputDecoration(
@@ -739,7 +762,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                             borderSide: BorderSide(
                                                 color: Colors.transparent)),
                                         labelText: 'Sex'),
-                                    value: sex,
+                                    value: widget.currUser.sex,
                                     items: genders
                                         .map((label) => DropdownMenuItem(
                                               alignment:
@@ -757,7 +780,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                 )),
                               ),
                             ),
-                            const SizedBox(width: 35),
+                            SizedBox(
+                                width: MediaQuery.of(context).size.width / 20),
                             Container(
                               width: 80,
                               child: IgnorePointer(
@@ -781,7 +805,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                             borderSide: BorderSide(
                                                 color: Colors.transparent)),
                                         labelText: 'Blood Type'),
-                                    value: bloodType,
+                                    value: widget.currUser.bloodType == ''
+                                        ? bloodType
+                                        : widget.currUser.bloodType,
                                     items: bloodTypes
                                         .map((label) => DropdownMenuItem(
                                               alignment:
@@ -807,10 +833,11 @@ class _ProfilePageState extends State<ProfilePage> {
                         Row(
                           children: [
                             Container(
-                                width: 150,
+                                width: 120,
                                 padding: const EdgeInsets.only(left: 10),
                                 child: TextFormField(
                                   enabled: editProfile,
+                                  initialValue: widget.currUser.hairCol,
                                   keyboardType: TextInputType.text,
                                   textCapitalization: TextCapitalization.none,
                                   maxLength: 30,
@@ -828,10 +855,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                   },
                                 )),
                             Container(
-                                width: 150,
-                                padding: const EdgeInsets.only(left: 10),
+                                width: 120,
+                                padding: EdgeInsets.only(
+                                    left:
+                                        MediaQuery.of(context).size.width / 25),
                                 child: TextFormField(
                                   enabled: editProfile,
+                                  initialValue: widget.currUser.eyeCol,
                                   keyboardType: TextInputType.text,
                                   textCapitalization: TextCapitalization.none,
                                   maxLength: 30,
@@ -849,10 +879,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                   },
                                 )),
                             Container(
-                                width: 150,
-                                padding: const EdgeInsets.only(left: 10),
+                                width: 120,
+                                padding: EdgeInsets.only(
+                                    left:
+                                        MediaQuery.of(context).size.width / 25),
                                 child: TextFormField(
                                   enabled: editProfile,
+                                  initialValue: widget.currUser.skinTone,
                                   keyboardType: TextInputType.text,
                                   textCapitalization: TextCapitalization.none,
                                   maxLength: 30,
@@ -901,10 +934,14 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ],
                     ),
-                    // onTap: () => FirebaseUIAuth.signOut(
-                    //   context: context,
-                    //   auth: AuthGate,
-                    // ),
+                    onTap: () async {
+                      await FirebaseUIAuth.signOut(
+                        context: context,
+                        auth: FirebaseAuth.instance,
+                      )
+                          .whenComplete(() => Navigator.of(context).pop())
+                          .whenComplete(() => Navigator.of(context).pop());
+                    },
                   ),
                 ),
                 const SizedBox(height: 30),
@@ -917,16 +954,16 @@ class _ProfilePageState extends State<ProfilePage> {
                       icon: const Icon(Icons.delete_forever),
                       label: Text('Delete Account'),
                       onPressed: (() async {
-                        await _userDataService
-                            .deleteProfile(widget.currUser!)
-                            .then((value) => {user!.delete()})
-                            .then((value) => ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                                    content: Text('User account deleted'))))
-                            .whenComplete(() => FirebaseUIAuth.signOut(
-                                  context: context,
-                                  auth: auth,
-                                ));
+                        // await _userDataService
+                        //     .deleteProfile(widget.currUser!)
+                        //     .then((value) => {user!.delete()})
+                        //     .then((value) => ScaffoldMessenger.of(context)
+                        //         .showSnackBar(const SnackBar(
+                        //             content: Text('User account deleted'))))
+                        //     .whenComplete(() => FirebaseUIAuth.signOut(
+                        //           context: context,
+                        //           auth: auth,
+                        //         ));
                       })),
                 ),
               ],

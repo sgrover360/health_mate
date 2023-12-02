@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:health_mate/models/chat_user.dart'; // Import ChatUser model
 import 'package:health_mate/views/theme_provider.dart';
+import 'package:provider/provider.dart';
 
 import 'profile_page.dart';
 import 'home_page.dart';

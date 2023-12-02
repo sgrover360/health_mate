@@ -37,14 +37,13 @@
 // }
 //
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class ChatUser {
-  final String id;
+  final String? id;
   late final String name;
   final List<String> chatIds;
-
-  // Fields from UserData
   String fname;
   String lname;
   DateTime? dob;
@@ -57,7 +56,7 @@ class ChatUser {
   String bloodType;
   String eyeCol;
   String skinTone;
-  String email;
+  final String email;
   String phone;
   String? photoUri;
   bool isDoctor;
@@ -79,7 +78,7 @@ class ChatUser {
     this.bloodType = '',
     this.eyeCol = '',
     this.skinTone = '',
-    this.email = '',
+    required this.email,
     this.phone = '',
     this.photoUri,
     this.isDoctor = false,
@@ -130,26 +129,28 @@ class ChatUser {
     );
   }
 
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'chatIds': chatIds.map((x) => x).toList(),
-        'fname': fname,
-        'lname': lname,
-        'dob': dob?.toIso8601String(),
-        'sex': sex,
-        'addr': addr,
-        'post': post,
-        'city': city,
-        'province': province,
-        'hairCol': hairCol,
-        'bloodType': bloodType,
-        'eyeCol': eyeCol,
-        'skinTone': skinTone,
-        'email': email,
-        'phone': phone,
-        'photoUri': photoUri,
-        'isDoctor': isDoctor,
-        'signInMethod': signInMethod,
-      };
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'chatIds': chatIds.map((x) => x).toList(),
+      'fname': fname,
+      'lname': lname,
+      'dob': dob?.toIso8601String(),
+      'sex': sex,
+      'addr': addr,
+      'post': post,
+      'city': city,
+      'province': province,
+      'hairCol': hairCol,
+      'bloodType': bloodType,
+      'eyeCol': eyeCol,
+      'skinTone': skinTone,
+      'email': email,
+      'phone': phone,
+      'photoUri': photoUri,
+      'isDoctor': isDoctor,
+      'signInMethod': signInMethod,
+    };
+  }
 }

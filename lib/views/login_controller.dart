@@ -68,7 +68,7 @@ class LoginController {
         .createUserWithEmailAndPassword(email: email, password: password);
 
     ChatUser newUser =
-        ChatUser(id: cred.user!.uid, name: username, chatIds: []);
+        ChatUser(id: cred.user!.uid, name: username, email: email, chatIds: []);
 
     await FirebaseFirestore.instance
         .collection("users")

@@ -3,26 +3,25 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
-import '../models/user_data.dart';
+import '../models/chat_user.dart';
 
 class UserDataService {
   final user = FirebaseAuth.instance.currentUser;
   final CollectionReference userDataCollection;
 
   UserDataService()
-      : userDataCollection = FirebaseFirestore.instance
-            .collection('users')
-            .doc(FirebaseAuth.instance.currentUser!.uid)
-            .collection('userData');
+      : userDataCollection = FirebaseFirestore.instance.collection('users');
+  // .doc(FirebaseAuth.instance.currentUser!.uid)
+  // .collection('userData');
 
-  Future<DocumentReference<Object?>> addNewProfile(UserData profile) async {
-    if (profile.fname.isEmpty && profile.lname.isEmpty) {
-      throw Exception('Please update name');
-    } else if (await profileExists(profile.id)) {
-      throw Exception('User profile already exists for this email');
-    }
-    return await userDataCollection.add(profile.toMap());
-  }
+  // Future<DocumentReference<Object?>> addNewProfile(UserData profile) async {
+  //   if (profile.fname.isEmpty && profile.lname.isEmpty) {
+  //     throw Exception('Please update name');
+  //   } else if (await profileExists(profile.id)) {
+  //     throw Exception('User profile already exists for this email');
+  //   }
+  //   return await userDataCollection.add(profile.toMap());
+  // }
 
   // Stream<List<UserData>> getAllProfiles() {
   //   return userDataCollection.snapshots().map((snapshot) {
@@ -32,14 +31,15 @@ class UserDataService {
   //   });
   // }
 
-  Future<void> updateProfile(String id, UserData profile) async {
+  Future<void> updateProfile(String id, ChatUser profile) async {
     if (await profileExists(profile.id)) {
       throw Exception('User profile already exists');
     }
-    return await userDataCollection.doc(id).update(profile.toMap());
+    // return await userDataCollection.doc(id).update(profile.toMap());
+    return await userDataCollection.doc(id).update(profile.toJson());
   }
 
-  Future<void> deleteProfile(UserData profile) async {
+  Future<void> deleteProfile(ChatUser profile) async {
     if (!await profileExists(profile.id)) {
       throw Exception('User profile not found');
     }
@@ -47,16 +47,24 @@ class UserDataService {
   }
 
   Future<bool> profileExists(String? id) async {
-    var profiles = [];
+    // var profiles = [];
+    // await userDataCollection.get().then((snapshot) {
+    //   for (var doc in snapshot.docs) {
+    //     var profile = doc.data();
+    //     profiles.add(profile);
+    //   }
+    // });
+    // if (profiles.length > 0) {
+    //   return true;
+    // }
+    // return false;
     await userDataCollection.get().then((snapshot) {
       for (var doc in snapshot.docs) {
-        var profile = doc.data();
-        profiles.add(profile);
+        if (doc.id == FirebaseAuth.instance.currentUser!.uid) {
+          return true;
+        }
       }
     });
-    if (profiles.length > 0) {
-      return true;
-    }
     return false;
   }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:health_mate/components/extensions.dart';
 import 'package:health_mate/views/user_prescriptions_page.dart';
@@ -6,8 +7,6 @@ import 'package:health_mate/models/chat_user.dart';
 import 'package:health_mate/pages/chat_overview/chat_overview_page.dart';
 import 'package:health_mate/views/profile_page.dart';
 import 'package:health_mate/views/theme_provider.dart';
-import 'package:provider/provider.dart';
-
 import '../components/light_color.dart';
 import '../components/text_styles.dart';
 import '../components/theme.dart';
