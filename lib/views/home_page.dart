@@ -351,8 +351,6 @@ class _HomePageState extends State<HomePage> {
           ),
           title: Text("Dr. ${doctor.firstName} ${doctor.lastName}",
               style: TextStyles.title.bold),
-          title: Text("Dr. ${doctor.firstName} ${doctor.lastName}",
-              style: TextStyles.title.bold),
           subtitle: Text(
             doctor.type,
             style: TextStyles.bodySm.subTitleColor.bold,
