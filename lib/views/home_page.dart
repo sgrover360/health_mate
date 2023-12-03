@@ -23,11 +23,15 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
+enum SearchFilter { names, rating, location }
+
 class _HomePageState extends State<HomePage> {
   //final User? user = FirebaseAuth.instance.currentUser;
   //final ChatUser user;
   late List<Doctor> doctorDataList;
   int _selectedIndex = 0;
+  String _searchQuery = "";
+  SearchFilter _searchFilter = SearchFilter.names;
 
   PageController pageController = PageController(
     initialPage: 0,
@@ -55,6 +59,8 @@ class _HomePageState extends State<HomePage> {
           icon: const Icon(Icons.person),
           onPressed: () {
             // Navigator.pushNamed(context, '/profile');
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => ProfilePage(currUser: widget.user)));
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => ProfilePage(currUser: widget.user)));
           },
@@ -91,21 +97,64 @@ class _HomePageState extends State<HomePage> {
           )
         ],
       ),
-      child: TextField(
-        decoration: InputDecoration(
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-          border: InputBorder.none,
-          hintText: "Search for doctor",
-          hintStyle: TextStyles.body.subTitleColor,
-          suffixIcon: SizedBox(
-              width: 50,
-              child: Icon(Icons.search, color: Theme.of(context).primaryColor)
-                  .alignCenter
-                  .ripple(() {}, borderRadius: BorderRadius.circular(13))),
-        ),
+      child: Row(
+        children: <Widget>[
+          DropdownButton<SearchFilter>(
+            value: _searchFilter,
+            onChanged: (SearchFilter? newValue) {
+              if (newValue != null) {
+                setState(() {
+                  _searchFilter = newValue;
+                });
+              }
+            },
+            items: SearchFilter.values.map((filter) {
+              return DropdownMenuItem<SearchFilter>(
+                value: filter,
+                child: Text(filterToString(
+                    filter)), // Helper function to convert enum to string
+              );
+            }).toList(),
+          ),
+          Expanded(
+            child: TextField(
+              onChanged: (query) {
+                setState(() {
+                  _searchQuery = query;
+                });
+              },
+              decoration: InputDecoration(
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                border: InputBorder.none,
+                hintText: "Search for doctor",
+                hintStyle: TextStyles.body.subTitleColor,
+                suffixIcon: SizedBox(
+                  width: 50,
+                  child: Icon(Icons.search,
+                          color: Theme.of(context).primaryColor)
+                      .alignCenter
+                      .ripple(() {}, borderRadius: BorderRadius.circular(13)),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
+  }
+
+  String filterToString(SearchFilter filter) {
+    switch (filter) {
+      case SearchFilter.names:
+        return "Name";
+      case SearchFilter.rating:
+        return "Rating";
+      case SearchFilter.location:
+        return "Location";
+      default:
+        return "";
+    }
   }
 
   Widget _upcomingAppointments() {
@@ -232,10 +281,32 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _getDoctorWidgetList() {
+    final filteredDoctors = doctorDataList.where((doctor) {
+      switch (_searchFilter) {
+        case SearchFilter.rating:
+          return doctor.rating.toString().contains(_searchQuery.toLowerCase());
+        case SearchFilter.names:
+          return doctor.firstName
+                  .toLowerCase()
+                  .contains(_searchQuery.toLowerCase()) ||
+              doctor.lastName
+                  .toLowerCase()
+                  .contains(_searchQuery.toLowerCase());
+        case SearchFilter.location:
+          return doctor.location
+              .toLowerCase()
+              .contains(_searchQuery.toLowerCase());
+
+        default:
+          return false;
+      }
+    });
+
     return Column(
-        children: doctorDataList.map((x) {
-      return _doctorTile(x);
-    }).toList());
+      children: filteredDoctors.map((x) {
+        return _doctorTile(x);
+      }).toList(),
+    );
   }
 
   Widget _doctorTile(Doctor doctor) {
@@ -278,6 +349,8 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
+          title: Text("Dr. ${doctor.firstName} ${doctor.lastName}",
+              style: TextStyles.title.bold),
           title: Text("Dr. ${doctor.firstName} ${doctor.lastName}",
               style: TextStyles.title.bold),
           subtitle: Text(
