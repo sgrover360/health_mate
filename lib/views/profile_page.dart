@@ -44,6 +44,7 @@ class _ProfilePageState extends State<ProfilePage> {
   String phone_primary = '';
   String phone_secondary = '';
   String? photoUri = '';
+  String? imageLink;
   XFile? selectedImage;
   bool is_doctor = false;
   bool editProfile = false;
@@ -192,6 +193,10 @@ class _ProfilePageState extends State<ProfilePage> {
     // );
     //
     // // Update the fields of currUser
+    if (selectedImage != null) {
+      imageLink = await _userDataService
+          .uploadProfilePic(selectedImage); // need to test
+    }
     widget.currUser.fname = fname.isNotEmpty ? fname : widget.currUser.fname;
     widget.currUser.lname = lname.isNotEmpty ? lname : widget.currUser.lname;
     widget.currUser.dob = dob ?? widget.currUser.dob;
@@ -213,7 +218,8 @@ class _ProfilePageState extends State<ProfilePage> {
         : (phone_secondary.isNotEmpty
             ? phone_secondary
             : widget.currUser.phone);
-    widget.currUser.photoUri = photoUri ?? widget.currUser.photoUri;
+    widget.currUser.photoUri =
+        imageLink ?? photoUri ?? widget.currUser.photoUri; // nneed to test
     await _userDataService
         .updateProfile(widget.currUser.id!, widget.currUser)
         .whenComplete(() => ScaffoldMessenger.of(context).showSnackBar(
@@ -355,7 +361,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         child: Text(
                           // _user?.displayName ??
                           //     '${widget.currUser?.fname ?? ''} ${widget.currUser?.lname ?? 'Guest'}'
-                          '${widget.currUser.fname} ${widget.currUser.lname}',
+                          widget.currUser.name,
                           style: const TextStyle(
                             fontSize: 35,
                             fontWeight: FontWeight.bold,
@@ -377,12 +383,12 @@ class _ProfilePageState extends State<ProfilePage> {
                               backgroundColor:
                                   const Color.fromARGB(110, 95, 87, 108),
                               onPressed: () {
-                                if (editProfile == false) {
-                                  saveCurrUser();
-                                }
                                 setState(() {
                                   editProfile = !editProfile;
                                 });
+                                if (editProfile == false) {
+                                  saveCurrUser();
+                                }
                               },
                               icon: const Icon(Icons.edit_note_rounded),
                               label: const Text(
@@ -470,10 +476,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                     .toList(),
                                 onChanged: (value) {
                                   setState(() {
-                                    country = value!;
-                                    province = country == 'CA'
+                                    province = (country == 'CA')
                                         ? 'Newfoundland\nand Labrador'
                                         : 'New York';
+                                    country = value!;
                                   });
                                 },
                               ),
@@ -703,11 +709,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   subtitle: Column(
                     children: [
-                      if (widget.currUser.signInMethod == 'password') ...[
+                      if (widget.currUser.signInMethod != 'google') ...[
                         Row(
                           children: [
                             Container(
-                                width: 200,
+                                width: MediaQuery.of(context).size.width / 2.5,
                                 padding: const EdgeInsets.only(left: 10),
                                 child: TextFormField(
                                   enabled: editProfile,
@@ -729,8 +735,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                   },
                                 )),
                             Container(
-                                width: 200,
-                                padding: const EdgeInsets.only(left: 10),
+                                width: MediaQuery.of(context).size.width / 2.5,
+                                padding: const EdgeInsets.only(left: 20),
                                 child: TextFormField(
                                   enabled: editProfile,
                                   initialValue: widget.currUser.lname,
@@ -1014,16 +1020,38 @@ class _ProfilePageState extends State<ProfilePage> {
                       icon: const Icon(Icons.delete_forever),
                       label: Text('Delete Account'),
                       onPressed: (() async {
-                        // await _userDataService
-                        //     .deleteProfile(widget.currUser!)
-                        //     .then((value) => {user!.delete()})
-                        //     .then((value) => ScaffoldMessenger.of(context)
-                        //         .showSnackBar(const SnackBar(
-                        //             content: Text('User account deleted'))))
-                        //     .whenComplete(() => FirebaseUIAuth.signOut(
-                        //           context: context,
-                        //           auth: auth,
-                        //         ));
+                        await showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                                  title: const Text('Delete Account'),
+                                  contentPadding: const EdgeInsets.only(
+                                      top: 15, left: 15, right: 15),
+                                  content: const Text('Are you sure?'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(false),
+                                      child: const Text('No'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () async => await _userDataService
+                                          .deleteProfile(widget.currUser)
+                                          .whenComplete(
+                                              () async => await _user?.delete())
+                                          .whenComplete(() => ScaffoldMessenger.of(context)
+                                              .showSnackBar(const SnackBar(
+                                                  content: Text(
+                                                      'User account deleted'))))
+                                          .whenComplete(() => Navigator.of(context)
+                                              .pushAndRemoveUntil(
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const AuthGate()),
+                                                  (Route<dynamic> route) => false)),
+                                      child: const Text('Yes'),
+                                    ),
+                                  ],
+                                ));
                       })),
                 ),
               ],

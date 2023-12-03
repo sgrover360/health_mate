@@ -65,8 +65,6 @@ class _HomePageState extends State<HomePage> {
             // Navigator.pushNamed(context, '/profile');
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => ProfilePage(currUser: widget.user)));
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ProfilePage(currUser: widget.user)));
           },
         ),
       ],

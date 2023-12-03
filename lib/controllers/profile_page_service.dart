@@ -11,8 +11,6 @@ class UserDataService {
 
   UserDataService()
       : userDataCollection = FirebaseFirestore.instance.collection('users');
-  // .doc(FirebaseAuth.instance.currentUser!.uid)
-  // .collection('userData');
 
   // Future<DocumentReference<Object?>> addNewProfile(UserData profile) async {
   //   if (profile.fname.isEmpty && profile.lname.isEmpty) {
@@ -32,10 +30,9 @@ class UserDataService {
   // }
 
   Future<void> updateProfile(String id, ChatUser profile) async {
-    if (await profileExists(profile.id)) {
+    if (!await profileExists(profile.id)) {
       throw Exception('User profile already exists');
     }
-    // return await userDataCollection.doc(id).update(profile.toMap());
     return await userDataCollection.doc(id).update(profile.toJson());
   }
 
@@ -47,25 +44,14 @@ class UserDataService {
   }
 
   Future<bool> profileExists(String? id) async {
-    // var profiles = [];
-    // await userDataCollection.get().then((snapshot) {
-    //   for (var doc in snapshot.docs) {
-    //     var profile = doc.data();
-    //     profiles.add(profile);
-    //   }
-    // });
-    // if (profiles.length > 0) {
-    //   return true;
-    // }
-    // return false;
-    await userDataCollection.get().then((snapshot) {
+    var check = await userDataCollection.get().then((snapshot) {
       for (var doc in snapshot.docs) {
         if (doc.id == FirebaseAuth.instance.currentUser!.uid) {
           return true;
         }
       }
     });
-    return false;
+    return check == true ? true : false;
   }
 
   Future<String?> uploadProfilePic(XFile? image) async {
