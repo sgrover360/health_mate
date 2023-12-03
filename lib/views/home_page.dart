@@ -32,6 +32,8 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   String _searchQuery = "";
   SearchFilter _searchFilter = SearchFilter.names;
+  List<Doctor> doctorList = [];
+  String selectedSortOrder = 'Sort by';
 
   PageController pageController = PageController(
     initialPage: 0,
@@ -41,6 +43,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     doctorDataList = doctorMapList.map((x) => Doctor.fromJson(x)).toList();
+    doctorList = [...doctorDataList];
+    _sortDoctors();
     super.initState();
   }
 
@@ -265,13 +269,24 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text("Top Doctors", style: TextStyles.title.bold),
-              IconButton(
-                  icon: Icon(
-                    Icons.sort,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  onPressed: () {})
-              // .p(12).ripple(() {}, borderRadius: BorderRadius.all(Radius.circular(20))),
+              DropdownButton<String>(
+                value: selectedSortOrder,
+                onChanged: (String? newValue) {
+                  if (newValue != null) {
+                    setState(() {
+                      selectedSortOrder = newValue;
+                      _sortDoctors();
+                    });
+                  }
+                },
+                items:
+                    <String>['Sort by', 'A to Z', 'Z to A'].map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
             ],
           ).hP16,
           _getDoctorWidgetList()
@@ -281,7 +296,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _getDoctorWidgetList() {
-    final filteredDoctors = doctorDataList.where((doctor) {
+    final filteredDoctors = doctorList.where((doctor) {
       switch (_searchFilter) {
         case SearchFilter.rating:
           return doctor.rating.toString().contains(_searchQuery.toLowerCase());
@@ -307,6 +322,16 @@ class _HomePageState extends State<HomePage> {
         return _doctorTile(x);
       }).toList(),
     );
+  }
+
+  void _sortDoctors() {
+    setState(() {
+      if (selectedSortOrder == 'A to Z') {
+        doctorList.sort((a, b) => a.firstName.compareTo(b.firstName));
+      } else {
+        doctorList.sort((a, b) => b.firstName.compareTo(a.firstName));
+      }
+    });
   }
 
   Widget _doctorTile(Doctor doctor) {

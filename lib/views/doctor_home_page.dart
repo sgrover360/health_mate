@@ -26,6 +26,9 @@ class DoctorHomePageState extends State<DoctorHomePage> {
   final User? user = FirebaseAuth.instance.currentUser;
   late List<dynamic> patientDataList;
   int _selectedIndex = 0;
+  String _searchQuery = "";
+  String selectedSortOrder = 'Sort by';
+  List<ChatUser> patientList = [];
 
   PageController pageController = PageController(
     initialPage: 0,
@@ -36,13 +39,9 @@ class DoctorHomePageState extends State<DoctorHomePage> {
   void initState() {
     // patientDataList = patientMapList.map((x) => UserData(email: user!.email!).fromPatientJson(x)).toList();
     patientDataList = patientMapList
-        .map((x) => ChatUser(
-                // id: widget.user.id,
-                // name: widget.user.name,
-                // chatIds: widget.user.chatIds,
-                email: widget.user.email)
-            .fromPatientJson(x))
+        .map((x) => ChatUser(email: widget.user.email).fromPatientJson(x))
         .toList();
+    patientList = [...patientDataList];
     super.initState();
   }
 
@@ -96,6 +95,11 @@ class DoctorHomePageState extends State<DoctorHomePage> {
         ],
       ),
       child: TextField(
+        onChanged: (query) {
+          setState(() {
+            _searchQuery = query;
+          });
+        },
         decoration: InputDecoration(
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -220,13 +224,25 @@ class DoctorHomePageState extends State<DoctorHomePage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text("My Patients", style: TextStyles.title.bold),
-              IconButton(
-                  icon: Icon(
-                    Icons.sort,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  onPressed: () {})
               // .p(12).ripple(() {}, borderRadius: BorderRadius.all(Radius.circular(20))),
+              DropdownButton<String>(
+                value: selectedSortOrder,
+                onChanged: (String? newValue) {
+                  if (newValue != null) {
+                    setState(() {
+                      selectedSortOrder = newValue;
+                      _sortPatients();
+                    });
+                  }
+                },
+                items:
+                    <String>['Sort by', 'A to Z', 'Z to A'].map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
             ],
           ).hP16,
           _getPatientWidgetList()
@@ -236,10 +252,25 @@ class DoctorHomePageState extends State<DoctorHomePage> {
   }
 
   Widget _getPatientWidgetList() {
+    final filteredDoctors = patientList.where((patient) =>
+        patient.fname.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+        patient.lname.toLowerCase().contains(_searchQuery.toLowerCase()));
+
     return Column(
-        children: patientDataList.map((patient) {
-      return _patientTile(patient);
-    }).toList());
+      children: filteredDoctors.map((x) {
+        return _patientTile(x);
+      }).toList(),
+    );
+  }
+
+  void _sortPatients() {
+    setState(() {
+      if (selectedSortOrder == 'A to Z') {
+        patientList.sort((a, b) => a.fname.compareTo(b.fname));
+      } else {
+        patientList.sort((a, b) => b.fname.compareTo(a.fname));
+      }
+    });
   }
 
   Widget _patientTile(ChatUser patient) {
