@@ -65,10 +65,10 @@ class _LoginPageState extends State<AuthGate> {
                         child: Image.asset('assets/logo.png'),
                       ),
                       const SizedBox(width: 15),
-                      const Text(
+                      Text(
                         'Health Mate',
                         style: TextStyle(
-                          color: Colors.blueAccent,
+                          color: Theme.of(context).primaryColor,
                           fontWeight: FontWeight.bold,
                           fontSize: 40,
                         ),
