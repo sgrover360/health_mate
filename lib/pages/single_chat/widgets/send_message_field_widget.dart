@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class SendMessageFieldWidget extends StatefulWidget {
-  final Function(String)? onPressed;
-  const SendMessageFieldWidget({Key? key, this.onPressed}) : super(key: key);
+  final Function(String)? onSendMessage;
+  final Function(XFile)? onSendImage;
+
+  const SendMessageFieldWidget({Key? key, this.onSendMessage, this.onSendImage}) : super(key: key);
+
 
   @override
   State<SendMessageFieldWidget> createState() => _SendMessageFieldWidgetState();
@@ -10,6 +14,8 @@ class SendMessageFieldWidget extends StatefulWidget {
 
 class _SendMessageFieldWidgetState extends State<SendMessageFieldWidget> {
   TextEditingController? _messageController;
+  final ImagePicker _picker = ImagePicker();
+
 
   @override
   void initState() {
@@ -21,6 +27,19 @@ class _SendMessageFieldWidgetState extends State<SendMessageFieldWidget> {
   void dispose() {
     _messageController?.dispose();
     super.dispose();
+  }
+
+  Future<void> _handleCameraButtonPressed() async {
+    try {
+      // Capture image from camera
+      XFile? image = await _picker.pickImage(source: ImageSource.camera);
+      if (image != null) {
+        widget.onSendImage?.call(image);
+      }
+    } catch (e) {
+      // Handle errors or permissions issues
+      print('Error capturing image: $e');
+    }
   }
 
   @override
@@ -43,15 +62,16 @@ class _SendMessageFieldWidgetState extends State<SendMessageFieldWidget> {
         children: [
           IconButton(
             icon: const Icon(Icons.attach_file, color: Color(0xFF0091A6)),
-            onPressed: () {
-              // Handle attachment
+            onPressed: () async {
+              XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+              if (image != null) {
+                widget.onSendImage?.call(image);
+              }
             },
           ),
           IconButton(
             icon: const Icon(Icons.camera_alt, color: Color(0xFF0091A6)),
-            onPressed: () {
-              // Handle camera
-            },
+            onPressed: _handleCameraButtonPressed,
           ),
           Expanded(
             child: Container(
@@ -89,7 +109,7 @@ class _SendMessageFieldWidgetState extends State<SendMessageFieldWidget> {
           IconButton(
             icon: const Icon(Icons.send, color: Color(0xFF0091A6)),
             onPressed: () {
-              widget.onPressed?.call(_messageController?.text ?? "");
+              widget.onSendMessage?.call(_messageController?.text ?? "");
               _messageController?.clear();
             },
           ),

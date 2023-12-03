@@ -48,7 +48,10 @@ class _LoginPageState extends State<AuthGate> {
     return Scaffold(
         appBar: AppBar(title: const Text("Login")),
         body: Center(
-            child: Column(
+        child: ConstrainedBox(
+            constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height - AppBar().preferredSize.height - MediaQuery.of(context).padding.top),
+            child: SingleChildScrollView(
+                child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
               // Chip(
@@ -125,7 +128,7 @@ class _LoginPageState extends State<AuthGate> {
                   ));
                 },
               )
-            ])));
+            ])))));
   }
 
   Future _login() async {

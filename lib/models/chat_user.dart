@@ -97,6 +97,7 @@ class ChatUser {
       sex: 'Male',
       email: user.email ?? '',
       signInMethod: user.providerData.isNotEmpty ? user.providerData[0].providerId : 'unknown',
+      photoUri: user.photoURL,
       // ... Other fields initialized similarly
     );
   }

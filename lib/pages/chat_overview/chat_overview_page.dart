@@ -36,7 +36,8 @@ class _ChatOverviewPageState extends State<ChatOverviewPage> {
               }
             }),
         floatingActionButton: FloatingActionButton.extended(
-            label: const Text("new chat"),
+            backgroundColor: Colors.deepPurple,
+            label: const Text("New chat"),
             icon: const Icon(Icons.add),
             onPressed: () async {
               await Navigator.of(context).push(MaterialPageRoute(

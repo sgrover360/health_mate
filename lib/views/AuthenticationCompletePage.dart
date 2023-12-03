@@ -1,7 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:health_mate/views/auth_gate.dart';
 
-class AuthenticationCompletePage extends StatelessWidget {
+class AuthenticationCompletePage extends StatefulWidget {
   const AuthenticationCompletePage({super.key});
+
+  @override
+  _AuthenticationCompletePageState createState() => _AuthenticationCompletePageState();
+}
+
+class _AuthenticationCompletePageState extends State<AuthenticationCompletePage> {
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(seconds: 5), () {
+      // Navigate back to AuthGate page after a 5-second delay
+      if (mounted) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const AuthGate()),
+              (Route<dynamic> route) => false,
+        );
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

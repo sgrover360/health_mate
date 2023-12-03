@@ -32,7 +32,13 @@ class ChatHeaderWidget extends StatelessWidget {
                   chat?.messages.last.timestamp.toNicerTime() ?? " - ";
 
               return ListTile(
-                  leading: const CircleAvatar(child: Icon(Icons.person)),
+                  leading: CircleAvatar(
+                    backgroundColor: Theme.of(context).colorScheme.primary,  // Sets the background color of the CircleAvatar to purple
+                    child: const Icon(
+                      Icons.person,
+                      color: Colors.white,  // Sets the color of the icon to white for contrast
+                    ),
+                  ),
                   title: Text(chatName),
                   subtitle: Text(lastMessage,
                       overflow: TextOverflow.ellipsis,
