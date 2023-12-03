@@ -7,38 +7,36 @@ class SendMessageFieldWidget extends StatefulWidget {
 
   const SendMessageFieldWidget({Key? key, this.onSendMessage, this.onSendImage}) : super(key: key);
 
-
   @override
   State<SendMessageFieldWidget> createState() => _SendMessageFieldWidgetState();
 }
 
 class _SendMessageFieldWidgetState extends State<SendMessageFieldWidget> {
-  TextEditingController? _messageController;
+  final TextEditingController _messageController = TextEditingController();
   final ImagePicker _picker = ImagePicker();
-
-
-  @override
-  void initState() {
-    super.initState();
-    _messageController = TextEditingController();
-  }
 
   @override
   void dispose() {
-    _messageController?.dispose();
+    _messageController.dispose();
     super.dispose();
   }
 
   Future<void> _handleCameraButtonPressed() async {
     try {
-      // Capture image from camera
       XFile? image = await _picker.pickImage(source: ImageSource.camera);
       if (image != null) {
         widget.onSendImage?.call(image);
       }
     } catch (e) {
-      // Handle errors or permissions issues
       print('Error capturing image: $e');
+    }
+  }
+
+  void _sendMessage() {
+    final message = _messageController.text.trim();
+    if (message.isNotEmpty) {
+      widget.onSendMessage?.call(message);
+      _messageController.clear();
     }
   }
 
@@ -55,7 +53,7 @@ class _SendMessageFieldWidgetState extends State<SendMessageFieldWidget> {
             blurRadius: 5,
             offset: Offset(0, -1),
             spreadRadius: 0,
-          )
+          ),
         ],
       ),
       child: Row(
@@ -85,7 +83,7 @@ class _SendMessageFieldWidgetState extends State<SendMessageFieldWidget> {
               child: TextField(
                 controller: _messageController,
                 keyboardType: TextInputType.multiline,
-                maxLines: null, // Allows the input to wrap to a new line
+                maxLines: null,
                 style: const TextStyle(
                   color: Color(0xFF0091A6),
                   fontSize: 14,
@@ -100,18 +98,15 @@ class _SendMessageFieldWidgetState extends State<SendMessageFieldWidget> {
                     fontWeight: FontWeight.w400,
                     letterSpacing: -0.30,
                   ),
-                  border: InputBorder.none, // No border
-                  contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10), // Adjust padding
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 ),
               ),
             ),
           ),
           IconButton(
             icon: const Icon(Icons.send, color: Color(0xFF0091A6)),
-            onPressed: () {
-              widget.onSendMessage?.call(_messageController?.text ?? "");
-              _messageController?.clear();
-            },
+            onPressed: _sendMessage,
           ),
         ],
       ),

@@ -10,47 +10,67 @@ class ChatHeaderWidget extends StatelessWidget {
   final Stream<DocumentSnapshot<Map<String, dynamic>>> stream;
   final ChatUser user;
 
-  const ChatHeaderWidget(
-      {required this.chatName,
-        required this.stream,
-        required this.user,
-        Key? key})
-      : super(key: key);
+  const ChatHeaderWidget({
+    required this.chatName,
+    required this.stream,
+    required this.user,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: StreamBuilder(
-            stream: stream,
-            builder: (context, snapshot) {
-              var chat = snapshot.hasData
-                  ? Chat.fromJson(snapshot.data!.data()!)
-                  : null;
-              var lastMessage = chat?.messages.last.content ?? " - ";
-              var lastTimestamp =
-                  chat?.messages.last.timestamp.toNicerTime() ?? " - ";
+      padding: const EdgeInsets.all(8.0),
+      child: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+        stream: stream,
+        builder: (context, snapshot) {
+          if (snapshot.hasData && snapshot.data!.data() != null) {
+            var chat = Chat.fromJson(snapshot.data!.data()!);
+            var lastMessage = chat.messages.isNotEmpty
+                ? chat.messages.last.content
+                : "No messages yet";
+            var lastTimestamp = chat.messages.isNotEmpty
+                ? chat.messages.last.timestamp.toNicerTime()
+                : " - ";
 
-              return ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: Theme.of(context).colorScheme.primary,  // Sets the background color of the CircleAvatar to purple
-                    child: const Icon(
-                      Icons.person,
-                      color: Colors.white,  // Sets the color of the icon to white for contrast
-                    ),
-                  ),
-                  title: Text(chatName),
-                  subtitle: Text(lastMessage,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                          fontSize: 12, color: Colors.blueGrey)),
-                  trailing: Text(lastTimestamp,
-                      style: const TextStyle(
-                          fontSize: 12, color: Colors.blueGrey)),
-                  onTap: () async {
-                    await Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => SingleChatPage(chat!, user)));
-                  });
-            }));
+            return _buildChatTile(context, chat, lastMessage, lastTimestamp);
+          } else if (snapshot.hasError) {
+            return const ListTile(
+              leading: Icon(Icons.error),
+              title: Text('Error loading chat'),
+            );
+          } else {
+            return const ListTile(
+              leading: CircularProgressIndicator(),
+              title: Text('Loading...'),
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  Widget _buildChatTile(BuildContext context, Chat chat, String lastMessage, String lastTimestamp) {
+    return ListTile(
+      leading: CircleAvatar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        child: const Icon(Icons.person, color: Colors.white),
+      ),
+      title: Text(chatName),
+      subtitle: Text(
+        lastMessage,
+        overflow: TextOverflow.ellipsis,
+        style: const TextStyle(fontSize: 12, color: Colors.blueGrey),
+      ),
+      trailing: Text(
+        lastTimestamp,
+        style: const TextStyle(fontSize: 12, color: Colors.blueGrey),
+      ),
+      onTap: () async {
+        await Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => SingleChatPage(chat, user),
+        ));
+      },
+    );
   }
 }

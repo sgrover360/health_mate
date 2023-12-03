@@ -5,7 +5,7 @@ class ChatMessageWidget extends StatelessWidget {
   final String content;
   final bool isLocalSender;
   final String avatarAsset; // URL or asset name for the avatar image
-  final bool isImage; // New parameter to indicate if the message is an image
+  final bool isImage; // Parameter to indicate if the message is an image
 
   const ChatMessageWidget({
     Key? key,
@@ -32,6 +32,7 @@ class ChatMessageWidget extends StatelessWidget {
               crossAxisAlignment: isLocalSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
               children: [
                 if (isImage)
+                // Image Message
                   Image.network(
                     content,
                     width: maxWidth,
@@ -51,7 +52,9 @@ class ChatMessageWidget extends StatelessWidget {
                     },
                   )
                 else
+                // Text Message
                   messageBubble(maxWidth),
+                // Timestamp
                 Padding(
                   padding: const EdgeInsets.only(top: 5),
                   child: Text(
@@ -66,6 +69,7 @@ class ChatMessageWidget extends StatelessWidget {
       ),
     );
   }
+
   Widget avatarWidget() {
     return avatarAsset.startsWith('http')
         ? CircleAvatar(backgroundImage: NetworkImage(avatarAsset))
@@ -76,7 +80,7 @@ class ChatMessageWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
       decoration: BoxDecoration(
-        color: isLocalSender ? Colors.blue[300] : Colors.grey[200],
+        color: isLocalSender ? Colors.blue[300] : Colors.lightGreen[300], // Customized color for doctor
         borderRadius: isLocalSender
             ? BorderRadius.circular(16).subtract(const BorderRadius.only(bottomRight: Radius.circular(16)))
             : BorderRadius.circular(16).subtract(const BorderRadius.only(bottomLeft: Radius.circular(16))),

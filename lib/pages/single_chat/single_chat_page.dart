@@ -12,7 +12,7 @@ import 'dart:io';
 
 class SingleChatPage extends StatefulWidget {
   final Chat chat;
-  final ChatUser user;
+  final ChatUser user; // The user here is the authenticated user
   const SingleChatPage(this.chat, this.user, {Key? key}) : super(key: key);
 
   @override
@@ -61,7 +61,7 @@ class _SingleChatPageState extends State<SingleChatPage> {
                     return ChatMessageWidget(
                         timestamp: message.timestamp,
                         content: message.content,
-                        avatarAsset: 'assets/doctor.png',
+                        avatarAsset: isLocal ? 'assets/user.png' : 'assets/doctor.png', // Different avatar for doctor
                         isLocalSender: isLocal,
                         isImage: isImage); // Pass the isImage flag
                   });

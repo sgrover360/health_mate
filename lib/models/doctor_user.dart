@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:health_mate/models/chat_user.dart';
 
-class DoctorUser {
+class DoctorUser extends ChatUser{
   DoctorUser({
     required this.id,
     required this.name,
@@ -8,7 +10,7 @@ class DoctorUser {
     required this.researchPaperURL,
     required this.dateOfBirth,
     required this.chatIds,
-  });
+  }) : super(id: id, name: name, chatIds: chatIds);
 
   final String id;
   final String name;
@@ -26,10 +28,8 @@ class DoctorUser {
       specialization: json["specialization"] ?? "",
       medicalId: json["medicalId"] ?? "",
       researchPaperURL: json["researchPaperURL"] ?? "",
-      dateOfBirth: DateTime.parse(json["dateOfBirth"]),
-      chatIds: json["chatIds"] == null
-          ? []
-          : List<String>.from(json["chatIds"]!.map((x) => x)),
+      dateOfBirth: json["dateOfBirth"] != null ? (json["dateOfBirth"] as Timestamp).toDate() : DateTime.now(),
+      chatIds: json["chatIds"] == null ? [] : List<String>.from(json["chatIds"].map((x) => x)),
     );
   }
 
@@ -40,7 +40,12 @@ class DoctorUser {
     "specialization": specialization,
     "medicalId": medicalId,
     "researchPaperURL": researchPaperURL,
-    "dateOfBirth": dateOfBirth,//.toIso8601String(),
+    "dateOfBirth": dateOfBirth.toIso8601String(),
     "chatIds": chatIds.map((x) => x).toList(),
   };
+
+  // Get a user-friendly representation of the doctor
+  String getDetails() {
+    return '$name, $specialization (ID: $medicalId)';
+  }
 }
