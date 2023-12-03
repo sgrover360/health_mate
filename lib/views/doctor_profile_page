@@ -1,0 +1,59 @@
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+// import 'package:firebase_ui_auth/src/screens/profile_screen.dart';
+// import 'package:firebase_ui_localizations/firebase_ui_localizations.dart';
+// import 'package:flutter/services.dart';
+// import 'package:health_mate/components/extensions.dart';
+// import 'package:image_picker/image_picker.dart';
+// import 'package:flutter/material.dart';
+
+// import '../views/theme_provider.dart';
+// import '../controllers/profile_page_service.dart';
+// import 'package:health_mate/models/chat_user.dart';
+
+// class ProfilePage extends StatefulWidget {
+//   final ChatUser currUser;
+//   ProfilePage({Key? key, required this.currUser}) : super(key: key);
+//   @override
+//   State<ProfilePage> createState() => _ProfilePageState();
+// }
+
+// class _ProfilePageState extends State<ProfilePage> {
+//   ThemeProvider themeProvider = ThemeProvider();
+//   User? _user = FirebaseAuth.instance.currentUser;
+//   final _formKey = GlobalKey<FormState>();
+//   final _userDataService = UserDataService();
+//   final ImagePicker picker = ImagePicker();
+//   String fname = '';
+//   String lname = '';
+
+//   Future<void> pickImageFromGallery() async {
+//     final XFile? chosen = await picker.pickImage(source: ImageSource.gallery);
+//     setState(() {
+//       selectedImage = chosen;
+//     });
+//     print(selectedImage);
+//   }
+
+//   Future<void> pickImageFromCamera() async {
+//     final XFile? chosen = await picker.pickImage(source: ImageSource.camera);
+//     setState(() {
+//       selectedImage = chosen;
+//     });
+//   }
+
+//   static void preload(BuildContext context, String? path) {
+//     final configuration = createLocalImageConfiguration(context);
+//     NetworkImage(path!).resolve(configuration);
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     if (_user!.photoURL != null) {
+//       preload(context, _user!.photoURL);
+//     }
+//     return Scaffold(
+
+//     )
+//   }
+// }

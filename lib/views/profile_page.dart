@@ -4,6 +4,7 @@ import 'package:firebase_ui_auth/src/screens/profile_screen.dart';
 import 'package:firebase_ui_localizations/firebase_ui_localizations.dart';
 import 'package:flutter/services.dart';
 import 'package:health_mate/components/extensions.dart';
+import 'package:health_mate/views/auth_gate.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 
@@ -271,8 +272,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                   alignment: const Alignment(1.5, 1.2),
                                   child: CircleAvatar(
                                     radius: 17,
-                                    backgroundColor: const Color.fromARGB(
-                                        255, 254, 166, 169),
+                                    backgroundColor:
+                                        const Color.fromARGB(255, 117, 74, 193),
                                     child: CircleAvatar(
                                       radius: 13,
                                       backgroundColor: Colors.white70,
@@ -281,8 +282,61 @@ class _ProfilePageState extends State<ProfilePage> {
                                         iconSize: 22,
                                         icon: const Icon(Icons.edit),
                                         color: Colors.blueGrey,
-                                        onPressed:
-                                            () {}, //need to implement image picker soon
+                                        onPressed: () {
+                                          showModalBottomSheet(
+                                              constraints: const BoxConstraints(
+                                                  maxHeight: 100),
+                                              context: context,
+                                              builder: (BuildContext bc) {
+                                                return Column(
+                                                  children: [
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        pickImageFromCamera();
+                                                      },
+                                                      child: const Row(
+                                                        children: [
+                                                          Text(
+                                                            'Take image with Camera',
+                                                            style: TextStyle(
+                                                                fontSize: 23),
+                                                          ),
+                                                          SizedBox(
+                                                            width: 40,
+                                                          ),
+                                                          Icon(
+                                                            Icons
+                                                                .camera_alt_outlined,
+                                                            size: 40,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    Divider(),
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        pickImageFromGallery();
+                                                      },
+                                                      child:
+                                                          const Row(children: [
+                                                        Text(
+                                                          'Pick image from Gallery',
+                                                          style: TextStyle(
+                                                              fontSize: 23),
+                                                        ),
+                                                        SizedBox(
+                                                          width: 40,
+                                                        ),
+                                                        Icon(
+                                                          Icons.photo,
+                                                          size: 40,
+                                                        ),
+                                                      ]),
+                                                    )
+                                                  ],
+                                                );
+                                              });
+                                        },
                                       ),
                                     ),
                                   ))
@@ -381,7 +435,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     subtitle: Row(
                       children: [
                         Container(
-                          width: MediaQuery.of(context).size.width / 4,
+                          width: MediaQuery.of(context).size.width / 4 -
+                              MediaQuery.of(context).size.width / 40,
                           child: IgnorePointer(
                             ignoring: !editProfile,
                             child: DropdownButtonHideUnderline(
@@ -541,7 +596,8 @@ class _ProfilePageState extends State<ProfilePage> {
                       Row(
                         children: [
                           Container(
-                              width: MediaQuery.of(context).size.width / 4,
+                              width: MediaQuery.of(context).size.width / 4 -
+                                  MediaQuery.of(context).size.width / 100,
                               padding: const EdgeInsets.only(left: 10),
                               child: TextFormField(
                                 enabled: editProfile,
@@ -734,7 +790,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                             ),
                             SizedBox(
-                                width: MediaQuery.of(context).size.width / 20),
+                                width: MediaQuery.of(context).size.width / 70),
                             Container(
                               width: 100,
                               child: IgnorePointer(
@@ -833,7 +889,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         Row(
                           children: [
                             Container(
-                                width: 120,
+                                width: MediaQuery.of(context).size.width / 4,
                                 padding: const EdgeInsets.only(left: 10),
                                 child: TextFormField(
                                   enabled: editProfile,
@@ -855,10 +911,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                   },
                                 )),
                             Container(
-                                width: 120,
+                                width: MediaQuery.of(context).size.width / 3,
                                 padding: EdgeInsets.only(
                                     left:
-                                        MediaQuery.of(context).size.width / 25),
+                                        MediaQuery.of(context).size.width / 20),
                                 child: TextFormField(
                                   enabled: editProfile,
                                   initialValue: widget.currUser.eyeCol,
@@ -879,10 +935,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                   },
                                 )),
                             Container(
-                                width: 120,
+                                width:
+                                    MediaQuery.of(context).size.width / 3 - 10,
                                 padding: EdgeInsets.only(
                                     left:
-                                        MediaQuery.of(context).size.width / 25),
+                                        MediaQuery.of(context).size.width / 20),
                                 child: TextFormField(
                                   enabled: editProfile,
                                   initialValue: widget.currUser.skinTone,
@@ -938,9 +995,12 @@ class _ProfilePageState extends State<ProfilePage> {
                       await FirebaseUIAuth.signOut(
                         context: context,
                         auth: FirebaseAuth.instance,
-                      )
-                          .whenComplete(() => Navigator.of(context).pop())
-                          .whenComplete(() => Navigator.of(context).pop());
+                      ).whenComplete(() {
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (context) => const AuthGate()),
+                            (Route<dynamic> route) => false);
+                      });
                     },
                   ),
                 ),
