@@ -13,9 +13,9 @@ class ChatOverviewController {
 
     for (var chatId in user.chatIds) {
       res.add(Chat.fromJson((await FirebaseFirestore.instance
-          .collection("chats")
-          .doc(chatId)
-          .get())
+              .collection("chats")
+              .doc(chatId)
+              .get())
           .data()!));
     }
 

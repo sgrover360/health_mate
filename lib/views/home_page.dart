@@ -29,6 +29,11 @@ class _HomePageState extends State<HomePage> {
   late List<Doctor> doctorDataList;
   int _selectedIndex = 0;
 
+  PageController pageController = PageController(
+    initialPage: 0,
+    keepPage: true,
+  );
+
   @override
   void initState() {
     doctorDataList = doctorMapList.map((x) => Doctor.fromJson(x)).toList();
@@ -38,6 +43,7 @@ class _HomePageState extends State<HomePage> {
   AppBar _appBar(BuildContext context) {
     return AppBar(
       title: const Text("Health Mate"),
+      automaticallyImplyLeading: false,
       actions: [
         IconButton(
           icon: const Icon(Icons.brightness_6),
@@ -329,42 +335,88 @@ class _HomePageState extends State<HomePage> {
   _onItemTapped(index) {
     setState(() {
       _selectedIndex = index;
-
-      if (index == 1) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const UserPrescriptionsPage(),
-          ),
-        );
-      }
-      if (index == 2) {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => ChatOverviewPage(widget.user)));
-      }
+      pageController.animateToPage(index,
+          duration: const Duration(milliseconds: 600),
+          curve: Curves.fastEaseInToSlowEaseOut);
+      // if (index == 1) {
+      //   Navigator.push(
+      //     context,
+      //     MaterialPageRoute(
+      //       builder: (context) => const UserPrescriptionsPage(),
+      //     ),
+      //   );
+      // }
+      // if (index == 2) {
+      //   Navigator.of(context).push(MaterialPageRoute(
+      //       builder: (context) => ChatOverviewPage(widget.user)));
+      // }
     });
+  }
+
+  Future<bool> _exitApp() async {
+    return (await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            contentPadding: const EdgeInsets.only(top: 15, left: 15, right: 15),
+            content: const Text('Would you like to sign-out before you leave?'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: const Text('No'),
+              ),
+              TextButton(
+                onPressed: () async => await FirebaseAuth.instance
+                    .signOut()
+                    .whenComplete(() => Navigator.of(context).pop(true)),
+                child: const Text('Yes'),
+              ),
+            ],
+          ),
+        )) ??
+        false;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _appBar(context),
-      backgroundColor: Theme.of(context).colorScheme.background,
-      body: CustomScrollView(
-        slivers: <Widget>[
-          SliverList(
-            delegate: SliverChildListDelegate(
-              [
-                _header(),
-                _searchField(),
-                _upcomingAppointments(),
+    return WillPopScope(
+      onWillPop: _selectedIndex == 0
+          ? _exitApp
+          : () async {
+              setState(() {
+                _selectedIndex = 0;
+                pageController.animateToPage(0,
+                    duration: const Duration(milliseconds: 250),
+                    curve: Curves.easeOut);
+              });
+              return false;
+            },
+      child: Scaffold(
+        appBar: _selectedIndex == 0 ? _appBar(context) : null,
+        backgroundColor: Theme.of(context).colorScheme.background,
+        body: PageView(
+          controller: pageController,
+          physics: const NeverScrollableScrollPhysics(),
+          children: [
+            CustomScrollView(
+              slivers: <Widget>[
+                SliverList(
+                  delegate: SliverChildListDelegate(
+                    [
+                      _header(),
+                      _searchField(),
+                      _upcomingAppointments(),
+                    ],
+                  ),
+                ),
+                _doctorsList()
               ],
             ),
-          ),
-          _doctorsList()
-        ],
+            const UserPrescriptionsPage(),
+            ChatOverviewPage(widget.user)
+          ],
+        ),
+        bottomNavigationBar: _bottomNavigationBar(),
       ),
-      bottomNavigationBar: _bottomNavigationBar(),
     );
   }
 }

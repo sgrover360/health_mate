@@ -47,7 +47,7 @@ class _LoginPageState extends State<AuthGate> {
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: true,
-        appBar: AppBar(title: const Text("Login")),
+        // appBar: AppBar(title: const Text("Login")),
         body: Center(
           child: SingleChildScrollView(
             child: Column(
@@ -56,6 +56,26 @@ class _LoginPageState extends State<AuthGate> {
                   // Chip(
                   //     label:
                   //     Text(_registerMode ? "Register for chat" : "Login to chat")),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 50,
+                        height: 50,
+                        child: Image.asset('assets/logo.png'),
+                      ),
+                      const SizedBox(width: 15),
+                      const Text(
+                        'Health Mate',
+                        style: TextStyle(
+                          color: Colors.blueAccent,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 40,
+                        ),
+                      ),
+                      const SizedBox(width: 35)
+                    ],
+                  ),
                   if (_registerMode) const SizedBox(height: 10),
                   if (_registerMode)
                     SizedBox(
@@ -140,11 +160,10 @@ class _LoginPageState extends State<AuthGate> {
       _passwordController?.text = "";
       _passwordConfirmController?.text = "";
 
+      // await Navigator.of(context)
+      //     .push(MaterialPageRoute(builder: (context) => HomePage(user: user)));
       await Navigator.of(context)
           .push(MaterialPageRoute(builder: (context) => HomePage(user: user)));
-
-      // await Navigator.of(context)
-      //     .push(MaterialPageRoute(builder: (context) => DoctorHomePage(user: user)));
 
       //await Navigator.of(context).push(
       //    MaterialPageRoute(builder: (context) => ChatOverviewPage(user)));
@@ -159,10 +178,10 @@ class _LoginPageState extends State<AuthGate> {
       ChatUser chatUser = await _controller.signInWithGoogle();
 
       // Navigate to the HomePage with the obtained ChatUser
-      // await Navigator.of(context)
-      //     .push(MaterialPageRoute(builder: (context) => DoctorHomePage(user: chatUser)));
-      await Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => HomePage(user: chatUser)));
+      await Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => DoctorHomePage(user: chatUser)));
+      // await Navigator.of(context).push(
+      //     MaterialPageRoute(builder: (context) => HomePage(user: chatUser)));
     } catch (error) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(error.toString())));

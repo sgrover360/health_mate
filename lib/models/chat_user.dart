@@ -63,9 +63,9 @@ class ChatUser {
   String signInMethod;
 
   ChatUser({
-    required this.id,
-    required this.name,
-    required this.chatIds,
+    this.id,
+    this.name = 'da',
+    this.chatIds = const [],
     this.fname = '',
     this.lname = 'Guest',
     this.dob,
@@ -126,6 +126,33 @@ class ChatUser {
       photoUri: json['photoUri'],
       isDoctor: json['isDoctor'] ?? false,
       signInMethod: json['signInMethod'] ?? 'unknown',
+    );
+  }
+
+  fromPatientJson(Map<String, dynamic> json) {
+    return ChatUser(
+      // name: json["name"],
+      name: json["fname"] + json["lname"],
+      chatIds: json["chat"] == null
+          ? []
+          : List<String>.from(json['chatIds'].map((x) => x)),
+      fname: json["fname"],
+      lname: json["lname"],
+      dob: json["dob"],
+      sex: json["sex"],
+      addr: json["addr"],
+      post: json["post"],
+      city: json["city"],
+      province: json["province"],
+      hairCol: json["hairCol"],
+      bloodType: json["bloodType"],
+      eyeCol: json["eyeCol"],
+      skinTone: json["skinTone"],
+      email: json["email"],
+      phone: json["phone"],
+      photoUri: json["photoUri"],
+      isDoctor: json["isDoctor"],
+      // id: json["id"],
     );
   }
 

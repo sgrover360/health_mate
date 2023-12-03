@@ -241,8 +241,8 @@ class _ProfilePageState extends State<ProfilePage> {
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    Color.fromARGB(255, 255, 171, 175),
-                    Color.fromARGB(255, 251, 145, 145)
+                    Colors.deepPurple,
+                    Color.fromARGB(255, 145, 107, 209),
                   ],
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,
@@ -352,7 +352,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: Text(
                       'Email',
                       style: TextStyle(
-                        color: Colors.deepOrange,
+                        color: Color.fromARGB(255, 76, 31, 154),
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
@@ -373,7 +373,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     title: const Text(
                       'Phone',
                       style: TextStyle(
-                        color: Colors.deepOrange,
+                        color: Color.fromARGB(255, 76, 31, 154),
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
@@ -494,7 +494,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   title: const Text(
                     'Address',
                     style: TextStyle(
-                      color: Colors.deepOrange,
+                      color: Color.fromARGB(255, 76, 31, 154),
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
@@ -640,7 +640,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   title: const Text(
                     'Personal',
                     style: TextStyle(
-                      color: Colors.deepOrange,
+                      color: Color.fromARGB(255, 76, 31, 154),
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
@@ -974,230 +974,3 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 }
-//
-// import 'package:flutter/material.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:health_mate/models/user_data.dart';
-// import 'package:health_mate/views/theme_provider.dart';
-// import 'package:image_picker/image_picker.dart';
-// import '../models/chat_user.dart'; // Replace with the correct import path for ChatUser
-// import '../pages/login/login_controller.dart'; // Replace with the correct import path for LoginController
-// import '../controllers/profile_page_service.dart'; // Replace with your service class if you have one
-//
-// class ProfilePage extends StatefulWidget {
-//   final ChatUser currUser;
-//
-//   ProfilePage({Key? key, required this.currUser}) : super(key: key);
-//
-//   @override
-//   State<ProfilePage> createState() => _ProfilePageState();
-// }
-//
-// class _ProfilePageState extends State<ProfilePage> {
-//   final _formKey = GlobalKey<FormState>();
-//   final ImagePicker _picker = ImagePicker();
-//   late ChatUser _user;
-//
-//
-//   ThemeProvider themeProvider = ThemeProvider();
-//
-//   final _userDataService = UserDataService();
-//   final ImagePicker picker = ImagePicker();
-//   String fname = '';
-//   String lname = '';
-//   DateTime? dob = DateTime(DateTime.now().year, DateTime.now().month,
-//       DateTime.now().day); //need change
-//   String sex = 'Male';
-//   String addr_line1 = '';
-//   String addr_line2 = '';
-//   String post = '';
-//   String city = '';
-//   String? country = 'CA';
-//   String? province = 'Newfoundland\nand Labrador';
-//   String hairCol = '';
-//   String bloodType = '';
-//   String eyeCol = '';
-//   String skinTone = '';
-//   String email = '';
-//   String phone_primary = '';
-//   String phone_secondary = '';
-//   String? photoUri = '';
-//   XFile? selectedImage;
-//   bool is_doctor = false;
-//   bool editProfile = false;
-//   bool editProfilePic = false;
-//   List<String> genders = ['Male', 'Female'];
-//   List<String> bloodTypes = [
-//     '',
-//     'A+',
-//     'A-',
-//     'B+',
-//     'B-',
-//     'AB+',
-//     'AB-',
-//     'O+',
-//     'O-'
-//   ];
-//   List<String> country_lst = ['USA', 'CA'];
-//   List<String> can_lst = [
-//     'Ontario',
-//     'Quebec',
-//     'Nova Scotia',
-//     'New Brunswick',
-//     'Manitoba',
-//     'British Columbia',
-//     'Prince Edward\nIsland',
-//     'Saskatchewan',
-//     'Alberta',
-//     'Newfoundland\nand Labrador'
-//   ];
-//   List<String> usa_lst = [
-//     'Alabama',
-//     'Alaska',
-//     'Arizona',
-//     'Arkansas',
-//     'California',
-//     'Colorado',
-//     'Connecticut',
-//     'Delaware',
-//     'Florida',
-//     'Georgia',
-//     'Hawaii',
-//     'Idaho',
-//     'Illinois',
-//     'Indiana',
-//     'Iowa',
-//     'Kansas',
-//     'Kentucky',
-//     'Lousiana',
-//     'Maine',
-//     'Maryland',
-//     'Massachusetts',
-//     'Michigan',
-//     'Minnesota',
-//     'Mississippi',
-//     'Missouri',
-//     'Montana',
-//     'Nebraska',
-//     'Nevada',
-//     'New Hampshire',
-//     'New Jersey',
-//     'New Mexico',
-//     'New York',
-//     'North Carolina',
-//     'North Dakota',
-//     'Ohio',
-//     'Oklahoma',
-//     'Oregon',
-//     'Pennsylvania',
-//     'Rhode Island',
-//     'South Carolina',
-//     'South Dakota',
-//     'Tennessee',
-//     'Texas',
-//     'Utah',
-//     'Vermont',
-//     'Virginia',
-//     'Washington',
-//     'West Virginia',
-//     'Wisconsin',
-//     'Wyoming'
-//   ];
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     _user = widget.currUser;
-//   }
-//
-//   Future<void> selectDate(BuildContext context) async {
-//     final DateTime? picked = await showDatePicker(
-//       context: context,
-//       initialDate: dob!,
-//       firstDate: DateTime(1940),
-//       lastDate: DateTime.now(),
-//     );
-//     if (picked != null && picked != dob) {
-//       setState(() {
-//         dob = picked;
-//       });
-//     }
-//   }
-//
-//   Future<void> _pickImageFromGallery() async {
-//     final XFile? chosen = await picker.pickImage(source: ImageSource.gallery);
-//     setState(() {
-//       selectedImage = chosen;
-//     });
-//     print(selectedImage);
-//   }
-//
-//   Future<void> pickImageFromCamera() async {
-//     final XFile? chosen = await picker.pickImage(source: ImageSource.camera);
-//     setState(() {
-//       selectedImage = chosen;
-//     });
-//   }
-//
-//   Future<void> _saveCurrUser() async {
-//     if (_formKey.currentState!.validate()) {
-//       _formKey.currentState!.save();
-//       // Handle the saving of user data to Firestore
-//     }
-//
-//   }
-//   static void preload(BuildContext context, String? path) {
-//     final configuration = createLocalImageConfiguration(context);
-//     NetworkImage(path!).resolve(configuration);
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text("Profile Page"),
-//       ),
-//       body: Form(
-//         key: _formKey,
-//         child: ListView(
-//           padding: const EdgeInsets.all(16),
-//           children: <Widget>[
-//             // Profile image
-//             Center(
-//               child: GestureDetector(
-//                 onTap: _pickImageFromGallery,
-//                 child: const CircleAvatar(
-//                   radius: 50,
-//                   // backgroundImage: _user.photoURL != null
-//                   //     ? NetworkImage(_user.photoURL!)
-//                   //     : const AssetImage("assets/person_icon.png"),
-//                 ),
-//               ),
-//             ),
-//             const SizedBox(height: 20),
-//             // Name field
-//             TextFormField(
-//               initialValue: _user.name,
-//               decoration: const InputDecoration(labelText: 'Name'),
-//               onSaved: (value) => _user.name = value!,
-//             ),
-//             const SizedBox(height: 10),
-//             // Email field
-//             // TextFormField(
-//             //   initialValue: _user.email,
-//             //   decoration: const InputDecoration(labelText: 'Email'),
-//             //   onSaved: (value) => _user.email = value!,
-//             // ),
-//             // ... Add other fields as necessary ...
-//             const SizedBox(height: 20),
-//             ElevatedButton(
-//               onPressed: _saveCurrUser,
-//               child: const Text("Save Changes"),
-//             ),
-//             // ... Add other buttons or UI elements as needed ...
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }

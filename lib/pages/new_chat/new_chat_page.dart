@@ -38,17 +38,17 @@ class _NewChatPageState extends State<NewChatPage> {
                 return snapshot.data!.isEmpty
                     ? const Center(child: Text("No chat users found!"))
                     : ListView.builder(
-                    itemCount: snapshot.data!.length,
-                    itemBuilder: (context, index) => Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ListTile(
-                        leading: const CircleAvatar(
-                            child: Icon(Icons.person)),
-                        title: Text(snapshot.data![index].name),
-                        onTap: () async =>
-                            _startNewChat(snapshot.data![index]),
-                      ),
-                    ));
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) => Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ListTile(
+                                leading: const CircleAvatar(
+                                    child: Icon(Icons.person)),
+                                title: Text(snapshot.data![index].name!),
+                                onTap: () async =>
+                                    _startNewChat(snapshot.data![index]),
+                              ),
+                            ));
               }
 
               return const ExceptionWidget();
@@ -57,7 +57,7 @@ class _NewChatPageState extends State<NewChatPage> {
 
   Future _startNewChat(ChatUser chatPartner) async {
     Chat? chat =
-    await _controller.getExistingChat(widget.localUser, chatPartner);
+        await _controller.getExistingChat(widget.localUser, chatPartner);
 
     chat ??= await _controller.createNewChat(widget.localUser, chatPartner);
 
