@@ -15,7 +15,6 @@ import '../models/user_data.dart';
 import 'doctor_prescriptions_page.dart';
 
 class DoctorHomePage extends StatefulWidget {
-
   final ChatUser user;
   const DoctorHomePage({super.key, required this.user});
 
@@ -27,11 +26,16 @@ class DoctorHomePageState extends State<DoctorHomePage> {
   final User? user = FirebaseAuth.instance.currentUser;
   late List<dynamic> patientDataList;
   int _selectedIndex = 0;
+  String _searchQuery = "";
+  String selectedSortOrder = 'Sort by';
+  List<UserData> patientList = [];
 
   @override
   void initState() {
     // patientDataList = patientMapList.map((x) => UserData(email: user!.email!).fromPatientJson(x)).toList();
-    patientDataList = patientMapList.map((x) => UserData().fromPatientJson(x)).toList();
+    patientDataList =
+        patientMapList.map((x) => UserData().fromPatientJson(x)).toList();
+    patientList = [...patientDataList];
     super.initState();
   }
 
@@ -84,9 +88,14 @@ class DoctorHomePageState extends State<DoctorHomePage> {
         ],
       ),
       child: TextField(
+        onChanged: (query) {
+          setState(() {
+            _searchQuery = query;
+          });
+        },
         decoration: InputDecoration(
           contentPadding:
-          const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           border: InputBorder.none,
           hintText: "Search for patient",
           hintStyle: TextStyles.body.subTitleColor,
@@ -105,7 +114,7 @@ class DoctorHomePageState extends State<DoctorHomePage> {
       children: <Widget>[
         Padding(
           padding:
-          const EdgeInsets.only(top: 8, right: 16, left: 16, bottom: 4),
+              const EdgeInsets.only(top: 8, right: 16, left: 16, bottom: 4),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -208,13 +217,25 @@ class DoctorHomePageState extends State<DoctorHomePage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text("My Patients", style: TextStyles.title.bold),
-              IconButton(
-                  icon: Icon(
-                    Icons.sort,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  onPressed: () {})
               // .p(12).ripple(() {}, borderRadius: BorderRadius.all(Radius.circular(20))),
+              DropdownButton<String>(
+                value: selectedSortOrder,
+                onChanged: (String? newValue) {
+                  if (newValue != null) {
+                    setState(() {
+                      selectedSortOrder = newValue;
+                      _sortPatients();
+                    });
+                  }
+                },
+                items:
+                    <String>['Sort by', 'A to Z', 'Z to A'].map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
             ],
           ).hP16,
           _getPatientWidgetList()
@@ -224,10 +245,25 @@ class DoctorHomePageState extends State<DoctorHomePage> {
   }
 
   Widget _getPatientWidgetList() {
+    final filteredDoctors = patientList.where((patient) =>
+        patient.fname.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+        patient.lname.toLowerCase().contains(_searchQuery.toLowerCase()));
+
     return Column(
-        children: patientDataList.map((patient) {
-          return _patientTile(patient);
-        }).toList());
+      children: filteredDoctors.map((x) {
+        return _patientTile(x);
+      }).toList(),
+    );
+  }
+
+  void _sortPatients() {
+    setState(() {
+      if (selectedSortOrder == 'A to Z') {
+        patientList.sort((a, b) => a.fname.compareTo(b.fname));
+      } else {
+        patientList.sort((a, b) => b.fname.compareTo(a.fname));
+      }
+    });
   }
 
   Widget _patientTile(UserData patient) {
@@ -270,7 +306,8 @@ class DoctorHomePageState extends State<DoctorHomePage> {
               ),
             ),
           ),
-          title: Text("${patient.fname} ${patient.lname}", style: TextStyles.title.bold),
+          title: Text("${patient.fname} ${patient.lname}",
+              style: TextStyles.title.bold),
           subtitle: Text(
             "Sex - ${patient.sex}",
             style: TextStyles.bodySm.subTitleColor.bold,
