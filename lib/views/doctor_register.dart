@@ -18,10 +18,13 @@ class _RegistrationFormState extends State<RegistrationForm> {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
-  final TextEditingController _specializationController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+  final TextEditingController _specializationController =
+      TextEditingController();
   final TextEditingController _medicalIdController = TextEditingController();
-  final TextEditingController _researchPaperURLController = TextEditingController();
+  final TextEditingController _researchPaperURLController =
+      TextEditingController();
 
   DateTime? _dateOfBirth;
 
@@ -50,11 +53,14 @@ class _RegistrationFormState extends State<RegistrationForm> {
               buildTextField(_firstNameController, "First Name"),
               buildTextField(_emailController, "Email"),
               buildTextField(_passwordController, "Password", isPassword: true),
-              buildTextField(_confirmPasswordController, "Confirm Password", isPassword: true),
+              buildTextField(_confirmPasswordController, "Confirm Password",
+                  isPassword: true),
               buildTextField(_specializationController, "Specialization"),
               buildTextField(_medicalIdController, "Medical ID"),
               buildDateField(),
-              buildTextField(_researchPaperURLController, "Research Paper URL (optional)", isRequired: false),
+              buildTextField(
+                  _researchPaperURLController, "Research Paper URL (optional)",
+                  isRequired: false),
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _submitForm,
@@ -67,7 +73,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
     );
   }
 
-  Widget buildTextField(TextEditingController controller, String label, {bool isPassword = false, bool isRequired = true}) {
+  Widget buildTextField(TextEditingController controller, String label,
+      {bool isPassword = false, bool isRequired = true}) {
     return TextFormField(
       controller: controller,
       obscureText: isPassword,
@@ -84,9 +91,11 @@ class _RegistrationFormState extends State<RegistrationForm> {
   Widget buildDateField() {
     return TextFormField(
       decoration: const InputDecoration(labelText: 'Date of Birth'),
-      controller: TextEditingController(text: _dateOfBirth != null ? _dateFormat.format(_dateOfBirth!) : ''),
+      controller: TextEditingController(
+          text: _dateOfBirth != null ? _dateFormat.format(_dateOfBirth!) : ''),
       onTap: () async {
-        FocusScope.of(context).requestFocus(FocusNode()); // Prevent opening default keyboard
+        FocusScope.of(context)
+            .requestFocus(FocusNode()); // Prevent opening default keyboard
         DateTime? picked = await showDatePicker(
           context: context,
           initialDate: DateTime.now(),
@@ -114,7 +123,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
   void _submitForm() async {
     if (!_validateForm()) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please fill all required fields correctly")),
+        const SnackBar(
+            content: Text("Please fill all required fields correctly")),
       );
       return;
     }
@@ -130,9 +140,10 @@ class _RegistrationFormState extends State<RegistrationForm> {
       Map<String, dynamic> doctorData = {
         'name': _firstNameController.text.trim(),
         'specialization': _specializationController.text.trim(),
-        'medicalId': _medicalIdController.text.trim(), // Assuming you have this field
+        'medicalId':
+            _medicalIdController.text.trim(), // Assuming you have this field
         'researchPaperURL': _researchPaperURLController.text.trim(),
-        'dateOfBirth': _dateOfBirth,//?.toIso8601String(),
+        'dateOfBirth': _dateOfBirth, //?.toIso8601String(),
         // Do not include password here
       };
 
@@ -159,7 +170,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const AuthenticationCompletePage()),
+        MaterialPageRoute(
+            builder: (context) => const AuthenticationCompletePage()),
       );
 
       // Navigate to the next page or perform other actions as needed
@@ -169,8 +181,6 @@ class _RegistrationFormState extends State<RegistrationForm> {
       );
     }
   }
-
-
 
   bool _validateForm() {
     bool isValid = _firstNameController.text.isNotEmpty &&

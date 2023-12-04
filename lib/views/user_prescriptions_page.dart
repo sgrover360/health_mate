@@ -169,6 +169,7 @@ class UserPrescriptionsPageState extends State<UserPrescriptionsPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Prescriptions'),
+        automaticallyImplyLeading: false,
       ),
       body: CustomScrollView(
         slivers: <Widget>[

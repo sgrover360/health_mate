@@ -12,7 +12,7 @@ import '../components/theme.dart';
 import '../models/chat_user.dart';
 import '../models/data.dart';
 import '../models/doctor.dart';
-import '../models/user_data.dart';
+// import '../models/user_data.dart';
 import 'doctor_prescriptions_page.dart';
 
 class DoctorHomePage extends StatefulWidget {
@@ -29,13 +29,19 @@ class DoctorHomePageState extends State<DoctorHomePage> {
   int _selectedIndex = 0;
   String _searchQuery = "";
   String selectedSortOrder = 'Sort by';
-  List<UserData> patientList = [];
+  List<ChatUser> patientList = [];
+
+  PageController pageController = PageController(
+    initialPage: 0,
+    keepPage: true,
+  );
 
   @override
   void initState() {
     // patientDataList = patientMapList.map((x) => UserData(email: user!.email!).fromPatientJson(x)).toList();
-    patientDataList =
-        patientMapList.map((x) => UserData().fromPatientJson(x)).toList();
+    patientDataList = patientMapList
+        .map((x) => ChatUser(email: widget.user.email).fromPatientJson(x))
+        .toList();
     patientList = [...patientDataList];
     super.initState();
   }
@@ -43,6 +49,7 @@ class DoctorHomePageState extends State<DoctorHomePage> {
   AppBar _appBar(BuildContext context) {
     return AppBar(
       title: const Text("Health Mate"),
+      automaticallyImplyLeading: false,
       actions: [
         IconButton(
           icon: const Icon(Icons.brightness_6),
@@ -267,7 +274,7 @@ class DoctorHomePageState extends State<DoctorHomePage> {
     });
   }
 
-  Widget _patientTile(UserData patient) {
+  Widget _patientTile(ChatUser patient) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       decoration: BoxDecoration(
@@ -363,42 +370,82 @@ class DoctorHomePageState extends State<DoctorHomePage> {
   _onItemTapped(index) {
     setState(() {
       _selectedIndex = index;
-
-      if (index == 1) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => DoctorPrescriptionsPage(user: widget.user),
-          ),
-        );
-      }
-      if (index == 2) {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => ChatOverviewPage(widget.user)));
-      }
+      pageController.animateToPage(index,
+          duration: const Duration(milliseconds: 600),
+          curve: Curves.fastEaseInToSlowEaseOut);
+      // if (index == 1) {
+      //   Navigator.push(
+      //     context,
+      //     MaterialPageRoute(
+      //       builder: (context) => DoctorPrescriptionsPage(user: widget.user),
+      //     ),
+      //   );
+      // }
     });
+  }
+
+  Future<bool> _exitApp() async {
+    return (await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            contentPadding: const EdgeInsets.only(top: 15, left: 15, right: 15),
+            content: const Text('Would you like to sign-out before you leave?'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: const Text('No'),
+              ),
+              TextButton(
+                onPressed: () async => await FirebaseAuth.instance
+                    .signOut()
+                    .whenComplete(() => Navigator.of(context).pop(true)),
+                child: const Text('Yes'),
+              ),
+            ],
+          ),
+        )) ??
+        false;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _appBar(context),
-      backgroundColor: Theme.of(context).colorScheme.background,
-      body: CustomScrollView(
-        slivers: <Widget>[
-          SliverList(
-            delegate: SliverChildListDelegate(
-              [
-                _header(),
-                _searchField(),
-                _upcomingAppointments(),
-              ],
-            ),
+    return WillPopScope(
+        onWillPop: _selectedIndex == 0
+            ? _exitApp
+            : () async {
+                setState(() {
+                  _selectedIndex = 0;
+                  pageController.animateToPage(0,
+                      duration: const Duration(milliseconds: 250),
+                      curve: Curves.easeOut);
+                });
+                return false;
+              },
+        child: Scaffold(
+          appBar: _selectedIndex == 0 ? _appBar(context) : null,
+          backgroundColor: Theme.of(context).colorScheme.background,
+          body: PageView(
+            controller: pageController,
+            physics: const NeverScrollableScrollPhysics(),
+            children: [
+              CustomScrollView(
+                slivers: <Widget>[
+                  SliverList(
+                    delegate: SliverChildListDelegate(
+                      [
+                        _header(),
+                        _searchField(),
+                        _upcomingAppointments(),
+                      ],
+                    ),
+                  ),
+                  _patientsList()
+                ],
+              ),
+              DoctorPrescriptionsPage(user: widget.user)
+            ],
           ),
-          _patientsList()
-        ],
-      ),
-      bottomNavigationBar: _bottomNavigationBar(),
-    );
+          bottomNavigationBar: _bottomNavigationBar(),
+        ));
   }
 }
