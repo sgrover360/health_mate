@@ -42,7 +42,7 @@ import 'package:health_mate/models/doctor_user.dart';
 
 class LoginController {
   // Email/Password Login
-  Future<ChatUser> login(String email, String password) async {
+  login(String email, String password) async {
     UserCredential cred = await FirebaseAuth.instance
         .signInWithEmailAndPassword(email: email, password: password);
 
@@ -51,9 +51,18 @@ class LoginController {
         .doc(cred.user!.uid)
         .get();
 
+    var doctorDoc = await FirebaseFirestore.instance
+        .collection("doctors")
+        .doc(email)
+        .get();
+
     if (userDoc.exists) {
       return ChatUser.fromJson(userDoc.data() as Map<String, dynamic>);
-    } else {
+    }
+    else if (doctorDoc.exists) {
+      return DoctorUser.fromJson(doctorDoc.data() as Map<String, dynamic>);
+    }
+    else {
       // Handle the case where user is authenticated but not in Firestore
       throw FirebaseAuthException(
         code: "USER_NOT_IN_FIRESTORE",
@@ -89,17 +98,19 @@ class LoginController {
     DoctorUser newDoctor = DoctorUser(
       id: cred.user!.uid,
       name: doctorData['name'],
+      email: email,
       specialization: doctorData['specialization'],
       medicalId: doctorData['medicalId'],
       researchPaperURL: doctorData['researchPaperURL'],
       dateOfBirth: doctorData['dateOfBirth'],
-      chatIds: [], // Initialize with empty list or as needed
+      chatIds: [],
+      appointments: [], // Initialize with empty list or as needed
     );
 
     // Save the new doctor to Firestore
     await FirebaseFirestore.instance
         .collection("doctors")
-        .doc(cred.user!.uid)
+        .doc(email)
         .set(newDoctor.toJson());
   }
 

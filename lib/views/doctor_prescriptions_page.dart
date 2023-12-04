@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:health_mate/components/extensions.dart';
+import 'package:health_mate/models/doctor_user.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 import '../components/light_color.dart';
@@ -11,9 +12,9 @@ import 'create_prescription.dart';
 import 'doctor_home_page.dart';
 
 class DoctorPrescriptionsPage extends StatefulWidget {
-  final ChatUser user;
+  final DoctorUser doctor;
 
-  const DoctorPrescriptionsPage({Key? key, required this.user})
+  const DoctorPrescriptionsPage({Key? key, required this.doctor})
       : super(key: key);
 
   @override
@@ -85,7 +86,7 @@ class DoctorPrescriptionsPageState extends State<DoctorPrescriptionsPage> {
           // Navigate to the page where the doctor can create a new prescription
           // Navigator.pushNamed(context, '/createPrescription');
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => CreatePrescription(user: widget.user)));
+              builder: (context) => CreatePrescription(user: widget.doctor)));
         },
         child: const Icon(Icons.add),
       ),

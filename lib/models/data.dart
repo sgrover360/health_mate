@@ -1,8 +1,13 @@
+import 'package:health_mate/models/prescription.dart';
+
 final doctorMapList = [
   {
-    "firstName": "David",
-    "lastName": "Kemp",
-    "type": "Heart Surgeon",
+    "name": "David Kemp",
+    "specialization": "Heart Surgeon",
+    "medicalId": "",
+    "researchPaperURL": "",
+    "dateOfBirth": '2023-12-01T15:30:00',
+    "chatIds": [],
     "rating": 4,
     "goodReviews": 79.2,
     "totalScore": 93.2,
@@ -15,9 +20,12 @@ final doctorMapList = [
         "A doctor can be found in several settings, including public health organization, group practices and  hospitals They have some of the most diverse and challenging careears available and part of a universally well-respected profession",
   },
   {
-    "firstName": "Kathy",
-    "lastName": "Mathews",
-    "type": "Neurologist",
+    "name": "Kathy Mathews",
+    "specialization": "Neurologist",
+    "medicalId": "",
+    "researchPaperURL": "",
+    "dateOfBirth": '2023-12-01T15:30:00',
+    "chatIds": [],
     "rating": 3,
     "goodReviews": 93.2,
     "totalScore": 72.2,
@@ -30,9 +38,12 @@ final doctorMapList = [
         "A doctor can be found in several settings, including public health organization, group practices and  hospitals They have some of the most diverse and challenging careears available and part of a universally well-respected profession",
   },
   {
-    "firstName": "Morris",
-    "lastName": "Terry",
-    "type": "Cardio Surgeon",
+    "name": "Morris Terry",
+    "specialization": "Cardio Surgeon",
+    "medicalId": "",
+    "researchPaperURL": "",
+    "dateOfBirth": '2023-12-01T15:30:00',
+    "chatIds": [],
     "rating": 2,
     "goodReviews": 88.2,
     "totalScore": 93.94,
@@ -45,9 +56,12 @@ final doctorMapList = [
         "A doctor can be found in several settings, including public health organization, group practices and  hospitals They have some of the most diverse and challenging careears available and part of a universally well-respected profession",
   },
   {
-    "firstName": "Bruce",
-    "lastName": "Banner",
-    "type": "Heart Surgeon",
+    "name": "Bruce Banner",
+    "specialization": "Heart Surgeon",
+    "medicalId": "",
+    "researchPaperURL": "",
+    "dateOfBirth": '2023-12-01T15:30:00',
+    "chatIds": [],
     "rating": 1,
     "goodReviews": 12.2,
     "totalScore": 75.2,
@@ -280,3 +294,113 @@ final Map<String, Map<String, bool>> medicines = {
     'Evening': false,
   },
 };
+
+final List<Prescription> prescriptions = [
+  Prescription(
+    doctorFirstName: 'Mashoor',
+    doctorLastName: 'Gulati',
+    userFirstName: 'Shivam',
+    userLastName: 'Grover',
+    contactInfo: '123-456-7890',
+    date: '2023-01-01',
+    prescriptionPdfUrl:
+    'https://firebasestorage.googleapis.com/v0/b/health-mate-4768.appspot.com/o/prescription.pdf?alt=media&token=5a5f9ac5-88e0-4d22-9215-a9101f4fa2fb', // Replace with the actual URL
+    medicineName: 'Aspirin',
+    doctorImage: 'assets/doctor_gulati.png',
+    userImage: 'assets/user_1.png',
+    userId: '',
+    prescriptionId: '',
+  ),
+  Prescription(
+    doctorFirstName: 'Garvit',
+    doctorLastName: 'Gupta',
+    userFirstName: 'Arya',
+    userLastName: 'Grover',
+    contactInfo: '123-456-7890',
+    date: '2023-01-02',
+    prescriptionPdfUrl:
+    'https://firebasestorage.googleapis.com/v0/b/health-mate-4768.appspot.com/o/prescription.pdf?alt=media&token=5a5f9ac5-88e0-4d22-9215-a9101f4fa2fb', // Replace with the actual URL
+    medicineName: 'Advil',
+    doctorImage: 'assets/doctor.png',
+    userImage: 'assets/user_2.png',
+    userId:
+    '', // think about making a static User class containing all the properties
+    prescriptionId: '',
+  ),
+  Prescription(
+    doctorFirstName: 'Jogan',
+    doctorLastName: 'Walia',
+    userFirstName: 'Simba',
+    userLastName: 'Grover',
+    contactInfo: '123-456-7890',
+    date: '2023-04-01',
+    prescriptionPdfUrl:
+    'https://firebasestorage.googleapis.com/v0/b/health-mate-4768.appspot.com/o/prescription.pdf?alt=media&token=5a5f9ac5-88e0-4d22-9215-a9101f4fa2fb', // Replace with the actual URL
+    medicineName: 'Viagra',
+    doctorImage: 'assets/doctor_1.png',
+    userImage: 'assets/user_3.png',
+    userId: '',
+    prescriptionId: '',
+  ),
+  Prescription(
+    doctorFirstName: 'Vaibhav',
+    doctorLastName: 'Mehra',
+    userFirstName: 'Shivam',
+    userLastName: 'Choudhary',
+    contactInfo: '123-456-7890',
+    date: '2023-04-18',
+    prescriptionPdfUrl:
+    'https://firebasestorage.googleapis.com/v0/b/health-mate-4768.appspot.com/o/prescription.pdf?alt=media&token=5a5f9ac5-88e0-4d22-9215-a9101f4fa2fb', // Replace with the actual URL
+    medicineName: 'Ibuprofen',
+    doctorImage: 'assets/doctor_3.png',
+    userImage: 'assets/user_4.png',
+    userId: '',
+    prescriptionId: '',
+  ),
+  Prescription(
+    doctorFirstName: 'Sawal',
+    doctorLastName: 'Nijjer',
+    userFirstName: 'Goku',
+    userLastName: 'Grover',
+    contactInfo: '123-456-7890',
+    date: '2023-08-23',
+    prescriptionPdfUrl:
+    'https://firebasestorage.googleapis.com/v0/b/health-mate-4768.appspot.com/o/prescription.pdf?alt=media&token=5a5f9ac5-88e0-4d22-9215-a9101f4fa2fb', // Replace with the actual URL
+    medicineName: 'Paracetamol',
+    doctorImage: 'assets/doctor_4.png',
+    userImage: 'assets/user_5.png',
+    userId: '',
+    prescriptionId: '',
+  ),
+  Prescription(
+    doctorFirstName: 'Bhavesh',
+    doctorLastName: 'Sahni',
+    userFirstName: 'Gohan',
+    userLastName: 'Grover',
+    contactInfo: '123-456-7890',
+    date: '2023-11-19',
+    prescriptionPdfUrl:
+    'https://firebasestorage.googleapis.com/v0/b/health-mate-4768.appspot.com/o/prescription.pdf?alt=media&token=5a5f9ac5-88e0-4d22-9215-a9101f4fa2fb', // Replace with the actual URL
+    medicineName: 'Lipitor',
+    doctorImage: 'assets/doctor.png',
+    userImage: 'assets/user_6.png',
+    userId: '',
+    prescriptionId: '',
+  ),
+  Prescription(
+    doctorFirstName: 'Rishab',
+    doctorLastName: 'Gupta',
+    userFirstName: 'Gotenks',
+    userLastName: 'Grover',
+    contactInfo: '123-456-7890',
+    date: '2023-12-27',
+    prescriptionPdfUrl:
+    'https://firebasestorage.googleapis.com/v0/b/health-mate-4768.appspot.com/o/prescription.pdf?alt=media&token=5a5f9ac5-88e0-4d22-9215-a9101f4fa2fb', // Replace with the actual URL
+    medicineName: 'Penicillin',
+    doctorImage: 'assets/doctor_4.png',
+    userImage: 'assets/user_6.png',
+    userId: '',
+    prescriptionId: '',
+  ),
+  // Add more prescriptions as needed
+];
