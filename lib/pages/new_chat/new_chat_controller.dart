@@ -34,7 +34,6 @@ class NewChatController {
     if (existingChat != null) {
       return existingChat;
     }
-
     // If no existing chat, create a new one
     var newChatId = local.id + other.id;
     var chat = Chat(

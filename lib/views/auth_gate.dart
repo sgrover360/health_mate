@@ -147,7 +147,7 @@ class _LoginPageState extends State<AuthGate> {
                   )
                 ]),
           ),
-        ));
+        )));
   }
 
   Future _login() async {

@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:health_mate/models/chat_user.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'appointment.dart';
 
 class DoctorUser extends ChatUser{
@@ -25,7 +23,7 @@ class DoctorUser extends ChatUser{
     this.location = '',
     this.hospital = '',
     this.isDoctor,
-  }): super(id: id, name: name, chatIds: chatIds);
+  }): super(id: id, name: name, chatIds: chatIds, isDoctor: isDoctor, email: email);
 
   final String id;
   final String name;
