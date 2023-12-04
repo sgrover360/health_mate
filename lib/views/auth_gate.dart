@@ -47,7 +47,6 @@ class _LoginPageState extends State<AuthGate> {
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: true,
-        // appBar: AppBar(title: const Text("Login")),
         body: Center(
         child: ConstrainedBox(
             constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height - AppBar().preferredSize.height - MediaQuery.of(context).padding.top),
@@ -55,9 +54,6 @@ class _LoginPageState extends State<AuthGate> {
                 child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  // Chip(
-                  //     label:
-                  //     Text(_registerMode ? "Register for chat" : "Login to chat")),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -162,26 +158,31 @@ class _LoginPageState extends State<AuthGate> {
       _passwordController?.text = "";
       _passwordConfirmController?.text = "";
 
-      // await Navigator.of(context)
-      //     .push(MaterialPageRoute(builder: (context) => HomePage(user: user)));
-      await Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => HomePage(user: user)));
-
-      //await Navigator.of(context).push(
-      //    MaterialPageRoute(builder: (context) => ChatOverviewPage(user)));
+      if (user.isDoctor == false) {
+        await Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => HomePage(user: user)));
+      }
+      else if (user.isDoctor == true) {
+        await Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => DoctorHomePage(doctor: user)));
+      }
+      else {
+        const snackBar = SnackBar(
+          content: Text('Your documents is under verification. We will send an email once your doctor account is activated'),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 5),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
     } on FirebaseAuthException catch (ex) {
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(ex.message ?? "")));
+          .showSnackBar(SnackBar(content: Text(ex.message ?? ""), backgroundColor: Colors.red,));
     }
   }
 
   Future<void> signInWithGoogle() async {
     try {
       ChatUser chatUser = await _controller.signInWithGoogle();
-
-      // Navigate to the HomePage with the obtained ChatUser
-      // await Navigator.of(context).push(MaterialPageRoute(
-      //     builder: (context) => DoctorHomePage(user: chatUser)));
       await Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => HomePage(user: chatUser)));
     } catch (error) {

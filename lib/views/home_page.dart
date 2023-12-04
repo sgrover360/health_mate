@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,7 +12,8 @@ import '../components/light_color.dart';
 import '../components/text_styles.dart';
 import '../components/theme.dart';
 import '../models/data.dart';
-import '../models/doctor.dart';
+import '../models/doctor_user.dart';
+import 'doctor_details_page.dart';
 
 class HomePage extends StatefulWidget {
   //final User? user = FirebaseAuth.instance.currentUser;
@@ -28,11 +30,11 @@ enum SearchFilter { names, rating, location }
 class _HomePageState extends State<HomePage> {
   //final User? user = FirebaseAuth.instance.currentUser;
   //final ChatUser user;
-  late List<Doctor> doctorDataList;
+  late List<DoctorUser> doctorDataList = [];
   int _selectedIndex = 0;
   String _searchQuery = "";
   SearchFilter _searchFilter = SearchFilter.names;
-  List<Doctor> doctorList = [];
+  List<DoctorUser> doctorList = [];
   String selectedSortOrder = 'Sort by';
 
   PageController pageController = PageController(
@@ -42,10 +44,34 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    doctorDataList = doctorMapList.map((x) => Doctor.fromJson(x)).toList();
-    doctorList = [...doctorDataList];
-    _sortDoctors();
+    // doctorDataList = doctorMapList.map((x) => DoctorUser.fromJson(x)).toList();
     super.initState();
+    _loadDoctorData();
+  }
+
+  Future<void> _loadDoctorData() async {
+    try {
+      // Reference to the "doctors" collection in Firestore
+      CollectionReference doctorsCollection =
+      FirebaseFirestore.instance.collection('doctors');
+
+      // Fetch the documents from the "doctors" collection
+      QuerySnapshot querySnapshot = await doctorsCollection.get();
+
+      // Convert the documents to a list of DoctorUser objects
+      List<DoctorUser> doctors = querySnapshot.docs
+          .map((doc) => DoctorUser.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+
+      setState(() {
+        doctorDataList = doctors;
+        doctorList = [...doctorDataList];
+        _sortDoctors();
+      });
+    } catch (error) {
+      // Handle error loading data
+      print("Error loading doctor data: $error");
+    }
   }
 
   AppBar _appBar(BuildContext context) {
@@ -299,10 +325,7 @@ class _HomePageState extends State<HomePage> {
         case SearchFilter.rating:
           return doctor.rating.toString().contains(_searchQuery.toLowerCase());
         case SearchFilter.names:
-          return doctor.firstName
-                  .toLowerCase()
-                  .contains(_searchQuery.toLowerCase()) ||
-              doctor.lastName
+          return doctor.name
                   .toLowerCase()
                   .contains(_searchQuery.toLowerCase());
         case SearchFilter.location:
@@ -325,14 +348,14 @@ class _HomePageState extends State<HomePage> {
   void _sortDoctors() {
     setState(() {
       if (selectedSortOrder == 'A to Z') {
-        doctorList.sort((a, b) => a.firstName.compareTo(b.firstName));
+        doctorList.sort((a, b) => a.name.compareTo(b.name));
       } else {
-        doctorList.sort((a, b) => b.firstName.compareTo(a.firstName));
+        doctorList.sort((a, b) => b.name.compareTo(a.name));
       }
     });
   }
 
-  Widget _doctorTile(Doctor doctor) {
+  Widget _doctorTile(DoctorUser doctor) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       decoration: BoxDecoration(
@@ -364,7 +387,7 @@ class _HomePageState extends State<HomePage> {
                 borderRadius: BorderRadius.circular(15),
                 color: Theme.of(context).primaryColorLight,
               ),
-              child: Image.asset(
+              child: Image.network(
                 doctor.image,
                 height: 50,
                 width: 50,
@@ -372,10 +395,10 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          title: Text("Dr. ${doctor.firstName} ${doctor.lastName}",
+          title: Text("Dr. ${doctor.name}",
               style: TextStyles.title.bold),
           subtitle: Text(
-            doctor.type,
+            doctor.specialization,
             style: TextStyles.bodySm.subTitleColor.bold,
           ),
           trailing: Icon(
@@ -385,7 +408,12 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ).ripple(() {
-        Navigator.pushNamed(context, "/DetailPage", arguments: doctor);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DoctorDetailsPage(doctor: doctor, user: widget.user,),
+          ),
+        );
       }, borderRadius: const BorderRadius.all(Radius.circular(20))),
     );
   }
