@@ -7,11 +7,12 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:health_mate/components/extensions.dart';
 import 'package:health_mate/components/text_styles.dart';
+import 'package:health_mate/models/doctor_user.dart';
 
 import '../models/data.dart';
 
 class CreatePrescription extends StatefulWidget {
-  const CreatePrescription({Key? key, required user}) : super(key: key);
+  const CreatePrescription({Key? key, required DoctorUser user}) : super(key: key);
 
   @override
   CreatePrescriptionState createState() => CreatePrescriptionState();
@@ -39,7 +40,6 @@ class CreatePrescriptionState extends State<CreatePrescription> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Button to upload prescription
                         Center(
                           child: ElevatedButton(
                             onPressed: () async {
@@ -47,7 +47,6 @@ class CreatePrescriptionState extends State<CreatePrescription> {
                                 FilePickerResult? prescriptionPdf = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['pdf']);
 
                                 if (prescriptionPdf != null) {
-                                  // Handle the picked file
                                   String filePath = prescriptionPdf.files.single.path!;
                                   print('File path: $filePath');
 
@@ -55,19 +54,16 @@ class CreatePrescriptionState extends State<CreatePrescription> {
 
                                   Navigator.pop(context);
 
-                                  // Add your logic to process the picked file
                                 } else {
-                                  // User canceled the file picker
                                   print('File picking canceled.');
                                 }
                               } catch (e) {
-                                // Handle any errors that occurred during file picking
                                 print('Error picking file: $e');
                               }
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Theme.of(context)
-                                  .primaryColor, // Match the theme color
+                                  .primaryColor,
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 24, vertical: 16),
                               shape: RoundedRectangleBorder(
@@ -81,7 +77,6 @@ class CreatePrescriptionState extends State<CreatePrescription> {
                           ),
                         ),
                         const SizedBox(height: 16),
-                        // "OR" text
                         Center(
                           child: Text(
                             'OR',
@@ -92,43 +87,36 @@ class CreatePrescriptionState extends State<CreatePrescription> {
                           ),
                         ),
                         const SizedBox(height: 16),
-                        // Heading for prescription form
                         Text(
                           'Fill the Prescription',
                           style: TextStyles.title.bold,
                         ),
                         const SizedBox(height: 16),
-                        // Container for Treatment Name
                         _buildTextFieldContainer(
                           icon: Icons.favorite,
                           hintText: 'Treatment Name',
                         ),
                         const SizedBox(height: 16),
-                        // Container for Doctor's Phone Number
                         _buildTextFieldContainer(
                           icon: Icons.phone,
                           hintText: 'Phone Number',
                         ),
                         const SizedBox(height: 16),
-                        // Container for Disease Name
                         _buildTextFieldContainer(
                           icon: Icons.coronavirus_outlined,
                           hintText: 'Disease Name',
                         ),
                         const SizedBox(height: 16),
-                        // Container for Course Duration
                         _buildTextFieldContainer(
                           icon: Icons.access_time_rounded,
                           hintText: 'Course Duration',
                         ),
                         const SizedBox(height: 16),
-                        // Heading for medicine search
                         Text(
                           'Search Medicine',
                           style: TextStyles.title.bold,
                         ),
                         const SizedBox(height: 16),
-                        // Container for Search bar
                         _buildSearchBar(),
                         Card(
                           child: SizedBox(
@@ -163,7 +151,6 @@ class CreatePrescriptionState extends State<CreatePrescription> {
                                           },
                                         ),
                                   onTap: () {
-                                    // Handle the selection of the medicine
                                   },
                                 );
                               },
@@ -191,11 +178,10 @@ class CreatePrescriptionState extends State<CreatePrescription> {
                         Center(
                           child: ElevatedButton(
                             onPressed: () {
-                              // Add functionality to handle prescription upload
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Theme.of(context)
-                                  .primaryColor, // Match the theme color
+                                  .primaryColor,
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 24, vertical: 16),
                               shape: RoundedRectangleBorder(
@@ -283,14 +269,10 @@ class CreatePrescriptionState extends State<CreatePrescription> {
             ),
             const DottedLine(
               direction: Axis.horizontal,
-              // or Axis.vertical for a vertical line
               lineLength: double.infinity,
-              // Use double.infinity for a line that spans the full width/height
               lineThickness: 1.0,
-              // Adjust the thickness of the dotted line
               dashLength: 10.0,
-              // Adjust the length of each dash
-              dashColor: Colors.black, // Specify the color of the dots
+              dashColor: Colors.black,
             ),
             const SizedBox(
               height: 16,
@@ -324,7 +306,7 @@ class CreatePrescriptionState extends State<CreatePrescription> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         SizedBox(
-          width: 80.0, // Adjust the width as needed
+          width: 80.0,
           child: Text(
             labelText,
             style: const TextStyle(
@@ -379,7 +361,6 @@ class CreatePrescriptionState extends State<CreatePrescription> {
           value: medicines[medicine]?['Morning'],
           onChanged: (value) {
             setState(() {
-              // isMorningChecked = value!;
               medicines[medicine]?['Morning'] = value!;
             });
           },
@@ -389,7 +370,6 @@ class CreatePrescriptionState extends State<CreatePrescription> {
           value: medicines[medicine]?['Afternoon'],
           onChanged: (value) {
             setState(() {
-              // isAfternoonChecked = value!;
               medicines[medicine]?['Afternoon'] = value!;
             });
           },
@@ -399,7 +379,6 @@ class CreatePrescriptionState extends State<CreatePrescription> {
           value: medicines[medicine]?['Evening'],
           onChanged: (value) {
             setState(() {
-              // isEveningChecked = value!;
               medicines[medicine]?['Evening'] = value!;
             });
           },
@@ -407,7 +386,6 @@ class CreatePrescriptionState extends State<CreatePrescription> {
     }
   }
 
-  // Helper method to build a container with an icon and a text field separated by a vertical bar
   Widget _buildTextFieldContainer(
       {required IconData icon, required String hintText}) {
     return Container(
@@ -418,7 +396,6 @@ class CreatePrescriptionState extends State<CreatePrescription> {
       ),
       child: Row(
         children: [
-          // Icon and vertical bar
           Container(
             padding: const EdgeInsets.symmetric(vertical: 8),
             child: Column(
@@ -431,10 +408,9 @@ class CreatePrescriptionState extends State<CreatePrescription> {
           Container(
             height: 24,
             width: 1,
-            color: Theme.of(context).primaryColor, // Vertical bar color
+            color: Theme.of(context).primaryColor,
           ),
           const SizedBox(width: 16),
-          // TextField
           Expanded(
             child: TextField(
               decoration: InputDecoration(
@@ -448,7 +424,6 @@ class CreatePrescriptionState extends State<CreatePrescription> {
     );
   }
 
-  // Helper method to build the search bar
   Widget _buildSearchBar() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16),
