@@ -22,13 +22,22 @@ class DoctorUser extends ChatUser{
 
   // Create a DoctorUser from JSON data
   factory DoctorUser.fromJson(Map<String, dynamic> json) {
+    DateTime parsedDateOfBirth;
+    if (json['dateOfBirth'] is Timestamp) {
+      parsedDateOfBirth = (json['dateOfBirth'] as Timestamp).toDate();
+    } else if (json['dateOfBirth'] is String) {
+      parsedDateOfBirth = DateTime.tryParse(json['dateOfBirth']) ?? DateTime.now();
+    } else {
+      parsedDateOfBirth = DateTime.now(); // default or fallback value
+    }
+
     return DoctorUser(
       id: json["id"] ?? "",
       name: json["name"] ?? "",
       specialization: json["specialization"] ?? "",
       medicalId: json["medicalId"] ?? "",
       researchPaperURL: json["researchPaperURL"] ?? "",
-      dateOfBirth: json["dateOfBirth"] != null ? (json["dateOfBirth"] as Timestamp).toDate() : DateTime.now(),
+      dateOfBirth: parsedDateOfBirth,
       chatIds: json["chatIds"] == null ? [] : List<String>.from(json["chatIds"].map((x) => x)),
     );
   }
