@@ -72,7 +72,8 @@ class ThemeProvider with ChangeNotifier {
       elevation: 2,
     ),
     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-    checkboxTheme: const CheckboxThemeData(side: BorderSide(color: Colors.deepPurple, width: 2)),
+    checkboxTheme: const CheckboxThemeData(
+        side: BorderSide(color: Colors.deepPurple, width: 2)),
     hintColor: Colors.grey,
   );
 

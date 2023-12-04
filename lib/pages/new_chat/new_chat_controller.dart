@@ -6,11 +6,11 @@ import 'package:health_mate/models/chat_user.dart';
 class NewChatController {
   Future<List<ChatUser>> getAllPossibleChatPartners(ChatUser user) async {
     return (await FirebaseFirestore.instance
-        .collection("users")
-        .where("id", isNotEqualTo: user.id)
-        .orderBy("id", descending: false)
-        .orderBy("name", descending: false)
-        .get())
+            .collection("users")
+            .where("id", isNotEqualTo: user.id)
+            .orderBy("id", descending: false)
+            .orderBy("name", descending: false)
+            .get())
         .docs
         .map((e) => ChatUser.fromJson(e.data()))
         .toList();
@@ -26,13 +26,13 @@ class NewChatController {
     var chatId = local.chatIds[index];
 
     var chat =
-    (await FirebaseFirestore.instance.collection("chats").doc(chatId).get())
-        .data();
+        (await FirebaseFirestore.instance.collection("chats").doc(chatId).get())
+            .data();
     return Chat.fromJson(chat!);
   }
 
   Future<Chat> createNewChat(ChatUser local, ChatUser other) async {
-    var newChatId = local.id + other.id;
+    var newChatId = local.id! + other.id!;
     var chat = Chat(
         users: <ChatUser>[local, other],
         id: newChatId,

@@ -37,14 +37,13 @@
 // }
 //
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class ChatUser {
-  final String id;
+  final String? id;
   late final String name;
   final List<String> chatIds;
-
-  // Fields from UserData
   String fname;
   String lname;
   DateTime? dob;
@@ -57,16 +56,16 @@ class ChatUser {
   String bloodType;
   String eyeCol;
   String skinTone;
-  String email;
+  final String email;
   String phone;
   String? photoUri;
   bool isDoctor;
   String signInMethod;
 
   ChatUser({
-    required this.id,
-    required this.name,
-    required this.chatIds,
+    this.id,
+    this.name = 'da',
+    this.chatIds = const [],
     this.fname = '',
     this.lname = 'Guest',
     this.dob,
@@ -79,7 +78,7 @@ class ChatUser {
     this.bloodType = '',
     this.eyeCol = '',
     this.skinTone = '',
-    this.email = '',
+    required this.email,
     this.phone = '',
     this.photoUri,
     this.isDoctor = false,
@@ -96,7 +95,9 @@ class ChatUser {
       lname: 'Guest',
       sex: 'Male',
       email: user.email ?? '',
-      signInMethod: user.providerData.isNotEmpty ? user.providerData[0].providerId : 'unknown',
+      signInMethod: user.providerData.isNotEmpty
+          ? user.providerData[0].providerId
+          : 'unknown',
       // ... Other fields initialized similarly
     );
   }
@@ -105,7 +106,9 @@ class ChatUser {
     return ChatUser(
       id: json['id'] ?? '',
       name: json['name'] ?? '',
-      chatIds: json['chatIds'] == null ? [] : List<String>.from(json['chatIds'].map((x) => x)),
+      chatIds: json['chatIds'] == null
+          ? []
+          : List<String>.from(json['chatIds'].map((x) => x)),
       fname: json['fname'] ?? '',
       lname: json['lname'] ?? 'Guest',
       dob: json['dob'] != null ? DateTime.parse(json['dob']) : null,
@@ -126,26 +129,55 @@ class ChatUser {
     );
   }
 
-  Map<String, dynamic> toJson() => {
-    'id': id,
-    'name': name,
-    'chatIds': chatIds.map((x) => x).toList(),
-    'fname': fname,
-    'lname': lname,
-    'dob': dob?.toIso8601String(),
-    'sex': sex,
-    'addr': addr,
-    'post': post,
-    'city': city,
-    'province': province,
-    'hairCol': hairCol,
-    'bloodType': bloodType,
-    'eyeCol': eyeCol,
-    'skinTone': skinTone,
-    'email': email,
-    'phone': phone,
-    'photoUri': photoUri,
-    'isDoctor': isDoctor,
-    'signInMethod': signInMethod,
-  };
+  fromPatientJson(Map<String, dynamic> json) {
+    return ChatUser(
+      // name: json["name"],
+      name: json["fname"] + json["lname"],
+      chatIds: json["chat"] == null
+          ? []
+          : List<String>.from(json['chatIds'].map((x) => x)),
+      fname: json["fname"],
+      lname: json["lname"],
+      dob: json["dob"],
+      sex: json["sex"],
+      addr: json["addr"],
+      post: json["post"],
+      city: json["city"],
+      province: json["province"],
+      hairCol: json["hairCol"],
+      bloodType: json["bloodType"],
+      eyeCol: json["eyeCol"],
+      skinTone: json["skinTone"],
+      email: json["email"],
+      phone: json["phone"],
+      photoUri: json["photoUri"],
+      isDoctor: json["isDoctor"],
+      // id: json["id"],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'chatIds': chatIds.map((x) => x).toList(),
+      'fname': fname,
+      'lname': lname,
+      'dob': dob?.toIso8601String(),
+      'sex': sex,
+      'addr': addr,
+      'post': post,
+      'city': city,
+      'province': province,
+      'hairCol': hairCol,
+      'bloodType': bloodType,
+      'eyeCol': eyeCol,
+      'skinTone': skinTone,
+      'email': email,
+      'phone': phone,
+      'photoUri': photoUri,
+      'isDoctor': isDoctor,
+      'signInMethod': signInMethod,
+    };
+  }
 }

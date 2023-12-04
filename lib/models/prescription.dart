@@ -11,7 +11,8 @@ class Prescription {
   final String medicineName;
   final String doctorImage;
   final String userImage;
-  final String? userId; //  combination of userFirstName, userLastName and Date of Month of Birthday
+  final String?
+      userId; //  combination of userFirstName, userLastName and Date of Month of Birthday
   final String prescriptionId;
 
   Prescription({
@@ -38,7 +39,7 @@ class Prescription {
       'prescriptionPdfUrl': prescriptionPdfUrl,
       'medicineName': medicineName,
       'doctorImage': doctorImage,
-      'userImage' : userImage,
+      'userImage': userImage,
       'userId': userId,
     };
   }

@@ -46,86 +46,110 @@ class _LoginPageState extends State<AuthGate> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text("Login")),
+        resizeToAvoidBottomInset: true,
+        // appBar: AppBar(title: const Text("Login")),
         body: Center(
+          child: SingleChildScrollView(
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-              // Chip(
-              //     label:
-              //     Text(_registerMode ? "Register for chat" : "Login to chat")),
-              if (_registerMode) const SizedBox(height: 10),
-              if (_registerMode)
-                SizedBox(
-                    width: 200,
-                    child: TextField(
-                      controller: _userController,
-                      decoration: const InputDecoration(label: Text("User name")),
-                    )),
-              const SizedBox(height: 10),
-              SizedBox(
-                  width: 200,
-                  child: TextField(
-                    controller: _mailController,
-                    decoration: const InputDecoration(label: Text("Email")),
-                  )),
-              const SizedBox(height: 10),
-              SizedBox(
-                  width: 200,
-                  child: TextField(
-                      controller: _passwordController,
-                      obscureText: true,
-                      decoration: const InputDecoration(label: Text("Password")))),
-              if (_registerMode) const SizedBox(height: 10),
-              if (_registerMode)
-                SizedBox(
-                    width: 200,
-                    child: TextField(
-                        controller: _passwordConfirmController,
-                        obscureText: true,
-                        decoration: const InputDecoration(
-                            label: Text("Confirm Password")))),
-              const SizedBox(height: 20),
-              Center(
-                  child: SizedBox(
+                  // Chip(
+                  //     label:
+                  //     Text(_registerMode ? "Register for chat" : "Login to chat")),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 50,
+                        height: 50,
+                        child: Image.asset('assets/logo.png'),
+                      ),
+                      const SizedBox(width: 15),
+                      Text(
+                        'Health Mate',
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 40,
+                        ),
+                      ),
+                      const SizedBox(width: 35)
+                    ],
+                  ),
+                  if (_registerMode) const SizedBox(height: 10),
+                  if (_registerMode)
+                    SizedBox(
+                        width: 200,
+                        child: TextField(
+                          controller: _userController,
+                          decoration:
+                              const InputDecoration(label: Text("User name")),
+                        )),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                      width: 200,
+                      child: TextField(
+                        controller: _mailController,
+                        decoration: const InputDecoration(label: Text("Email")),
+                      )),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                      width: 200,
+                      child: TextField(
+                          controller: _passwordController,
+                          obscureText: true,
+                          decoration:
+                              const InputDecoration(label: Text("Password")))),
+                  if (_registerMode) const SizedBox(height: 10),
+                  if (_registerMode)
+                    SizedBox(
+                        width: 200,
+                        child: TextField(
+                            controller: _passwordConfirmController,
+                            obscureText: true,
+                            decoration: const InputDecoration(
+                                label: Text("Confirm Password")))),
+                  const SizedBox(height: 20),
+                  Center(
+                      child: SizedBox(
                     width: 100,
                     child: ElevatedButton(
                         child: Text(_registerMode ? "Register" : "Login"),
                         onPressed: () async =>
-                        _registerMode ? await _register() : await _login()),
+                            _registerMode ? await _register() : await _login()),
                   )),
-              const SizedBox(height: 20),
-              SignInButton(
-                Buttons.Google,
-                onPressed: () async {
-                  try {
-                    await signInWithGoogle();
-                  }
-                  catch (error) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(error.toString())));
-                  }
-                },
-              ),
-              TextButton(
-                child: Text(_registerMode
-                    ? "Want to log in?"
-                    : "Want to register?"),
-                onPressed: () {
-                  setState(() {
-                    _registerMode = !_registerMode;
-                  });
-                },
-              ),
-              TextButton(
-                child: const Text('Doctor? Register Here'),
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const RegistrationForm()
-                  ));
-                },
-              )
-            ])));
+                  const SizedBox(height: 20),
+                  SignInButton(
+                    Buttons.Google,
+                    onPressed: () async {
+                      try {
+                        await signInWithGoogle();
+                      } catch (error) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(error.toString())));
+                      }
+                    },
+                  ),
+                  TextButton(
+                    child: Text(_registerMode
+                        ? "Want to log in?"
+                        : "Want to register?"),
+                    onPressed: () {
+                      setState(() {
+                        _registerMode = !_registerMode;
+                      });
+                    },
+                  ),
+                  TextButton(
+                    child: const Text('Doctor? Register Here'),
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const RegistrationForm()));
+                    },
+                  )
+                ]),
+          ),
+        ));
   }
 
   Future _login() async {
@@ -136,11 +160,10 @@ class _LoginPageState extends State<AuthGate> {
       _passwordController?.text = "";
       _passwordConfirmController?.text = "";
 
-      await Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => HomePage(user: user)));
-      
       // await Navigator.of(context)
-      //     .push(MaterialPageRoute(builder: (context) => DoctorHomePage(user: user)));
+      //     .push(MaterialPageRoute(builder: (context) => HomePage(user: user)));
+      await Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => HomePage(user: user)));
 
       //await Navigator.of(context).push(
       //    MaterialPageRoute(builder: (context) => ChatOverviewPage(user)));
@@ -155,14 +178,13 @@ class _LoginPageState extends State<AuthGate> {
       ChatUser chatUser = await _controller.signInWithGoogle();
 
       // Navigate to the HomePage with the obtained ChatUser
-      // await Navigator.of(context)
-      //     .push(MaterialPageRoute(builder: (context) => DoctorHomePage(user: chatUser)));
+      // await Navigator.of(context).push(MaterialPageRoute(
+      //     builder: (context) => DoctorHomePage(user: chatUser)));
       await Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => HomePage(user: chatUser)));
     } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(error.toString()))
-      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(error.toString())));
     }
   }
 
