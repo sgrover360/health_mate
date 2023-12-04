@@ -425,7 +425,7 @@ class _HomePageState extends State<HomePage> {
         topRight: Radius.circular(20.0),
       ),
       child: BottomNavigationBar(
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         type: BottomNavigationBarType.fixed,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(

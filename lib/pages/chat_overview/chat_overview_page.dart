@@ -23,23 +23,23 @@ class _ChatOverviewPageState extends State<ChatOverviewPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text("Your chats"),
-          automaticallyImplyLeading: false,
-        ),
+        appBar: AppBar(title: const Text("Your chats")),
         body: FutureBuilder(
             future: _controller.getAllChatsOfUser(widget.user),
-            builder: (context, snapshot) {
+            builder: (context, AsyncSnapshot<List<Chat>> snapshot) {
               if (snapshot.connectionState != ConnectionState.done) {
                 return const LoadingWidget();
-              } else if (snapshot.hasData) {
+              } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
                 return _buildChatWidgets(snapshot.data!);
+              } else if (snapshot.hasData && snapshot.data!.isEmpty) {
+                return const Center(child: Text("Start your first conversation!"));
               } else {
                 return const ExceptionWidget();
               }
             }),
         floatingActionButton: FloatingActionButton.extended(
-            label: const Text("new chat"),
+            backgroundColor: Colors.deepPurple,
+            label: const Text("New chat"),
             icon: const Icon(Icons.add),
             onPressed: () async {
               await Navigator.of(context).push(MaterialPageRoute(
@@ -50,22 +50,19 @@ class _ChatOverviewPageState extends State<ChatOverviewPage> {
   }
 
   Widget _buildChatWidgets(List<Chat> chats) {
-    return chats.isEmpty
-        ? const Center(child: Text("Start your first conversation!"))
-        : RefreshIndicator(
-            onRefresh: () async =>
-                await _controller.getAllChatsOfUser(widget.user),
-            child: ListView.builder(
-                itemCount: chats.length,
-                itemBuilder: (context, index) {
-                  var chatName =
-                      _controller.getChatName(chats[index], widget.user);
-                  var stream = FirebaseFirestore.instance
-                      .collection("chats")
-                      .doc(chats[index].id)
-                      .snapshots();
-                  return ChatHeaderWidget(
-                      chatName: chatName, stream: stream, user: widget.user);
-                }));
+    return RefreshIndicator(
+      onRefresh: () async => setState(() {}),
+      child: ListView.builder(
+          itemCount: chats.length,
+          itemBuilder: (context, index) {
+            var chatName = _controller.getChatName(chats[index], widget.user);
+            var stream = FirebaseFirestore.instance
+                .collection("chats")
+                .doc(chats[index].id)
+                .snapshots();
+            return ChatHeaderWidget(
+                chatName: chatName, stream: stream, user: widget.user);
+          }),
+    );
   }
 }

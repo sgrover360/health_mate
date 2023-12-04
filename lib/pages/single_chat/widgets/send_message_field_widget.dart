@@ -1,26 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class SendMessageFieldWidget extends StatefulWidget {
-  final Function(String)? onPressed;
-  const SendMessageFieldWidget({Key? key, this.onPressed}) : super(key: key);
+  final Function(String)? onSendMessage;
+  final Function(XFile)? onSendImage;
+
+  const SendMessageFieldWidget({Key? key, this.onSendMessage, this.onSendImage}) : super(key: key);
 
   @override
   State<SendMessageFieldWidget> createState() => _SendMessageFieldWidgetState();
 }
 
 class _SendMessageFieldWidgetState extends State<SendMessageFieldWidget> {
-  TextEditingController? _messageController;
-
-  @override
-  void initState() {
-    super.initState();
-    _messageController = TextEditingController();
-  }
+  final TextEditingController _messageController = TextEditingController();
+  final ImagePicker _picker = ImagePicker();
 
   @override
   void dispose() {
-    _messageController?.dispose();
+    _messageController.dispose();
     super.dispose();
+  }
+
+  Future<void> _handleCameraButtonPressed() async {
+    try {
+      XFile? image = await _picker.pickImage(source: ImageSource.camera);
+      if (image != null) {
+        widget.onSendImage?.call(image);
+      }
+    } catch (e) {
+      print('Error capturing image: $e');
+    }
+  }
+
+  void _sendMessage() {
+    final message = _messageController.text.trim();
+    if (message.isNotEmpty) {
+      widget.onSendMessage?.call(message);
+      _messageController.clear();
+    }
   }
 
   @override
@@ -36,22 +53,23 @@ class _SendMessageFieldWidgetState extends State<SendMessageFieldWidget> {
             blurRadius: 5,
             offset: Offset(0, -1),
             spreadRadius: 0,
-          )
+          ),
         ],
       ),
       child: Row(
         children: [
           IconButton(
             icon: const Icon(Icons.attach_file, color: Color(0xFF0091A6)),
-            onPressed: () {
-              // Handle attachment
+            onPressed: () async {
+              XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+              if (image != null) {
+                widget.onSendImage?.call(image);
+              }
             },
           ),
           IconButton(
             icon: const Icon(Icons.camera_alt, color: Color(0xFF0091A6)),
-            onPressed: () {
-              // Handle camera
-            },
+            onPressed: _handleCameraButtonPressed,
           ),
           Expanded(
             child: Container(
@@ -65,7 +83,7 @@ class _SendMessageFieldWidgetState extends State<SendMessageFieldWidget> {
               child: TextField(
                 controller: _messageController,
                 keyboardType: TextInputType.multiline,
-                maxLines: null, // Allows the input to wrap to a new line
+                maxLines: null,
                 style: const TextStyle(
                   color: Color(0xFF0091A6),
                   fontSize: 14,
@@ -80,18 +98,15 @@ class _SendMessageFieldWidgetState extends State<SendMessageFieldWidget> {
                     fontWeight: FontWeight.w400,
                     letterSpacing: -0.30,
                   ),
-                  border: InputBorder.none, // No border
-                  contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10), // Adjust padding
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 ),
               ),
             ),
           ),
           IconButton(
             icon: const Icon(Icons.send, color: Color(0xFF0091A6)),
-            onPressed: () {
-              widget.onPressed?.call(_messageController?.text ?? "");
-              _messageController?.clear();
-            },
+            onPressed: _sendMessage,
           ),
         ],
       ),

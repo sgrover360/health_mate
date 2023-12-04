@@ -747,7 +747,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ] else ...[
                         const SizedBox(height: 3)
                       ],
-                      if (!widget.currUser!.isDoctor) ...[
+                      if (widget.currUser?.isDoctor == false) ...[
                         Row(
                           children: [
                             Expanded(
@@ -878,7 +878,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
 
 
-                      if (!widget.currUser!.isDoctor) ...[
+                      if (widget.currUser?.isDoctor == false) ...[
                         Row(
                           children: [
                             Expanded(
@@ -979,7 +979,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
 
                       const SizedBox(height: 15),
-                      if (!widget.currUser!.isDoctor) ...[
+                      if (widget.currUser?.isDoctor == false) ...[
                         Row(
                           children: [
                             Container(

@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:health_mate/models/chat_user.dart';
 import 'appointment.dart';
 
-class DoctorUser {
+class DoctorUser extends ChatUser{
   DoctorUser({
     required this.id,
     required this.name,
@@ -23,7 +23,7 @@ class DoctorUser {
     this.location = '',
     this.hospital = '',
     this.isDoctor,
-  });
+  }): super(id: id, name: name, chatIds: chatIds, isDoctor: isDoctor, email: email);
 
   final String id;
   final String name;
@@ -47,6 +47,15 @@ class DoctorUser {
 
   // Create a DoctorUser from JSON data
   factory DoctorUser.fromJson(Map<String, dynamic> json) {
+    DateTime parsedDateOfBirth;
+    if (json['dateOfBirth'] is Timestamp) {
+      parsedDateOfBirth = (json['dateOfBirth'] as Timestamp).toDate();
+    } else if (json['dateOfBirth'] is String) {
+      parsedDateOfBirth = DateTime.tryParse(json['dateOfBirth']) ?? DateTime.now();
+    } else {
+      parsedDateOfBirth = DateTime.now(); // default or fallback value
+    }
+
     return DoctorUser(
         id: json["id"] ?? "",
         name: json["name"] ?? "",
@@ -54,9 +63,10 @@ class DoctorUser {
         specialization: json["specialization"] ?? "",
         medicalId: json["medicalId"] ?? "",
         researchPaperURL: json["researchPaperURL"] ?? "",
-        dateOfBirth: json["dateOfBirth"] is String
-            ? DateTime.parse(json["dateOfBirth"])
-            : (json["dateOfBirth"] as Timestamp).toDate(),
+        dateOfBirth: parsedDateOfBirth,
+  // json["dateOfBirth"] is String
+        //     ? DateTime.parse(json["dateOfBirth"])
+        //     : (json["dateOfBirth"] as Timestamp).toDate(),
         chatIds: json["chatIds"] == null
             ? []
             : List<String>.from(json["chatIds"]!.map((x) => x)),
@@ -98,4 +108,8 @@ class DoctorUser {
         "hospital": hospital,
         "isDoctor": isDoctor,
       };
+  // Get a user-friendly representation of the doctor
+  String getDetails() {
+    return '$name, $specialization (ID: $medicalId)';
+  }
 }
