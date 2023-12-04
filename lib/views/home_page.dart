@@ -392,6 +392,15 @@ class _HomePageState extends State<HomePage> {
                 height: 50,
                 width: 50,
                 fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) {
+                  // Display a default image when the network image fails to load
+                  return Image.asset(
+                    'assets/doctor_default.jpg',
+                    height: 50,
+                    width: 50,
+                    fit: BoxFit.contain,
+                  );
+                },
               ),
             ),
           ),
