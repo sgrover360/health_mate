@@ -127,21 +127,6 @@ class _ProfilePageState extends State<ProfilePage> {
     'Wyoming'
   ];
 
-  // Future<bool> _reauthenticate(BuildContext context) {
-  //   // final l = FirebaseUILocalizations.labelsOf(context);
-  //   return showReauthenticateDialog(
-  //     context: context,
-  //     providers: providers,
-  //     auth: auth,
-  //     onSignedIn: () {
-  //       user!.delete();
-  //       Navigator.of(context).pop();
-  //     },
-  //     // actionButtonLabelOverride: l.deleteAccount,
-  //     actionButtonLabelOverride: 'Delete Account',
-  //   );
-  // }
-
   Future<void> selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -440,9 +425,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     subtitle: Row(
                       children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width / 4 -
-                              MediaQuery.of(context).size.width / 40,
+                        Expanded(
+                          // width: MediaQuery.of(context).size.width / 4 -
+                          //     MediaQuery.of(context).size.width / 40,
                           child: IgnorePointer(
                             ignoring: !editProfile,
                             child: DropdownButtonHideUnderline(
@@ -450,7 +435,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               alignedDropdown: true,
                               layoutBehavior:
                                   ButtonBarLayoutBehavior.constrained,
-                              child: DropdownButtonFormField<String>(
+                                  child: DropdownButtonFormField<String>(
                                 isDense: true,
                                 menuMaxHeight: 115,
                                 alignment: AlignmentDirectional.centerStart,
@@ -470,8 +455,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                     .map((label) => DropdownMenuItem(
                                           alignment:
                                               AlignmentDirectional.center,
-                                          child: Text(label),
                                           value: label,
+                                          child: Text(label),
                                         ))
                                     .toList(),
                                 onChanged: (value) {
@@ -487,8 +472,8 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ),
                         SizedBox(width: MediaQuery.of(context).size.width / 45),
-                        Container(
-                            width: 125,
+                        Expanded(
+                           // width: 125,
                             child: TextFormField(
                               enabled: editProfile,
                               initialValue: widget.currUser.phone,
@@ -518,36 +503,36 @@ class _ProfilePageState extends State<ProfilePage> {
                               },
                             )),
                         SizedBox(width: MediaQuery.of(context).size.width / 45),
-                        Container(
-                            width: 125,
-                            child: TextFormField(
-                              enabled: editProfile,
-                              initialValue: widget.currUser.phone,
-                              keyboardType: TextInputType.number,
-                              maxLength: 10,
-                              style: const TextStyle(fontSize: 18),
-                              decoration: const InputDecoration(
-                                  prefixText: '+1',
-                                  hintText: 'xxx-xxxxxxx',
-                                  labelText: 'Secondary',
-                                  counterText: ''),
-                              inputFormatters: <TextInputFormatter>[
-                                FilteringTextInputFormatter.allow(
-                                    RegExp(r'[0-9]')),
-                                FilteringTextInputFormatter.digitsOnly
-                              ],
-                              validator: ((value) {
-                                if (value!.length > 0 && value!.length < 10) {
-                                  return 'Enter valid phone number';
-                                }
-                                return null;
-                              }),
-                              onSaved: (value) {
-                                setState(() {
-                                  phone_secondary = value!;
-                                });
-                              },
-                            )),
+                        // Container(
+                        //     width: 125,
+                        //     child: TextFormField(
+                        //       enabled: editProfile,
+                        //       initialValue: widget.currUser.phone,
+                        //       keyboardType: TextInputType.number,
+                        //       maxLength: 10,
+                        //       style: const TextStyle(fontSize: 18),
+                        //       decoration: const InputDecoration(
+                        //           prefixText: '+1',
+                        //           hintText: 'xxx-xxxxxxx',
+                        //           labelText: 'Secondary',
+                        //           counterText: ''),
+                        //       inputFormatters: <TextInputFormatter>[
+                        //         FilteringTextInputFormatter.allow(
+                        //             RegExp(r'[0-9]')),
+                        //         FilteringTextInputFormatter.digitsOnly
+                        //       ],
+                        //       validator: ((value) {
+                        //         if (value!.length > 0 && value!.length < 10) {
+                        //           return 'Enter valid phone number';
+                        //         }
+                        //         return null;
+                        //       }),
+                        //       onSaved: (value) {
+                        //         setState(() {
+                        //           phone_secondary = value!;
+                        //         });
+                        //       },
+                        //     )),
                       ],
                     )),
                 const Divider(),
@@ -601,10 +586,10 @@ class _ProfilePageState extends State<ProfilePage> {
                       const SizedBox(height: 5),
                       Row(
                         children: [
-                          Container(
-                              width: MediaQuery.of(context).size.width / 4 -
-                                  MediaQuery.of(context).size.width / 100,
-                              padding: const EdgeInsets.only(left: 10),
+                          Expanded(
+                              // width: MediaQuery.of(context).size.width / 4 -
+                              //     MediaQuery.of(context).size.width / 100,
+                             // padding: const EdgeInsets.only(left: 10),
                               child: TextFormField(
                                 enabled: editProfile,
                                 initialValue: widget.currUser.city,
@@ -734,9 +719,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                     });
                                   },
                                 )),
-                            Container(
-                                width: MediaQuery.of(context).size.width / 2.5,
-                                padding: const EdgeInsets.only(left: 20),
+                            Expanded(
+                                // width: MediaQuery.of(context).size.width / 2.5,
+                                // padding: const EdgeInsets.only(left: 20),
                                 child: TextFormField(
                                   enabled: editProfile,
                                   initialValue: widget.currUser.lname,
@@ -765,9 +750,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       if (!widget.currUser!.isDoctor) ...[
                         Row(
                           children: [
-                            Container(
-                              width: 100,
-                              padding: const EdgeInsets.only(left: 10),
+                            Expanded(
+                              //width: 100,
+                              //padding: const EdgeInsets.only(left: 10),
                               child: IgnorePointer(
                                 ignoring: !editProfile,
                                 child: InputDatePickerFormField(
@@ -795,101 +780,204 @@ class _ProfilePageState extends State<ProfilePage> {
                                 onPressed: () => selectDate(context),
                               ),
                             ),
-                            SizedBox(
-                                width: MediaQuery.of(context).size.width / 70),
-                            Container(
-                              width: 100,
+
+                            // Expanded(
+                            //   //width: 100,
+                            //   child: IgnorePointer(
+                            //     ignoring: !editProfile,
+                            //     child: DropdownButtonHideUnderline(
+                            //         child: ButtonTheme(
+                            //       alignedDropdown: true,
+                            //       layoutBehavior:
+                            //           ButtonBarLayoutBehavior.constrained,
+                            //       child: DropdownButtonFormField<String>(
+                            //         isDense: true,
+                            //         menuMaxHeight: 115,
+                            //         alignment: AlignmentDirectional.centerStart,
+                            //         padding: EdgeInsets.only(
+                            //             top: 10,
+                            //             left:
+                            //                 MediaQuery.of(context).size.width /
+                            //                     150),
+                            //         borderRadius: BorderRadius.circular(10),
+                            //         focusColor: Colors.transparent,
+                            //         decoration: const InputDecoration(
+                            //             contentPadding: EdgeInsets.zero,
+                            //             focusedBorder: InputBorder.none,
+                            //             enabledBorder: UnderlineInputBorder(
+                            //                 borderSide: BorderSide(
+                            //                     color: Colors.transparent)),
+                            //             labelText: 'Sex'),
+                            //         value: widget.currUser.sex,
+                            //         items: genders
+                            //             .map((label) => DropdownMenuItem(
+                            //                   alignment:
+                            //                       AlignmentDirectional.center,
+                            //                   child: Text(label),
+                            //                   value: label,
+                            //                 ))
+                            //             .toList(),
+                            //         onChanged: (value) {
+                            //           setState(() {
+                            //             sex = value!;
+                            //           });
+                            //         },
+                            //       ),
+                            //     )),
+                            //   ),
+                            // ),
+                            // SizedBox(
+                            //     width: MediaQuery.of(context).size.width / 20),
+                            // Expanded(
+                            //  // width: 80,
+                            //   child: IgnorePointer(
+                            //     ignoring: !editProfile,
+                            //     child: DropdownButtonHideUnderline(
+                            //         child: ButtonTheme(
+                            //       alignedDropdown: true,
+                            //       layoutBehavior:
+                            //           ButtonBarLayoutBehavior.constrained,
+                            //       child: DropdownButtonFormField<String>(
+                            //         isDense: true,
+                            //         menuMaxHeight: 115,
+                            //         alignment: AlignmentDirectional.centerStart,
+                            //         padding: const EdgeInsets.only(top: 10),
+                            //         borderRadius: BorderRadius.circular(10),
+                            //         focusColor: Colors.transparent,
+                            //         decoration: const InputDecoration(
+                            //             contentPadding: EdgeInsets.zero,
+                            //             focusedBorder: InputBorder.none,
+                            //             enabledBorder: UnderlineInputBorder(
+                            //                 borderSide: BorderSide(
+                            //                     color: Colors.transparent)),
+                            //             labelText: 'Blood Type'),
+                            //         value: widget.currUser.bloodType == ''
+                            //             ? bloodType
+                            //             : widget.currUser.bloodType,
+                            //         items: bloodTypes
+                            //             .map((label) => DropdownMenuItem(
+                            //                   alignment:
+                            //                       AlignmentDirectional.center,
+                            //                   child: Text(label),
+                            //                   value: label,
+                            //                 ))
+                            //             .toList(),
+                            //         onChanged: (value) {
+                            //           setState(() {
+                            //             bloodType = value!;
+                            //           });
+                            //         },
+                            //       ),
+                            //     )),
+                            //   ),
+                            // )
+                          ],
+                        ),
+                      ],
+
+
+
+
+                      if (!widget.currUser!.isDoctor) ...[
+                        Row(
+                          children: [
+                            Expanded(
+                              //width: 100,
                               child: IgnorePointer(
                                 ignoring: !editProfile,
                                 child: DropdownButtonHideUnderline(
                                     child: ButtonTheme(
-                                  alignedDropdown: true,
-                                  layoutBehavior:
+                                      alignedDropdown: true,
+                                      layoutBehavior:
                                       ButtonBarLayoutBehavior.constrained,
-                                  child: DropdownButtonFormField<String>(
-                                    isDense: true,
-                                    menuMaxHeight: 115,
-                                    alignment: AlignmentDirectional.centerStart,
-                                    padding: EdgeInsets.only(
-                                        top: 10,
-                                        left:
+                                      child: DropdownButtonFormField<String>(
+                                        isDense: true,
+                                        menuMaxHeight: 115,
+                                        alignment: AlignmentDirectional.centerStart,
+                                        padding: EdgeInsets.only(
+                                            top: 10,
+                                            left:
                                             MediaQuery.of(context).size.width /
                                                 150),
-                                    borderRadius: BorderRadius.circular(10),
-                                    focusColor: Colors.transparent,
-                                    decoration: const InputDecoration(
-                                        contentPadding: EdgeInsets.zero,
-                                        focusedBorder: InputBorder.none,
-                                        enabledBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.transparent)),
-                                        labelText: 'Sex'),
-                                    value: widget.currUser.sex,
-                                    items: genders
-                                        .map((label) => DropdownMenuItem(
-                                              alignment:
-                                                  AlignmentDirectional.center,
-                                              child: Text(label),
-                                              value: label,
-                                            ))
-                                        .toList(),
-                                    onChanged: (value) {
-                                      setState(() {
-                                        sex = value!;
-                                      });
-                                    },
-                                  ),
-                                )),
+                                        borderRadius: BorderRadius.circular(10),
+                                        focusColor: Colors.transparent,
+                                        decoration: const InputDecoration(
+                                            contentPadding: EdgeInsets.zero,
+                                            focusedBorder: InputBorder.none,
+                                            enabledBorder: UnderlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: Colors.transparent)),
+                                            labelText: 'Sex'),
+                                        value: widget.currUser.sex,
+                                        items: genders
+                                            .map((label) => DropdownMenuItem(
+                                          alignment:
+                                          AlignmentDirectional.center,
+                                          child: Text(label),
+                                          value: label,
+                                        ))
+                                            .toList(),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            sex = value!;
+                                          });
+                                        },
+                                      ),
+                                    )),
                               ),
                             ),
                             SizedBox(
                                 width: MediaQuery.of(context).size.width / 20),
-                            Container(
-                              width: 80,
+                            Expanded(
+                              // width: 80,
                               child: IgnorePointer(
                                 ignoring: !editProfile,
                                 child: DropdownButtonHideUnderline(
                                     child: ButtonTheme(
-                                  alignedDropdown: true,
-                                  layoutBehavior:
+                                      alignedDropdown: true,
+                                      layoutBehavior:
                                       ButtonBarLayoutBehavior.constrained,
-                                  child: DropdownButtonFormField<String>(
-                                    isDense: true,
-                                    menuMaxHeight: 115,
-                                    alignment: AlignmentDirectional.centerStart,
-                                    padding: const EdgeInsets.only(top: 10),
-                                    borderRadius: BorderRadius.circular(10),
-                                    focusColor: Colors.transparent,
-                                    decoration: const InputDecoration(
-                                        contentPadding: EdgeInsets.zero,
-                                        focusedBorder: InputBorder.none,
-                                        enabledBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.transparent)),
-                                        labelText: 'Blood Type'),
-                                    value: widget.currUser.bloodType == ''
-                                        ? bloodType
-                                        : widget.currUser.bloodType,
-                                    items: bloodTypes
-                                        .map((label) => DropdownMenuItem(
-                                              alignment:
-                                                  AlignmentDirectional.center,
-                                              child: Text(label),
-                                              value: label,
-                                            ))
-                                        .toList(),
-                                    onChanged: (value) {
-                                      setState(() {
-                                        bloodType = value!;
-                                      });
-                                    },
-                                  ),
-                                )),
+                                      child: DropdownButtonFormField<String>(
+                                        isDense: true,
+                                        menuMaxHeight: 115,
+                                        alignment: AlignmentDirectional.centerStart,
+                                        padding: const EdgeInsets.only(top: 10),
+                                        borderRadius: BorderRadius.circular(10),
+                                        focusColor: Colors.transparent,
+                                        decoration: const InputDecoration(
+                                            contentPadding: EdgeInsets.zero,
+                                            focusedBorder: InputBorder.none,
+                                            enabledBorder: UnderlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: Colors.transparent)),
+                                            labelText: 'Blood Type'),
+                                        value: widget.currUser.bloodType == ''
+                                            ? bloodType
+                                            : widget.currUser.bloodType,
+                                        items: bloodTypes
+                                            .map((label) => DropdownMenuItem(
+                                          alignment:
+                                          AlignmentDirectional.center,
+                                          child: Text(label),
+                                          value: label,
+                                        ))
+                                            .toList(),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            bloodType = value!;
+                                          });
+                                        },
+                                      ),
+                                    )),
                               ),
                             )
                           ],
                         ),
                       ],
+
+
+
+
                       const SizedBox(height: 15),
                       if (!widget.currUser!.isDoctor) ...[
                         Row(
@@ -976,22 +1064,22 @@ class _ProfilePageState extends State<ProfilePage> {
                   width: 180,
                   height: 45,
                   child: InkWell(
-                    splashColor: const Color.fromARGB(255, 176, 220, 240),
-                    hoverColor: Colors.blueGrey.withOpacity(0.1),
-                    highlightColor: Colors.blueGrey,
+                    splashColor: Colors.deepPurple,
+                    hoverColor: Colors.deepPurple.withOpacity(0.1),
+                    highlightColor: Colors.deepPurple,
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
                           Icons.logout,
                           size: 40,
-                          color: Color.fromARGB(255, 111, 198, 239),
+                          color: Colors.deepPurple,
                         ),
                         SizedBox(width: 10),
                         Text(
                           'Sign out',
                           style: TextStyle(
-                              color: Color.fromARGB(255, 111, 198, 239),
+                              color: Colors.deepPurple,
                               fontSize: 25,
                               fontWeight: FontWeight.w800),
                         ),
@@ -1012,7 +1100,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 const SizedBox(height: 30),
                 Container(
-                  height: 30,
+                  height: 50,
                   alignment: AlignmentDirectional.center,
                   child: FloatingActionButton.extended(
                       heroTag: null,
@@ -1054,6 +1142,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ));
                       })),
                 ),
+                const SizedBox(height: 30),
               ],
             )
           ],

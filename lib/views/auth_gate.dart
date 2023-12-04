@@ -178,10 +178,10 @@ class _LoginPageState extends State<AuthGate> {
       ChatUser chatUser = await _controller.signInWithGoogle();
 
       // Navigate to the HomePage with the obtained ChatUser
-      await Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => DoctorHomePage(user: chatUser)));
-      // await Navigator.of(context).push(
-      //     MaterialPageRoute(builder: (context) => HomePage(user: chatUser)));
+      // await Navigator.of(context).push(MaterialPageRoute(
+      //     builder: (context) => DoctorHomePage(user: chatUser)));
+      await Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => HomePage(user: chatUser)));
     } catch (error) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(error.toString())));
