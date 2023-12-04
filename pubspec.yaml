@@ -81,6 +81,7 @@ flutter:
     - assets/doctor_1.png
     - assets/doctor_3.png
     - assets/doctor_4.png
+    - assets/doctor_default.jpg
 
     - assets/img.png
     - assets/doctor_animation.gif
