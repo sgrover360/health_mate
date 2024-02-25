@@ -14,3 +14,9 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+## Features
+[![health_mate](https://github.com/sgrover360/health_mate/assets/148765329/d6350619-e262-4a59-9501-6cf3f1da9466)](https://youtu.be/CtCUOSus84M)
+<br>
+Link: https://youtu.be/CtCUOSus84M
+
